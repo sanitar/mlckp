@@ -1,0 +1,98 @@
+.nav .nav-header{
+    color: #666;
+}
+.nav .nav-info{
+    color: gray;
+    font-size: 11px;
+    padding-bottom: 5px;
+}
+.groups > div{
+    border: 1px solid #E5E5E5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+}
+a.groups-header{
+    padding: 8px 15px;
+    display: inline-block;
+    cursor: pointer;
+}
+div.groups-content{
+    border-top: 1px solid #E5E5E5;
+    padding: 5px;
+}
+
+.groups-content p span{
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background-color: darkslategrey;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;    
+    cursor:pointer;
+}
+
+.groups-content p label{
+    display: inline;    
+    cursor:pointer;
+}
+
+.groups-content p:hover{
+    border: 1px solid #E5E5E5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.groups-content p{
+    border: 1px solid transparent;
+    padding: 4px;
+    margin: 0;
+    cursor:pointer;
+}
+
+.workspace{
+    border: 2px solid #E5E5E5;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    height: 700px;
+    
+}
+
+.block{
+    width: 300px;
+    height: 200px;
+    border: 1px solid rgba(200, 200, 200, 0.6);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.block:hover{
+    border: 1px solid rgba(200, 200, 200, 0.8);
+    background: rgba(200, 200, 200, 0.15);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+.block .controls{
+    height: 20px;
+    clear: both;
+    display: block;
+    width: 100%;
+}
+.block .controls span{
+    background-color: lightgray;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    float:left;
+    margin: 1px;
+    cursor: pointer;
+}
