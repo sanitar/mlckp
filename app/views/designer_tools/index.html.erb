@@ -2,47 +2,45 @@
   Проектировщик
 <% end %>
   <div class="container-fluid">
-    <div class="row-fluid">
-      <div class="span3">
+    <ul class="breadcrumb">
+      <li><a href="#">Home</a><span class="divider">></span></li>
+      <li><a href="#">Интернет-фабрика</a><span class="divider">></span></li>
+      <li><a href="#">Наши Проекты</a><span class="divider">></span></li>
+      <li class="active"><a href="#">Страница проекта</a><span class="divider"></span></li>
+    </ul>
+    
+    <div class="row">
+      <div class="aside">
         <div class="well sidebar-nav">
           <ul class="nav nav-list">
-            <li class="nav-header">Интернет-магазин</li>
+            <li class="nav-header">Страница проекта</li>
             <li class="nav-info">последние изменения: сегодня, 13:31:25</li>
-            <div class="groups">
+            <div id="groups">
             </div>
           </ul>
         </div>
       </div>
-      <div class="span8 workspace">        
+      <div class="workspace">        
       </div>
     </div>    
   </div>
   
   <script type="text/template" id="block-template">
-    <div class="ui-draggable ui-resizable block" id="block{{ id }}" style="width: {{ width }}px; height: {{ height }}px;">
-        <!--<div class="controls" >
-          <span>+</span>
-          <span></span>
-          <span></span>
-          <span>x</span>
-        </div>-->
-        <div>
-            {{ innerHtml }}
-        </div>
-      </div>
+    <div class="block" id="block{{ id }}">
+      {{ innerHtml }}
+    </div>
   </script>
 
   <script type="text/template" id="group-template">
-      <div>
-        <a class="groups-header"> {{label}} </a>
-        <div class="groups-content" id="groupt{{id}}">
-        </div>
+      <a class="groups-header"> {{label}} </a>
+      <div class="groups-content" id="group{{id}}">
       </div>
   </script>
   
   <script type="text/template" id="element-template">
       <p id="el{{ id }}">
-        <span>&nbsp;</span>
+        <code>&lt;{{ tag }}&gt;</code>
+        <!--<span>&nbsp;</span>-->
         <label>{{label}}</label>
       </p>
   </script>
