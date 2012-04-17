@@ -12,7 +12,8 @@ $(document).ready(function(){
         defaults: {
             tooltip: 'Подсказка',
             tag: 'div',
-            css: {}
+            css: {},
+            js: function(){}
         }
     });
     
@@ -67,18 +68,21 @@ $(document).ready(function(){
         render: function(){
             this.model.set('id', _.uniqueId(''));
             var tmpl = _.template(this.template);
-            this.el = $(tmpl(this.model.toJSON())).draggable({
-                containment: '.workspace'
-            }).resizable({
-                containment: '.workspace'
-            }).hover(this.onHoverIn, this.onHoverOut);
+            this.el = $(tmpl(this.model.toJSON())).hover(this.onHoverIn, this.onHoverOut)
+            this.el.find('.btn-delete').on('click', this.onDeleteBlock);
             return this;
         },
         onHoverIn: function(e){
             $(this).find('.ui-icon-gripsmall-diagonal-se').show();
+            $(this).find('.btn-controls').show();
         },
         onHoverOut: function(e){
             $(this).find('.ui-icon-gripsmall-diagonal-se').hide();
+            $(this).find('.btn-controls').hide();
+        },
+        onDeleteBlock: function(e){
+            console.log('delete block!!', $(this).parents('div.block'));
+            //$(this).parents('.block').hide();
         }
     });
     
@@ -145,15 +149,22 @@ $(document).ready(function(){
                 model: item
             });
             var block = blockView.render().el;
+            attrs.js(block);
             var ws = $('.workspace');
-            ws.append(block);
             $(block).css($.extend(attrs.css, {
                 left: e.pageX - ws.offset().left - 12,
-                top: e.pageY - ws.offset().top - 12
+                top: e.pageY - ws.offset().top - 12,
+                position: 'absolute'
             }));
+            ws.append(block);
+            $(block).draggable({
+                containment: '.workspace'
+            }).resizable({
+                containment: '.workspace'
+            });
         }
     });
 
     //create instance of master view
-    var directory = new DirectoryView();
+    var directory = new DirectoryView();    
 });

@@ -1,3 +1,6 @@
+<%= stylesheet_link_tag "designer_tools"%>
+<%= javascript_include_tag "designer_tools"%>
+
 <% content_for :title do %>
   Проектировщик
 <% end %>
@@ -27,6 +30,12 @@
   
   <script type="text/template" id="block-template">
     <div class="block" id="block{{ id }}">
+      <div class="btn-controls">
+        <span class="btn-delete"></span>
+        <span class="btn-edit"></span>
+        <span class="btn-copy"></span>
+        <span class="btn-select"></span>
+      </div>
       {{ innerHtml }}
     </div>
   </script>

@@ -1,6 +1,24 @@
+<%= stylesheet_link_tag "home"%>
 <% content_for :nav_home do %>
   class="active"
 <% end %>
+<h2>Список проектов:</h2>
+<ul class="projects">
+  <% if not @projects.present? %>
+      <div class="empty">Нет проектов</div>
+  <% end %>
+      
+  <% @projects.each do |project| %>
+      <li>
+        <%= link_to "", edit_project_path(project.id), :class => "btn-edit" %>
+        <%= link_to "", project, :confirm => "Are you sure?", :method => :delete, :class => "btn-delete" %>
+        <a href="#"><%= project.name %></a></span>
+      </li>
+  <%  end %>  
+  <li><%= link_to "Add project", new_project_path %></li>
+</ul>
+<h2>Инструменты: </h2>
+
 <ul>
   <li><%= link_to "Инструменты проектировщика", designer_tools_path %></li>  
   <li><%= link_to "Инструменты разработчика", developer_tools_path %></li>  

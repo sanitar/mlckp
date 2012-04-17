@@ -44,7 +44,7 @@ var elements = [{
     tag: 'div', 
     html: '<div>Простой блочный элемент</div>',
     css: {
-        backgroundColor: '#ccc',        
+        backgroundColor: '#ddd',
         width: '200px',
         height: '100px',
         borderRadius: '5px'
@@ -53,10 +53,22 @@ var elements = [{
     group: '1', 
     label: 'Текстовый элемент', 
     tag: 'input', 
-    html: '<input type="text" place_holder="type some" />',
+    //html: '<input type="text" style="display: none;"/> <span class="input"></span>',
+    html: '<input type="text" />',
     css: {
         width: '250px',
         height: '20px'
+    },
+    js: function(el){
+        /*$(el).dblclick(function(){
+            $(el).find('span').toggle();
+            $(el).find('input').toggle().focus();
+        });
+        $(el).find('input').blur(function(){
+            $(el).find('input').toggle();
+            $(el).find('span').toggle();
+        });
+        console.log('el: ', el);*/
     }
 },{
     group: '2', 

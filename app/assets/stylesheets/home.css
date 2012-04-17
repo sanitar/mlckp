@@ -1,0 +1,20 @@
+.projects{
+    list-style: none;
+}
+.projects .btn-edit, .projects .btn-delete{
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    cursor: pointer;
+    background-image: url("ui-icons_888888_256x240.png");
+}
+.projects .btn-edit{
+    background-position: -64px -112px;
+}
+.projects .btn-delete{
+    background-position: -176px -96px;
+}
+.projects .empty{
+    font-size: 11px;
+    color: gray;
+}

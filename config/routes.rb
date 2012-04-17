@@ -1,5 +1,5 @@
 Molockup10::Application.routes.draw do
-  resources :developer_tools, :reviewer_tools, :designer_tools
+  resources :developer_tools, :reviewer_tools, :designer_tools, :projects
   
   root :to => "home#index"
 

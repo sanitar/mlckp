@@ -17,4 +17,3 @@
 //= require bootstrap.js
 //= require jquery-ui-1.8.18.custom.js
 //= require bd.js
-//= require designer_tools.js
