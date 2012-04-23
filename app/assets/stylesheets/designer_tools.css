@@ -1,7 +1,3 @@
-input{
-    padding: 0;
-}
-
 .nav .nav-header{
     color: #666;
 }
@@ -34,12 +30,12 @@ div.groups-content{
     background-color: darkslategrey;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
-    border-radius: 2px;    
+    border-radius: 2px;
     cursor:pointer;
 }
 
 .groups-content p label{
-    display: inline;    
+    display: inline;
     cursor:pointer;
 }
 
@@ -70,33 +66,6 @@ div.groups-content{
     position: relative;
 }
 
-.block{
-    border: 1px solid transparent;
-}
-
-.block *[class!="controls"]{
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-div.btn-controls{    
-    width: 100%;
-    top: -26px;
-    position: absolute;
-    display: none;
-}
-
-div.btn-controls span{
-    width: 16px;
-    height: 16px;
-    display: inline-block; 
-    float: right;
-    margin: 4px;
-    cursor: pointer;    
-    border: 1px solid transparent;
-    background-image: url("ui-icons_888888_256x240.png");
-}
 
 div.btn-controls span:hover{
     background-image: url("ui-icons_454545_256x240.png");
@@ -115,34 +84,49 @@ div.btn-controls span.btn-select{
     background-position: -64px -16px;
 }
 
-/*span.input{
-    width: 100px;
-    height: 20px;
-    border: 1px solid gray;
-}*/
-
-/*.block:hover{
-    border: 1px solid rgba(200, 200, 200, 0.8);
-    background: rgba(200, 200, 200, 0.15);
+/* ----------------------------------------------- */
+/* --------- общая часть для блоков ----------- */
+div.block .content{
+    width: 100%;
+    height: 100%;
 }
-.block .controls{
-    height: 20px;
-    clear: both;
-    display: block;
+
+div.btn-controls{
+    position: absolute;
+    display: none;
+    top: -22px;
     width: 100%;
 }
-.block .controls span{
-    background-color: lightgray;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
+
+div.btn-controls span{
     width: 16px;
     height: 16px;
     display: inline-block;
-    float:left;
-    margin: 1px;
+    float: right;
+    margin: 4px;
     cursor: pointer;
-}*/
+    border: 1px solid transparent;
+    background-image: url("ui-icons_888888_256x240.png");
+}
+div.block.selected{
+    border-color: rgba(82, 168, 236, 0.8);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+/* ----------------------------------------------- */
+/* --------- для компонентов в системе ----------- */
+
+.mock-block{
+    width: 200px;
+    height: 100px;
+}
+
+.mock-block .content{
+    background-color: #ddd;
+    border-radius: 5px;
+    padding: 0;
+}
+
 .ui-icon{
     background-image: url("ui-icons_222222_256x240.png") !important;
 }

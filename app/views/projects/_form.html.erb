@@ -1,18 +1,36 @@
+<!-- fixme -->
+<% content_for :breadcrumb do %>
+  <li><%= link_to "Список проектов", projects_path %><span class="divider">></span></li>
+  <li class="active">
+  <% if @project.id? %>
+    <%= link_to @project.name, edit_project_path(@project.id) %>
+  <% else %>
+    <%= link_to "Новый проект", new_project_path %>
+  <% end %>
+  </li>
+<% end %>
+  
 <%= form_for @project, :html => {:class => "form-horizontal"} do |f| %>
   <fieldset>
-    <legend>Создание нового проекта</legend>
+    <legend>
+      <% if not @project.id? %>
+        Создание нового проекта
+      <% else %>
+        Редактирование проекта
+      <% end %>
+    </legend>
     <div class="control-group">
       <label class="control-label">Название проекта</label>
       <div class="controls">
         <%= f.text_field :name, :class => "input-xxlarge" %>
       </div>
     </div>
-    <!--<div class="control-group">
+    <div class="control-group">
       <label class="control-label">Описание</label>
       <div class="controls">
         <%= f.text_area :description, :class => "input-xxlarge" %>
       </div>
-    </div>-->
+    </div>
     <div class="form-actions">
       <%= f.submit %>
     </div>

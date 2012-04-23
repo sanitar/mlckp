@@ -1,4 +1,8 @@
 class ProjectsController < ApplicationController
+  def index
+    @projects = Project.all
+  end
+  
   def new
     @project = Project.new
     render 'new', :layout => true
@@ -7,7 +11,7 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.new(params[:project])
     if @project.save
-      redirect_to "/"
+      redirect_to projects_path
     else
       render :action => 'new'
     end
@@ -20,7 +24,7 @@ class ProjectsController < ApplicationController
   def update
     @project = Project.find(params[:id])
     if @project.update_attributes(params[:project])
-      redirect_to "/"
+      redirect_to projects_path
     else
       render :action => 'edit'
     end
