@@ -30,15 +30,12 @@
     </div>
   </div>
 
-  <ul class="breadcrumb">    
-    <li><a href="/">Home</a>
-    <% if content_for?(:breadcrumb) %>
-      <span class="divider">></span>
-    <% end  %>  
-    </li>
+  <% if content_for?(:breadcrumb) %>
+    <ul class="breadcrumb">
+      <li><a href="/">Home</a> <span class="divider">></span></li>
     <%= content_for?(:breadcrumb) ? yield(:breadcrumb) : '' %>
   </ul>
-
+  <% end  %>
 
 <%= yield %>
 

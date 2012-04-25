@@ -15,5 +15,6 @@
 //= require underscore.js
 //= require backbone.js
 //= require bootstrap.js
+//= require block.js
 //= require jquery-ui-1.8.18.custom.js
 

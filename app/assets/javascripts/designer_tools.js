@@ -1,236 +1,91 @@
 $(document).ready(function(){
-    var cl = console.log;
-    // переопределение шаблонизатора underscore
+    var ws = $('#workspace');
+
     _.templateSettings = {
         interpolate : /\{\{(.+?)\}\}/g,
         evaluate: /\{\{(.+?)\}\}/g
     };
 
-    // модели
-    var BlockModel = Backbone.Model.extend({ // Модель пользователя
-    });
-
-    // коллекции
-    var BlocksCollection = Backbone.Collection.extend({ // Коллекция пользователей
-        url: 'blocks',
-        model: BlockModel
-    });
-
-    // индивидуальные вьюхи
-    var BlockView = Backbone.View.extend({
-        template: _.template($("#block-template").html()),
-
-        events: {
-          "click .btn-delete"  : "onDeleteBlock"
-        },
-
-        initialize: function(options){
-            this.el_model = options.el_model;
-            this.directory = options.parent;
-            this.render();
-            if (this.model.isNew()){
-                this.onChange();
-            }
-        },
-
-        render: function(){
-            var self = this;
-            this.el = $(this.template(this.el_model.toJSON()));
-            this.$el = $(this.el);
-            this.$el.attr('id', 'block-' + this.cid);
-
-            this.el.addClass(this.el_model.attributes.css);
-
-            this.el.css({
-               left: this.model.get('positionx'),
-               top: this.model.get('positiony'),
-               position: 'absolute'
-            });
-            if (this.model.get('width') !== undefined){
-                this.el.width(this.model.get('width'));
-            }
-            if (this.model.get('height') !== undefined){
-                this.el.height(this.model.get('height'));
-            }
-
-            $('.workspace').append(this.el);
-
-            $(this.el).draggable({
-                containment: '.workspace',
-                stop: function(){
-                    self.onChange.apply(self, []);
-                }
-            }).resizable({
-                containment: '.workspace',
-                stop: function(){
-                    self.onChange.apply(self, []);
-                }
-            });
-            $(this.el).hover(this.onHoverIn, this.onHoverOut);
-
-            return this;
-        },
-
-        onChange: function(){
-            var self = this,
-                pos = $(this.el).position();
-
-            this.model.set({
-                'positionx': pos.left,
-                'positiony': pos.top,
-                'width': $(this.el).width(),
-                'height': $(this.el).height()
-            });
-            this.updateSaveLabel(true);
-            this.model.save([],{
-                success: function(){
-                    self.updateSaveLabel(false);
-                }
-            });
-        },
-
-        updateSaveLabel:function(saving){
-           $('.nav-info').html(saving == true ? 'Сохранение...' : 'Все изменения сохранены');
-        },
-
-        onHoverIn: function(e){
-            $(this).find('.ui-icon-gripsmall-diagonal-se').show();
-            $(this).find('.btn-controls').show();
-
-        },
-
-        onHoverOut: function(e){
-            $(this).find('.ui-icon-gripsmall-diagonal-se').hide();
-            if (!$(this).hasClass('selected')){
-                $(this).find('.btn-controls').hide();
-            }
-        },
-
-        onDeleteBlock: function(e){
-            var self = this;
-            this.model.destroy({
-                success: function(){
-                    self.remove();
-                    $(self.el).unbind();
-                }
-            })
-        }
-    });
-
-    // класс объектов для перетаскивания
-    var DragObjects = function(){
-        var dragObjects = [],
-            multipleDrag = false,
-            startPosition;
+    /*var DragObjects = function(){
+        var dragCfg = {
+            offset: {},
+            objs: []
+        };
         return {
-            cls: 'selected',
+            cls: 'ui-selected',
 
             init: function(){
                 var self = this;
+                ws.selectable({
+                    filter: '.block',
+                    'stop': function(e, ui){
+                        console.log('select ends', ui);
+                    }
+                });
                 $('.block').live({
                     'click': function(e){
-                        self.onClick.apply(self, [e, this]);
+                        $(this).toggleClass(self.cls);
                     },
+
                     'dragstart': function(e){
-                        self.onDragStart.apply(self, [e, this]);
+                        if ($(this).hasClass('ui-selected')){
+                            dragCfg.objs = $('.ui-selected', '#workspace');
+                            dragCfg.objs.each(function(item){
+                                var el = $(this);
+                                el.data("offset", el.offset());
+                            });
+                            dragCfg.objs = dragCfg.objs.not(this);
+                            dragCfg.offset = $(this).offset();
+                        }  else {
+                            dragCfg.objs = [];
+                        }
                     },
+
                     'drag': function(e, ui){
-                        if (multipleDrag){
+                        if (dragCfg.objs.length > 0){
                             self.onMultipleDrag.apply(self, [e, this, ui]);
                         }
                     },
-                    'dragstop': function(e){
-                        multipleDrag = false;
+                    'dragstop': function(e, ui){
+                        console.log('drag stop');
+                        $(self).trigger('dragstop', [dragCfg.objs]);
                     }
                 });
-                $('.workspace').live('click', function(e){
-                    self.onWorkspaceClick.apply(self, [e, this]);
-                });
-            },
-
-            clear: function(){
-                $(dragObjects).removeClass(this.cls);
-                dragObjects = [];
-            },
-
-            remove: function(el){
-                dragObjects = $.grep(dragObjects, function(item){
-                    return item !== el;
-                });
-                $(el).removeClass(this.cls);
-            },
-
-            add: function(el){
-                dragObjects.push(el);
-                $(el).addClass(this.cls);
-            },
-
-            hasEl: function(el){
-                return $.inArray(el, dragObjects) !== -1;
-            },
-
-            onClick: function(e, el){
-                var len = dragObjects.length,
-                    has = this.hasEl(el);
-                if (e.ctrlKey){
-                    this[has ? 'remove' : 'add'](el);
-                } else {
-                    this.clear();
-                    if ((has && len > 1) || !has){
-                        this.add(el);
-                    }
-                }
-                e.stopPropagation();
-                return false;
-            },
-
-            onWorkspaceClick: function(e, el){
-                if (!e.ctrlKey){
-                    this.clear();
-                }
-            },
-
-            onDragStart: function(e, el){
-                if (this.hasEl(el)){
-                    if (dragObjects.length > 1){
-                        multipleDrag = true;
-                        startPosition = $(el).position();
-                    }
-                } else {
-                    this.clear();
-                    this.add(el);
-                }
             },
 
             onMultipleDrag: function(e, el, ui){
-                var pos = $(el).position(),
-                    shiftTop = pos.top - startPosition.top,
-                    shiftLeft = pos.left- startPosition.left;
+                var dt = ui.position.top - dragCfg.offset.top,
+                    dl = ui.position.left - dragCfg.offset.left,
+                    w = ws.width(), h = ws.height();
 
-                $(dragObjects).each(function(index, item){
-                    if (item != el){
-                        pos = $(item).position();
-                        $(item).css({
-                            left: pos.left + shiftLeft,
-                            top: pos.top + shiftTop
-                        })
-                    }
+                $(dragCfg.objs).each(function(){
+                   var el = $(this),
+                       off = el.data('offset'),
+                       left = off.left + dl,
+                       top = off.top + dt,
+                       x_max = w - el.width(),
+                       y_max = h - el.height();
+
+                   el.css({
+                      top: top < 0 ? 0 : (top > y_max ? y_max : top),
+                      left: left < 0 ? 0 : (left > x_max ? x_max : left)
+                   });
                 });
-                startPosition = $(el).position();
             }
         }
-    }
+    }*/
 
-    // главная вьюха
+
     var DirectoryView = Backbone.View.extend({
         el: $("#groups"),
 
         initialize: function () {
             var self = this;
-            this.drag_stack = new DragObjects();
+            this.blocks = new Mock.BlocksCollection();
+            this.controllers = [];
+            this.drag_stack = new Mock.DragObjects();
             this.drag_stack.init();
             this.elements = allElements;
-            this.blocks = new BlocksCollection();
             this.initEvents();
         },
 
@@ -242,7 +97,18 @@ $(document).ready(function(){
                 }
             });
 
-            $('a.groups-header').on('click', this.toggleGroupHeader);
+            $(this.drag_stack).on('dragstop', function(e, objs){
+                self.onDragStop.apply(self, [objs]);
+            });
+
+            $('#navigation').draggable({
+                axis: 'x',
+                containment: 'parent'
+            });
+
+            $('a.groups-header').on('click', function(e){
+                $(this).parent().find('.groups-content').toggle();
+            });
             $('.groups-content > p').each(function(index, item){
                 var el = self.elements.get(parseInt(this.id.replace('el','')));
                 $(this).draggable({
@@ -254,30 +120,51 @@ $(document).ready(function(){
                         return $('<div class="block"><div class="content">' + el.attributes.html + '</div></div>').addClass(el.attributes.css);
                     },
                     stop: function(e, ui){
-                        var size = $('.workspace').offset();
+                        var size = ws.offset();
                         if ((e.pageX-10) > size.left && (e.pageY-10) > size.top){
                             self.renderBlock(e, ui, el.attributes);
                         }
                     }
                 });
             });
+            $('#master-panel').draggable({
+                containment: 'parent'
+            });
+            $('#master-panel .mini-btn').on('click', function(){
+                self.hideMasterPanel.apply(self);
+            });
+
+            $('.block .btn-select').live('click', function(e){
+                self.showMasterPanel.apply(self);
+            });
         },
 
         onSuccess: function(blocks, arr){
             var self = this;
             this.blocks.each(function(item, index){
-                var blockView = new BlockView({
-                    model: item,
-                    el_model: self.elements.get(item.attributes['element_id'])
-                });
+                self.createBlock(item);
             });
         },
 
+        createBlock: function(model){
+            var blockView = new Mock.BlockView({
+                model: model,
+                template: _.template($("#block-template").html()),
+                el_model: this.elements.get(model.attributes['element_id'])
+            });
+
+            var controller = new Mock.BlockController({
+                model: model,
+                view: blockView
+            });
+            this.controllers.push(controller);
+        },
+
+
         renderBlock: function(e, ui, attrs){
             var self = this,
-                ws = $('.workspace'),
-                left = e.pageX - ws.offset().left - 12,
-                top = e.pageY - ws.offset().top - 12;
+                left = e.pageX - ws.offset().left - 10,
+                top = e.pageY - ws.offset().top - 10;
 
             var item = this.blocks.add([{
                 element_id: attrs.id,
@@ -285,13 +172,32 @@ $(document).ready(function(){
                 positiony: top
             }]).last();
 
-            var blockView = new BlockView({
-                model: item,
-                el_model: this.elements.get(attrs.id)
-            });
+            this.createBlock(item);
+        },
+
+        onDragStop: function(objs){
+            for (var i = 0, len1 = objs.length; i < len1; i++){
+                var id = objs[i].id.replace('block-', '');
+                for (var j = 0, len2 = this.controllers.length; j < len2; j++){
+                    if (id == this.controllers[j].view.cid){
+                        this.controllers[j].savePosition();
+                    }
+                }
+            }
+        },
+        hideMasterPanel: function(){
+          $('#master-panel').hide();
+        },
+        showMasterPanel: function(){
+            var mp = $('#master-panel');
+            if (!mp.is(':visible')){
+                $('#master-panel').show().css({
+                    left: $('#workspace').width() - 200,
+                    top: '10px'
+                });
+            }
         }
     });
 
-    //create instance of master view
     var directory = new DirectoryView();
 });
