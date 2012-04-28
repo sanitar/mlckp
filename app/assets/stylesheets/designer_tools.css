@@ -98,6 +98,16 @@ div.block .content{
     height: 100%;
 }
 
+div.block .content > *{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+}
+
 div.btn-controls{
     position: absolute;
     display: none;
@@ -127,11 +137,16 @@ div.block.ui-selected{
     width: 200px;
     height: 100px;
 }
-
-.mock-block .content{
+.mock-block .content > *{
     background-color: rgba(226, 230, 238, 0.7);
     border-radius: 5px;
     padding: 0;
+}
+.mock-input{
+    width: 200px;
+    height: 25px;
+}
+.mock-input .content > *{
 }
 
 .ui-icon{

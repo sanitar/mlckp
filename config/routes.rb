@@ -1,15 +1,15 @@
 Molockup10::Application.routes.draw do
-  resources :developer_tools, :reviewer_tools
-  
+  resources :developer_tools, :reviewer_tools, :elements
+
   resources :projects do
     resources :pages do
       resources :designer_tools
       resources :blocks
     end
   end
-  
+
   match "/mock/blocks" => "mock#blocks"
-  
+
   root :to => "home#index"
 
   # The priority is based upon order of creation:

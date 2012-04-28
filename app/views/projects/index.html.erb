@@ -1,6 +1,6 @@
 <%= stylesheet_link_tag "home"%>
 
-<% content_for :nav_home do %>
+<% content_for :nav_project do %>
   class="active"
 <% end %>
 
@@ -8,13 +8,13 @@
 <% content_for :breadcrumb do %>
   <li class="active"><%= link_to "Список проектов", projects_path %></li>
 <% end %>
-  
+
 <h2>Список проектов:</h2>
 <ul class="projects">
   <% if not @projects.present? %>
       <div class="empty">Нет проектов</div>
   <% end %>
-      
+
   <% @projects.each do |project| %>
       <li>
         <%= link_to "", edit_project_path(project.id), :class => "btn-edit" %>
@@ -22,6 +22,6 @@
         <%= link_to project.name, project_pages_path(project.id) %>
         <div class="description"><%= project.description %></div>
       </li>
-  <%  end %>  
+  <%  end %>
   <li><%= link_to "Добавить проект", new_project_path %></li>
 </ul>

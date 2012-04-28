@@ -12,9 +12,13 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui-1.8.18.custom.js
 //= require underscore.js
 //= require backbone.js
 //= require bootstrap.js
+//= require controller.js
+//= require plugins/multiselection.js
 //= require block.js
-//= require jquery-ui-1.8.18.custom.js
+
+
 

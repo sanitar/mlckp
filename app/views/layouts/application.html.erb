@@ -24,6 +24,8 @@
         <div class="nav-collapse">
           <ul class="nav">
             <li <%= content_for?(:nav_home) ? yield(:nav_home) : "" %>><a href="/">Home</a></li>
+            <li <%= content_for?(:nav_project) ? yield(:nav_project) : "" %>><%= link_to "Список проектов", projects_path %></li>
+            <li <%= content_for?(:nav_elements) ? yield(:nav_elements) : "" %>><%= link_to "Элементы", elements_path %></li>
           </ul>
         </div>
       </div>

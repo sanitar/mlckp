@@ -1,0 +1,28 @@
+<%= stylesheet_link_tag "home"%>
+
+<% content_for :nav_elements do %>
+  class="active"
+<% end %>
+
+<!-- fixme -->
+<% content_for :breadcrumb do %>
+  <%= link_to "Элементы", elements_path %>
+<% end %>
+
+<h2>Список элементов проекта</h2>
+<ul class="projects">
+  <% if not @elements.present? %>
+      <div class="empty">Нет страниц</div>
+  <% end %>
+
+  <% @elements.each do |element| %>
+      <li>
+        <%= link_to "", edit_element_path(element.id), :class => "btn-edit" %>
+        <%= link_to "", element_path(element.id), :confirm => "Are you sure?", :method => :delete, :class => "btn-delete" %>
+        <%= link_to element.label, edit_element_path(element.id) %>
+        <div class="description"><%= element.html %></div>
+      </li>
+  <% end %>
+
+  <li><%= link_to "Добавить страницу", new_element_path %></li>
+</ul>

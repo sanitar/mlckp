@@ -11,7 +11,7 @@
     <% end %>
   </li>
 <% end %>
-  
+
 <%= form_for [@project, @pages], :html => {:class => "form-horizontal"} do |f| %>
 <h3><%= @project.name %></h3>
   <fieldset>
@@ -22,7 +22,7 @@
         Редактирование страницы
       <% end %>
     </legend>
-    
+
     <div class="control-group">
       <label class="control-label">Название страницы</label>
       <div class="controls">
