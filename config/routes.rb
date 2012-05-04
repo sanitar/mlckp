@@ -3,7 +3,7 @@ Molockup10::Application.routes.draw do
 
   resources :projects do
     resources :pages do
-      resources :designer_tools
+      #resources :designer_tools
       resources :blocks
     end
   end

@@ -4,6 +4,22 @@
 <% content_for :title do %>
   Проектировщик
 <% end %>
+<% content_for :navigation do %>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand">MolockUp</a>
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="active editreview"><a href="#edit">Edit</a></li>
+            <li class="editreview"><a href="#review">Review</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<%  end %>
   <style type="text/css">
     body {
         padding: 0;
@@ -13,8 +29,13 @@
   <div id="navigation">
     <div>
       <ul class="nav nav-list">
-        <li class="nav-header"><%= link_to @project.name, project_pages_path(@project.id) %><%= @page.name %></li>
+        <li class="nav-header"><%= link_to @project.name, project_pages_path(@project.id) %></li>
         <li class="nav-info">Все изменения сохранены</li>
+        <div id="pages" class="well">
+          <h6>Pages: <i class="icon-plus" title="Add page"></i></h6>
+          <ul class="nav nav-list">
+          </ul>
+        </div>
         <div id="groups">
           <% @groups.each do |group| %>
             <div>
@@ -63,6 +84,25 @@
   </script>
 
   <script>
-    var allElements = new Backbone.Collection;
-    allElements.reset($.parseJSON("<%= @elements.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));
+    Mock = Mock || {};
+    Mock.pages = Mock.pages || {};
+    var allElements = new Backbone.Collection(<%= @elements.to_json %>);
+    Mock.pages.PageCollection = new Backbone.Collection(<%= @pages.to_json %>);
+  </script>
+
+  <script type="text/template" id="menu-item-template">
+    <li><a title="{{ tooltip }}"><span class="menu-btn {{ menu_item }}"></span></a></li>
+  </script>
+
+  <script type="text/template" id="menu-divider-template">
+    <li class="{{ divider }}"><a></a></li>
+  </script>
+
+  <script type="text/template" id="page-item-template">
+      <li id="page{{ id }}"><a href="#page{{ id }}"> {{ name }}
+          <span style="display: none;">
+            <i class="icon-trash" title="Remove page"></i>
+            <i class="icon-pencil" title="Edit page"></i>
+          </span>
+      </a></li>
   </script>

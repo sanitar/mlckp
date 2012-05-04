@@ -16,9 +16,10 @@
 //= require underscore.js
 //= require backbone.js
 //= require bootstrap.js
-//= require controller.js
-//= require plugins/multiselection.js
+//= require mock.js
+//= require appearance.js
 //= require block.js
-
-
-
+//= require controller.js
+//= require collection.js
+//= require plugins.js
+//= require pile.js

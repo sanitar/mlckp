@@ -1,26 +1,155 @@
-<%= stylesheet_link_tag "home"%>
+<%= stylesheet_link_tag "designer_tools"%>
+<%= javascript_include_tag "designer_tools"%>
 
-<!-- fixme -->
-<% content_for :breadcrumb do %>
-  <li><%= link_to "Список проектов", projects_path %><span class="divider">></span></li>
-  <li class="active"><%= link_to @project.name, project_pages_path(@project.id) %></li>
+<% content_for :title do %>
+  Проектировщик
 <% end %>
+<% content_for :navigation do %>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="brand">MolockUp</a>
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="active editreview"><a href="#edit">Edit</a></li>
+            <li class="editreview"><a href="#review">Review</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<h3><%= @project.name %></h3>
-<h2>Список страниц проекта</h2>
-<ul class="projects">
-  <% if not @pages.present? %>
-      <div class="empty">Нет страниц</div>
-  <% end %>
-      
-  <% @pages.each do |page| %>
-      <li>
-        <%= link_to "", edit_project_page_path(@project.id, page.id), :class => "btn-edit" %>
-        <%= link_to "", project_page_path(@project.id, page.id), :confirm => "Are you sure?", :method => :delete, :class => "btn-delete" %>
-        <%= link_to page.name, project_page_designer_tools_path(@project.id, page.id) %>  
-        <div class="description"><%= page.description %></div>
+<%  end %>
+  <style type="text/css">
+    body {
+        padding: 0;
+    }
+  </style>
+
+  <div id="navigation">
+    <div>
+      <ul class="nav nav-list">
+        <li class="nav-header"><%= link_to @project.name, project_pages_path(@project.id) %></li>
+        <li class="nav-info">Все изменения сохранены</li>
+        <div id="pages" class="well">
+          <h6>Pages: <i class="icon-plus" title="Add page"></i></h6>
+          <ul class="nav nav-list">
+          </ul>
+        </div>
+        <div id="groups">
+          <% @groups.each do |group| %>
+            <div>
+              <a class="groups-header"> <%= group.label %> </a>
+              <div class="groups-content" id="group<%= group.id %>">
+                <% @elements.each do |element| %>
+                  <p id="el<%= element.id %>">
+                    <code>&lt;<%= element.tag %>&gt;</code>
+                    <label><%= element.label %></label>
+                  </p>
+                <% end %>
+              </div>
+            </div>
+          <% end  %>
+        </div>
+      </ul>
+    </div>
+  </div>
+
+
+  <div id="workspace">
+    <div id="master-panel" style="left: 1100px; top: 10px;">
+      <div><span class="mini-btn"></span></div>
+      <ul>
+        <% @elements.each do |element| %>
+        <li id="el-mp<%= element.id %>">
+          <%= element.label %>
+        </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="modal hide fade in" id="modal-pages-dialog" style="display: none;">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h4></h4>
+      </div>
+      <div class="modal-body control-group">
+        <label class="control-label" for="inputName">Название</label>
+        <input type="text" placeholder="Type name..." id="inputName"/>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Close</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
+      </div>
+    </div>
+  </div>
+
+
+  <script type="text/template" id="block-template">
+    <div class="block">
+      <div class="btn-controls">
+        <span class="btn-delete"></span>
+        <span class="btn-edit"></span>
+        <span class="btn-copy"></span>
+        <span class="btn-select"></span>
+      </div>
+      <div class="content">
+        {{ html }}
+      </div>
+    </div>
+  </script>
+
+  <script type="text/javascript">
+    var allElements = new Backbone.Collection();
+    allElements.reset($.parseJSON("<%= @elements.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));
+    var pageCollection = new Mock.pages.PageCollection();
+    pageCollection.reset($.parseJSON("<%= @pages.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));
+  </script>
+
+  <script type="text/template" id="menu-item-template">
+    <li><a title="{{ tooltip }}"><span class="menu-btn {{ menu_item }}"></span></a></li>
+  </script>
+
+  <script type="text/template" id="menu-divider-template">
+    <li class="{{ divider }}"><a></a></li>
+  </script>
+
+  <script type="text/template" id="page-item-template">
+      <li id="page{{ id }}">
+        <a href="#{{ id }}"> {{ name }}
+          <span style="display: none;">
+            <i class="icon-trash" title="Remove page"></i>
+            <i class="icon-pencil" title="Edit page"></i>
+          </span>
+        </a>
+        <input class="span2" type="text" style="display: none;"/>
+
       </li>
-  <% end %>
+  </script>
 
-  <li><%= link_to "Добавить страницу", new_project_page_path %></li>    
-</ul>
+<%#*<!--<%= stylesheet_link_tag "home"%>%>
+
+<%#*<!-- fixme -->%>
+<%# content_for :breadcrumb do %>
+  <%#*<li><%= link_to "Список проектов", projects_path %><span class="divider">></span></li>%>
+  <%#*<li class="active"><%= link_to @project.name, project_pages_path(@project.id) %></li>%>
+<%# end %>
+
+<%#*<h3><%= @project.name %></h3>%>
+<%#*<h2>Список страниц проекта</h2>%>
+<%#*<ul class="projects">%>
+  <%# if not @pages.present? %>
+      <%#*<div class="empty">Нет страниц</div>%>
+  <%# end %>
+
+  <%# @pages.each do |page| %>
+      <%#*<li>%>
+        <%#= link_to "", edit_project_page_path(@project.id, page.id), :class => "btn-edit" %>
+        <%#= link_to "", project_page_path(@project.id, page.id), :confirm => "Are you sure?", :method => :delete, :class => "btn-delete" %>
+        <%#= link_to page.name, project_page_designer_tools_path(@project.id, page.id) %>
+        <%#*<div class="description"><%= page.description %></div>%>
+      <%#*</li>%>
+  <%# end %>
+
+  <%#*<li><%= link_to "Добавить страницу", new_project_page_path %></li>%>
+<%#*</ul>-->%>

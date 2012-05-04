@@ -1,10 +1,11 @@
 class DesignerToolsController < ApplicationController
   def index
-    @blocks = Block.where(:page_id => params[:page_id])
     @groups = ElementGroup.all
     @elements = Element.all
-    @page = Page.find(params[:page_id])
     @project = Project.find(params[:project_id])
+    @page = Page.find(params[:page_id])
+    @pages = Page.where(:project_id => params[:project_id])
+    @blocks = Block.where(:page_id => params[:page_id])
     render 'index', :layout => true
   end
 end

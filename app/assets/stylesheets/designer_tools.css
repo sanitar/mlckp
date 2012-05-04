@@ -1,9 +1,53 @@
+/*---------- Меню ----------*/
+.editreview{
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+}
+.divider{
+}
+.menu-btn{
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+/*---------- Меню::Страницы ----------*/
+#pages{
+    padding: 5px;
+}
+#pages .nav.nav-list li{
+    cursor: pointer;
+}
+#pages .nav.nav-list li span{
+    display: inline-block;
+    float: right;
+}
+#pages [class^="icon-"], [class*=" icon-"]{
+    cursor: pointer;
+    float: right;
+    opacity: 0.5;
+}
+#pages [class^="icon-"]:hover, [class*=" icon-"]:hover{
+    opacity: 1;
+}
+#modal-pages-dialog{
+    width: 350px;
+}
 /*----------Общая часть----------*/
+.ui-state-disabled,
+.ui-widget-content .ui-state-disabled,
+.ui-widget-header .ui-state-disabled{
+    opacity: 1.00;
+}
 .mini-btn{
     width: 16px;
     height: 16px;
     cursor: pointer;
     background-image: url("ui-icons_888888_256x240.png");
+}
+[class^="icon-"], [class*=" icon-"]{
+    background-image: url("glyphicons-halflings.png");
 }
 /* ----- новые стили ----- */
 #navigation{

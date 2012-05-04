@@ -1,4 +1,141 @@
-var Mock = Mock || {};
+Mock.namespace('Mock.block');
+
+Mock.block.BlockModel = Backbone.Model.extend({});
+
+Mock.block.BlocksCollection = Backbone.Collection.extend({
+    url: 'blocks',
+    model: Mock.block.BlockModel
+});
+
+Mock.block.BlockView = Backbone.View.extend({
+    tpl_id: 'block-template',
+    initialize: function(options){
+        this.el_model = this.findModel(this.model.get('element_id'));
+        this.render();
+    },
+
+    render: function(){
+        var self = this,
+            template = _.template($("#" + this.tpl_id).html());
+
+        this.el = $(template(this.el_model.toJSON()))[0];
+        this.$el = $(this.el);
+        this.$el.attr('id', 'block-' + this.cid);
+
+        this.$el.addClass(this.el_model.attributes.css);
+
+        this.$el.css({
+           left: this.model.get('positionx'),
+           top: this.model.get('positiony'),
+           position: 'absolute'
+        });
+
+        if (this.model.get('width') !== undefined){
+            this.$el.width(this.model.get('width'));
+        }
+        if (this.model.get('height') !== undefined){
+            this.$el.height(this.model.get('height'));
+        }
+
+        $('#workspace').append(this.$el);
+
+        $(this.$el).draggable({
+            containment: '#workspace',
+            distance: 3,
+            cancel: null,
+            grid: [5, 5]
+        }).resizable({
+            containment: '#workspace',
+            autoHide: true,
+            grid: [5, 5]
+        });
+        $(this.$el).hover(this.onHoverIn, this.onHoverOut);
+
+        return this;
+    },
+
+    onHoverIn: function(e){
+        $(this).find('.btn-controls').show();
+
+    },
+
+    onHoverOut: function(e){
+        if (!$(this).hasClass('selected')){
+            $(this).find('.btn-controls').hide();
+        }
+    },
+    findModel: function(element_id){
+        return allElements.where({
+            'id': element_id
+        })[0];
+    }
+});
+
+Mock.block.BlockController = Backbone.View.extend({
+    pluginsConfig: {
+        //'drag': 'Draggable',
+        //'selectable': 'Selectable'
+    },
+
+    initialize: function(o){
+        $.extend(this, o);
+        this.createView();
+        this.el = this.view.el;
+        this.$el = this.view.$el;
+        this.view.$el.on({
+            'dragstop': this.updatePosition.createDelegate(this),
+            'resizestop': this.updatePosition.createDelegate(this)
+        });
+        this.view.$el.find('.btn-delete').click(this.onDelete.createDelegate(this));
+        //this.model.bind('add', this.onModelAdd);
+
+        if (this.model.isNew()){
+            this.updatePosition();
+        }
+    },
+
+    onModelAdd: function(){
+        console.log('onModelAdd');
+    },
+
+    createView: function(){
+        this.view = new Mock.block.BlockView({
+            model: this.model
+        });
+    },
+
+    updatePosition: function(){
+        var pos = this.view.$el.position();
+        this.model.set({
+            'positionx': pos.left,
+            'positiony': pos.top,
+            'width': this.view.$el.width(),
+            'height': this.view.$el.height()
+        });
+        this.model.save([]);
+    },
+
+    onDelete: function(){
+        var self = this;
+        this.model.destroy({
+            success: this.remove.createDelegate(this)/*function(){
+                self.view.remove();
+                self.view.$el.unbind();
+
+                self.$el.unbind();
+            }*/
+        });
+    },
+
+    removeView: function(){
+        this.view.remove();
+        this.view.$el.unbind();
+        this.$el.unbind();
+    }
+});
+
+
+/*var Mock = Mock || {};
 
 // класс модели
 Mock.BlockModel = Backbone.Model.extend({});
@@ -255,104 +392,5 @@ _.extend(Mock.Controllers.prototype, Backbone.Events, {
     }
 });
 
-Mock.MultipleSelection = function(attributes, options) {
-    this.dragCfg = {
-        offset: {},
-        objs: []
-    };
-    this.selection = [];
-    this.cls = 'ui-selected';
-    this.initialize.apply(this, arguments);
-};
-_.extend(Mock.MultipleSelection.prototype, Backbone.Events, {
-    initialize: function(){
-        this.initEvents();
-    },
-    initEvents: function(){
-        var self = this;
-         $('#workspace').selectable({
-            filter: '.block',
-            stop: function(){
-                self.onSelectableStop.apply(self, []);
-            }
-        });
 
-        $('.block').live({
-            'dblclick': function(e){
-                $(this).addClass('ui-selected');
-                self.trigger('add', this);
-            },
-            'click': function(e){
-                var dragObjs = $('.ui-selected', '#workspace').not(this);
-                if (!e.ctrlKey){
-                    dragObjs.removeClass('ui-selected');
-                    if (dragObjs.length > 0 && $(this).hasClass('ui-selected')){
-                        return;
-                    }
-                }
-                $(this).toggleClass('ui-selected');
-            },
-
-            'dragstart': function(e){
-                if ($(this).hasClass('ui-selected')){
-                    self.dragCfg.objs = $('.ui-selected', '#workspace');
-                    self.dragCfg.objs.each(function(item){
-                        var el = $(this);
-                        el.data("offset", el.offset());
-                    });
-                    self.dragCfg = {
-                        objs: self.dragCfg.objs.not(this),
-                        offset: $(this).offset()
-                    }
-                }  else {
-                    self.dragCfg.objs = [];
-                    $('.ui-selected', '#workspace').not(this).removeClass('ui-selected');
-                    $(this).addClass('ui-selected');
-                }
-            },
-
-            'drag': function(e, ui){
-                if (self.dragCfg.objs.length > 0){
-                    self.onMultipleDrag.apply(self, [e, this, ui]);
-                }
-            },
-            'dragstop': function(e, ui){
-                $(self).trigger('dragstop', [self.dragCfg.objs]);
-            }
-        });
-        this.bind('add', this.onAdd, this);
-        this.bind('remove', this.onRemove, this);
-    },
-    onSelectableStop: function(){
-        //this.selection = $('.ui-selected', '#workspace');
-    },
-    onAdd: function(arr){
-        console.log('add', arr);
-        //this.selection.push(arr);
-    },
-    onRemove: function(arr){
-        console.log('remove', arr);
-    },
-    get: function(){
-        return $('.ui-selected', '#workspace');
-    },
-    onMultipleDrag: function(e, el, ui){
-        var dt = ui.position.top - this.dragCfg.offset.top,
-            dl = ui.position.left - this.dragCfg.offset.left,
-            w = $('#workspace').width(), h = $('#workspace').height();
-
-        $(this.dragCfg.objs).each(function(){
-           var el = $(this),
-               off = el.data('offset'),
-               left = off.left + dl,
-               top = off.top + dt,
-               x_max = w - el.width(),
-               y_max = h - el.height();
-
-           el.css({
-              top: top < 0 ? 0 : (top > y_max ? y_max : top),
-              left: left < 0 ? 0 : (left > x_max ? x_max : left)
-           });
-        });
-    }
-});
+*/

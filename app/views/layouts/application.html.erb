@@ -17,6 +17,9 @@
         padding: 9px 0;
       }
 </style>
+<% if content_for?(:navigation) %>
+<%=  yield(:navigation) %>
+<% else %>
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container-fluid">
@@ -31,7 +34,7 @@
       </div>
     </div>
   </div>
-
+<% end %>
   <% if content_for?(:breadcrumb) %>
     <ul class="breadcrumb">
       <li><a href="/">Home</a> <span class="divider">></span></li>

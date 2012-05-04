@@ -1,15 +1,18 @@
 class PagesController < ApplicationController
   def index
-    @pages = Page.where(:project_id => params[:project_id])
+    @groups = ElementGroup.all
+    @elements = Element.all
     @project = Project.find(params[:project_id])
-  end 
-  
+    @pages = Page.where(:project_id => params[:project_id])
+    render 'index', :layout => true
+  end
+
   def new
     @pages = Page.new
     @project = Project.find(params[:project_id])
     render 'new', :layout => true
   end
-  
+
   def create
     @pages = Page.new(params[:page])
     if @pages.save
@@ -18,7 +21,7 @@ class PagesController < ApplicationController
       render :action => 'new'
     end
   end
-  
+
   def edit
     @pages = Page.find(params[:id])
     @project = Project.find(params[:project_id])
@@ -32,10 +35,10 @@ class PagesController < ApplicationController
       render :action => 'edit'
     end
   end
-  
+
   def destroy
     @pages = Page.find(params[:id])
     @pages.destroy
     redirect_to project_pages_path
-  end  
+  end
 end
