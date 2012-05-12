@@ -1,6 +1,6 @@
 Mock.namespace('Mock.Controller');
 
-Mock.Controller = Mock.extend(null, {
+Mock.MocksController = Mock.extend(null, {
     pageLoads: {},
     current_page_id: null,
 
@@ -10,16 +10,37 @@ Mock.Controller = Mock.extend(null, {
         this.collection = new Mock.block.BlocksCollection();
         this.collection.on('reset', this.onCollectionFetch.createDelegate(this));
 
-        $('#groups .groups-content > p').on('dragstop', this.onDragStopElement.createDelegate(this));
+        $('#groups .groups-content > p').on('dragstop', this.createMock.createDelegate(this));
+        $('.block').live({
+            'resizestop': this.updateMock.createDelegate(this),
+            'editstop': this.onEditStopMock.createDelegate(this)
+        });
         $('.block .btn-delete').live({
-            'click': this.onDeleteElement.createDelegate(this)
+            'click': this.deleteMock.createDelegate(this)
         });
     },
+    onEditStopMock: function(e, el, s1){
+        console.log('edit stopped!!!', e, el, s1);
+    },
 
-    onDeleteElement: function(e, el){
+    deleteMock: function(e, el){
         var block = $(el).parents('.block').toArray()[0],
             model = this.controllers.findBy('el', block)[0].model;
         this.collection.remove(model);
+        this.collection.save();
+    },
+
+    createMock: function(e){
+        var size = Mock.C.ws.offset();
+        if ((e.pageX-10) > size.left && (e.pageY-10) > size.top){
+            this.createModel(e);
+        }
+        this.collection.save();
+    },
+
+    updateMock: function(e, ui, el){
+        var control = this.controllers.findBy('el', el)[0];
+        control.updatePosition();
         this.collection.save();
     },
 
@@ -69,24 +90,19 @@ Mock.Controller = Mock.extend(null, {
         });
     },
 
-    onDragStopElement: function(e, ui){
-        var size = Mock.C.ws.offset();
-        if ((e.pageX-10) > size.left && (e.pageY-10) > size.top){
-            this.createModel(e, ui);
-        }
-        this.collection.save();
-    },
-
-    createModel: function(e, ui){
+    createModel: function(e){
         var ws = Mock.C.ws,
             left = e.pageX - ws.offset().left - 10,
             top = e.pageY - ws.offset().top - 10,
             attrs = allElements.get(parseInt(e.target.id.replace('el',''))).attributes;
 
+        console.log('before create: ', left, top);
         var item = this.collection.add([{
             element_id: attrs.id,
-            positionx: left,
-            positiony: top
+            params: JSON.stringify({
+                x: left,
+                y: top
+            })
         }]).last();
 
         var controller = new Mock.block.BlockController({

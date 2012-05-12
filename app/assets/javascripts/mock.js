@@ -47,31 +47,6 @@ Mock.isArray = function(obj){
     return Object.prototype.toString.call(obj, []) === '[object Array]';
 };
 
-Mock.Observable = Mock.extend(Backbone.Events, {
-    initialize: function(){
-        if (this.pluginsConfig !== undefined){
-            this.initPlugins();
-        }
-    },
-    initPlugins: function(){
-       var self = this,
-           root = Mock.plugins,
-           plugins = this.pluginsConfig;
-
-       this.plugins = {};
-
-       $.each(plugins, function(key, value){
-           if (root[value] !== undefined){
-               self.plugins[key] = new root[value]({
-                   parent: self
-               });
-           } else {
-               if (console) console.log('Plugin ' + value + ' doesn\'t exist!');
-           }
-       });
-    }
-});
-
 $.extend(Function.prototype, {
     createDelegate: function(obj, args, appendArgs){
         var method = this;

@@ -11,18 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120419114402) do
+ActiveRecord::Schema.define(:version => 20120512093354) do
 
   create_table "blocks", :force => true do |t|
     t.integer  "element_id"
     t.integer  "page_id"
-    t.integer  "positionx"
-    t.integer  "positiony"
-    t.integer  "width"
-    t.integer  "height"
-    t.integer  "parent_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.text     "params"
   end
 
   create_table "element_groups", :force => true do |t|
@@ -40,6 +36,14 @@ ActiveRecord::Schema.define(:version => 20120419114402) do
     t.text     "js"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+  end
+
+  create_table "mocks", :force => true do |t|
+    t.integer  "element_id"
+    t.integer  "page_id"
+    t.text     "params"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "pages", :force => true do |t|

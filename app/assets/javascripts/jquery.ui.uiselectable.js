@@ -52,7 +52,7 @@ $.widget("ui.uiselectable", $.ui.selectable, {
         },
 
 	destroy: function() {
-		return this;
+            return this;
 	}
 });
 

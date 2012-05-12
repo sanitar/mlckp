@@ -11,10 +11,10 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery_ujs
 //= require jquery-ui
 //= require jquery.ui.uiselectable.js
 //= require jquery.ui.multidraggable.js
+//= require jquery.ui.editable.js
 //= require underscore.js
 //= require backbone.js
 //= require bootstrap.js
@@ -24,6 +24,4 @@
 //= require block.js
 //= require controller.js
 //= require collection.js
-//= require plugins.js
-//= require pile.js
 //= require page.js

@@ -50,18 +50,39 @@ class PagesController < ApplicationController
 
   def update_mocks
     data = params[:data]
-    logger.debug(params)
-    data.each do |id, data|
-      logger.debug(id, data)
+    res = []
+    data.each do |obj|
+      block = Block.find(obj[0])
+      if (not block.update_attributes(obj[1]))
+        res.push({obj[0] => 'error'})
+      end
     end
-    render :text => data.to_json
+    render :text => res.to_json
   end
 
   def create_mocks
-    render :text => "create"
+    data = params[:data]
+    res = {}
+    data.each do |obj|
+      obj[1][:page_id] = params[:page_id]
+      block = Block.new(obj[1])
+      if block.save
+        res[obj[0]] = block
+      else
+        res[obj[0]] = "error"
+      end
+    end
+    render :text => res.to_json
   end
 
   def destroy_mocks
-    render :text => "destroy"
+    data = params[:data]
+    logger.debug('-------------delete------------')
+    data.each do |obj|
+      logger.debug(obj)
+      block = Block.find(obj)
+      block.destroy
+    end
+    render :text => [].to_json
   end
 end

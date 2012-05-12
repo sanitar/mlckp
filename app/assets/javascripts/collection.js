@@ -70,9 +70,8 @@ Mock.Collection = Mock.extend(null, {
         });
         return grep.length == 0 ? false : grep;
     },
+    
     each: function(callback, args){
-//each: function( callback, args ) {
         return jQuery.each( this.collection, callback, args );
-//},
     }
 });
