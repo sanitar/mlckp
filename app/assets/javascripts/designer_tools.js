@@ -11,9 +11,27 @@ $(document).ready(function(){
         initialize: function(){
             dir = this;
             this.controller = new Mock.Controller();
-            this.selections = new Mock.Selections({
-                blocks: this.controller.controllers
-            });
+
+            $('#workspace')
+                .uiselectable({
+                    filter: '.block'
+                })
+                .multidraggable({
+                    filter: '.block',
+                    dragOptions: {
+                        containment: '#workspace',
+                        distance: 3,
+                        cancel: null,
+                        grid: [5, 5]
+                    }
+                });
+            $('#workspace').on('multidraggablestop', this.onDragStop.createDelegate(this));
+
+            /*$('#navigation > div').splitter({
+                type: 'h',
+                sizeTop: true,
+                accessKey:"P"
+            });*/
 
             this.menu = new Mock.menu.Menu({
                 menu: [
@@ -26,7 +44,7 @@ $(document).ready(function(){
                 ]
             });
 
-            this.pages = new Mock.menu.Pages({
+            this.pages = new Mock.page.PageController({
                 collection: pageCollection
             });
             this.pages.on('route:load', this.controller.fetch.createDelegate(this.controller));
@@ -44,6 +62,10 @@ $(document).ready(function(){
                     }
                 });
             });
+        },
+        onDragStop: function(e, el, ui){
+            //console.log('multiple drag stop: ', e, el, ui);
+            this.controller.save();
         }
     });
 

@@ -4,41 +4,64 @@ class PagesController < ApplicationController
     @elements = Element.all
     @project = Project.find(params[:project_id])
     @pages = Page.where(:project_id => params[:project_id])
-    render 'index', :layout => true
-  end
-
-  def new
-    @pages = Page.new
-    @project = Project.find(params[:project_id])
-    render 'new', :layout => true
   end
 
   def create
-    @pages = Page.new(params[:page])
+    data = params[:page]
+    data['project_id'] = params[:project_id]
+    @pages = Page.new(data)
     if @pages.save
-      redirect_to project_pages_path
+      data = @pages
     else
-      render :action => 'new'
+      data = []
     end
+    render :text => data.to_json
   end
 
-  def edit
-    @pages = Page.find(params[:id])
-    @project = Project.find(params[:project_id])
-  end
 
   def update
     @pages = Page.find(params[:id])
+    response.headers['Content-type'] = "text/plain; charset=utf-8"
     if @pages.update_attributes(params[:page])
-      redirect_to project_pages_path
+      data = @pages
     else
-      render :action => 'edit'
+      data = []
     end
+    render :text => data.to_json
   end
 
   def destroy
-    @pages = Page.find(params[:id])
-    @pages.destroy
-    redirect_to project_pages_path
+    @page = Page.find(params[:id])
+    @page.destroy
+    response.headers['Content-type'] = "text/plain; charset=utf-8"
+    render :text => [].to_json
+  end
+
+  def save
+    data = params[:data]
+    render :text => params.to_json
+  end
+
+  def get_mocks
+    data = Block.where(:page_id => params[:page_id])
+    response.headers['Content-type'] = "text/plain; charset=utf-8"
+    render :text => data.to_json
+  end
+
+  def update_mocks
+    data = params[:data]
+    logger.debug(params)
+    data.each do |id, data|
+      logger.debug(id, data)
+    end
+    render :text => data.to_json
+  end
+
+  def create_mocks
+    render :text => "create"
+  end
+
+  def destroy_mocks
+    render :text => "destroy"
   end
 end

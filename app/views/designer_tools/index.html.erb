@@ -36,23 +36,24 @@
           <ul class="nav nav-list">
           </ul>
         </div>
-        <div id="groups">
-          <% @groups.each do |group| %>
-            <div>
-              <a class="groups-header"> <%= group.label %> </a>
-              <div class="groups-content" id="group<%= group.id %>">
-                <% @elements.each do |element| %>
-                  <p id="el<%= element.id %>">
-                    <code>&lt;<%= element.tag %>&gt;</code>
-                    <label><%= element.label %></label>
-                  </p>
-                <% end %>
-              </div>
-            </div>
-          <% end  %>
-        </div>
       </ul>
     </div>
+    <div id="groups">
+      <% @groups.each do |group| %>
+        <div>
+          <a class="groups-header"> <%= group.label %> </a>
+          <div class="groups-content" id="group<%= group.id %>">
+            <% @elements.each do |element| %>
+              <p id="el<%= element.id %>">
+                <code>&lt;<%= element.tag %>&gt;</code>
+                <label><%= element.label %></label>
+              </p>
+            <% end %>
+          </div>
+        </div>
+      <% end  %>
+    </div>
+    <div>sdklfhsdkfh</div>
   </div>
 
 

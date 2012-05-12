@@ -4,7 +4,53 @@ Mock.block.BlockModel = Backbone.Model.extend({});
 
 Mock.block.BlocksCollection = Backbone.Collection.extend({
     url: 'blocks',
-    model: Mock.block.BlockModel
+    model: Mock.block.BlockModel,
+    initialize: function(){
+        this.changes = {
+            'delete': [],
+            'update': {},
+            'create': {}
+        };
+        //this.saving = false;
+        this.bind('change', this.onChange);
+        this.bind('remove', this.onRemove);
+    },
+
+    onRemove: function(model, col, obj){
+        if (!model.isNew()){
+            this.changes['delete'].push(model.id);
+        }
+    },
+
+    onChange: function(model, ui){
+        //console.log('change!!!', model, model.changedAttributes());
+        var isNew = model.isNew(),
+            id = isNew ? model.cid : model.id,
+            arr = this.changes[isNew ? 'create' : 'update'];
+        arr[id] = arr[id] || {};
+        $.extend(arr[id], model.changedAttributes());
+    },
+
+    save: function(){
+        console.log('we want save data: ', this.changes);
+        var ch = this.changes,
+            type = ch['delete'].length ? 'delete'
+                : ($.isEmptyObject(ch['update']) ? 'create' : 'update');
+
+        $.ajax({
+            url: this.url + '/' + type,
+            type: 'post',
+            data: {
+                'data': ch[type]
+            },
+            traditional: false,
+            success: function(responce, result, info){
+                console.log('ajax success!!', responce, result, info);
+            }
+        });
+
+        this.changes[type] = type == 'delete' ? [] : {};
+    }
 });
 
 Mock.block.BlockView = Backbone.View.extend({
@@ -39,12 +85,8 @@ Mock.block.BlockView = Backbone.View.extend({
 
         $('#workspace').append(this.$el);
 
-        $(this.$el).draggable({
-            containment: '#workspace',
-            distance: 3,
-            cancel: null,
-            grid: [5, 5]
-        }).resizable({
+        $(this.$el)
+        .resizable({
             containment: '#workspace',
             autoHide: true,
             grid: [5, 5]
@@ -72,30 +114,22 @@ Mock.block.BlockView = Backbone.View.extend({
 });
 
 Mock.block.BlockController = Backbone.View.extend({
-    pluginsConfig: {
-        //'drag': 'Draggable',
-        //'selectable': 'Selectable'
-    },
-
     initialize: function(o){
         $.extend(this, o);
         this.createView();
         this.el = this.view.el;
         this.$el = this.view.$el;
         this.view.$el.on({
-            'dragstop': this.updatePosition.createDelegate(this),
             'resizestop': this.updatePosition.createDelegate(this)
         });
-        this.view.$el.find('.btn-delete').click(this.onDelete.createDelegate(this));
+        //this.view.$el.find('.btn-delete').click(this.onDelete.createDelegate(this));
         //this.model.bind('add', this.onModelAdd);
 
         if (this.model.isNew()){
             this.updatePosition();
         }
-    },
-
-    onModelAdd: function(){
-        console.log('onModelAdd');
+        this.$el.trigger('create');
+        this.model.on('remove', this.onRemove.createDelegate(this));
     },
 
     createView: function(){
@@ -112,26 +146,28 @@ Mock.block.BlockController = Backbone.View.extend({
             'width': this.view.$el.width(),
             'height': this.view.$el.height()
         });
-        this.model.save([]);
     },
 
-    onDelete: function(){
-        var self = this;
-        this.model.destroy({
-            success: this.remove.createDelegate(this)/*function(){
-                self.view.remove();
-                self.view.$el.unbind();
-
-                self.$el.unbind();
-            }*/
-        });
-    },
-
-    removeView: function(){
+    onRemove: function(){
+        //console.log('on remove in controller ');
         this.view.remove();
         this.view.$el.unbind();
         this.$el.unbind();
     }
+
+    /*onDelete: function(){
+        var self = this;
+        this.$el.trigger('remove');
+        this.model.destroy({
+            success: this.remove.createDelegate(this)
+        });
+    },*/
+
+    /*removeView: function(){
+        this.view.remove();
+        this.view.$el.unbind();
+        this.$el.unbind();
+    }*/
 });
 
 

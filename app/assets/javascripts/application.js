@@ -12,10 +12,13 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui-1.8.18.custom.js
+//= require jquery-ui
+//= require jquery.ui.uiselectable.js
+//= require jquery.ui.multidraggable.js
 //= require underscore.js
 //= require backbone.js
 //= require bootstrap.js
+
 //= require mock.js
 //= require appearance.js
 //= require block.js
@@ -23,3 +26,4 @@
 //= require collection.js
 //= require plugins.js
 //= require pile.js
+//= require page.js

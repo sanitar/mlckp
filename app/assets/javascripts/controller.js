@@ -8,18 +8,20 @@ Mock.Controller = Mock.extend(null, {
         $.extend(this, o);
         this.controllers = new Mock.Collection();
         this.collection = new Mock.block.BlocksCollection();
-
         this.collection.on('reset', this.onCollectionFetch.createDelegate(this));
-        this.collection.on('remove', this.onCollectionChange.createDelegate(this));
-        this.collection.on('sync', this.onCollectionChange.createDelegate(this));
 
         $('#groups .groups-content > p').on('dragstop', this.onDragStopElement.createDelegate(this));
+        $('.block .btn-delete').live({
+            'click': this.onDeleteElement.createDelegate(this)
+        });
     },
 
-    onCollectionChange: function(){
-        this.pageLoads[this.current_page_id] = this.collection.toJSON();
+    onDeleteElement: function(e, el){
+        var block = $(el).parents('.block').toArray()[0],
+            model = this.controllers.findBy('el', block)[0].model;
+        this.collection.remove(model);
+        this.collection.save();
     },
-
 
     fetch: function(page_id){
         var self = this;
@@ -49,6 +51,14 @@ Mock.Controller = Mock.extend(null, {
         this.current_page_id = page_id;
     },
 
+    save: function(){
+        var changes = [];
+        this.controllers.each(function(index, item){
+            item.updatePosition();
+        });
+        this.collection.save();
+    },
+
     onCollectionFetch: function(){
         var self = this;
         this.collection.each(function(item , index){
@@ -64,6 +74,7 @@ Mock.Controller = Mock.extend(null, {
         if ((e.pageX-10) > size.left && (e.pageY-10) > size.top){
             this.createModel(e, ui);
         }
+        this.collection.save();
     },
 
     createModel: function(e, ui){
