@@ -40,21 +40,25 @@
         </ul>
       </div>
       <div id="groups">
-        <% @groups.each do |group| %>
-          <div>
-            <a class="groups-header"> <%= group.label %> </a>
-            <div class="groups-content" id="group<%= group.id %>">
+        <ul class="nav nav-tabs">
+          <% @groups.each do |group| %>
+          <li><a data-toggle="tab" href="#group<%= group.id %>"><%= group.label %></a></li>
+          <% end  %>
+        </ul>
+        <div class="tab-content">
+          <% @groups.each do |group| %>
+          <div class="tab-pane" id="group<%= group.id %>">
               <% @elements.each do |element| %>
-                <p id="el<%= element.id %>">
-                  <code>&lt;<%= element.tag %>&gt;</code>
-                  <label><%= element.label %></label>
-                </p>
+                <% if element.element_group_id == group.id %>
+                  <div class="element" id="el<%= element.id %>"><span>
+                    <%= image_tag ("elements/#{element.tag}.png"), :title => element.label %>
+                  </span></div>
+                <% end %>
               <% end %>
-            </div>
           </div>
-        <% end  %>
+          <% end  %>
+        </div>
       </div>
-
     </div>
   </div>
 
@@ -101,7 +105,6 @@
       </div>
     </div>
   </script>
-
   <script type="text/javascript">
     var allElements = new Backbone.Collection();
     allElements.reset($.parseJSON("<%= @elements.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));

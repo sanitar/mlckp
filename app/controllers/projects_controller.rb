@@ -2,12 +2,12 @@ class ProjectsController < ApplicationController
   def index
     @projects = Project.all
   end
-  
+
   def new
     @project = Project.new
     render 'new', :layout => true
   end
-  
+
   def create
     @project = Project.new(params[:project])
     if @project.save
@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
       render :action => 'new'
     end
   end
-  
+
   def edit
     @project = Project.find(params[:id])
   end
@@ -29,10 +29,10 @@ class ProjectsController < ApplicationController
       render :action => 'edit'
     end
   end
-  
+
   def destroy
     @project = Project.find(params[:id])
     @project.destroy
-    redirect_to "/"
-  end  
+    redirect_to projects_path
+  end
 end

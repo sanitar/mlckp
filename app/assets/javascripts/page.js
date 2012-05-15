@@ -60,6 +60,7 @@ Mock.page.PageController = Backbone.Router.extend({
 
     initialize: function(o){
         $.extend(this, o);
+        this.current_page = -1;
         this.views = new Mock.Collection();
         this.dialog = new Mock.page.Dialog();
 
@@ -96,7 +97,12 @@ Mock.page.PageController = Backbone.Router.extend({
 
     onRemovePageClick: function(e, view, model){
         if (confirm('Do you really want to delete page "'+ model.attributes['name'] + '"?')){
+            var id = model.attributes.id;
+            if (id == this.current_page){
+                this.navigate('#');
+            }
             model.destroy();
+            this.trigger('deletepages', [this, id]);
         }
     },
 
@@ -104,18 +110,26 @@ Mock.page.PageController = Backbone.Router.extend({
         var self = this;
         if (isEdit){
             this.editModel.set('name', text);
-            this.editModel.save();
+            this.editModel.save({},{
+                success: function(){
+                    self.trigger('editpages', [self, self.editModel]);
+                }
+            });
         } else {
             var model = this.collection.add({
                 name: text
             }).last();
             model.save({}, {
-                success: self.createView.createDelegate(this)
+                success: function(){
+                    self.createView(model);
+                    self.trigger('addpages', [self, model]);
+                }
             });
         }
     },
 
     load: function(page){
+        this.current_page = page;
         $('#pages ul li').removeClass('active')
         $('#page' + page).addClass('active');
     }

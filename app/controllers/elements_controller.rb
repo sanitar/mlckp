@@ -1,10 +1,12 @@
 class ElementsController < ApplicationController
   def index
+    @groups = ElementGroup.all
     @elements = Element.all
  end
 
   def new
     @element = Element.new
+    @group_id = params[:group_id]
     render 'new', :layout => true
   end
 
@@ -19,6 +21,7 @@ class ElementsController < ApplicationController
 
   def edit
     @element = Element.find(params[:id])
+    @group_id = params[:group_id]
   end
 
   def update

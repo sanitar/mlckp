@@ -10,8 +10,19 @@ $(document).ready(function(){
     var DirectoryView = Mock.extend(null, {
         initialize: function(){
             dir = this;
-            this.controller = new Mock.MocksController();
+            this.initComponents();
+            this.initEvents();
 
+            $('#groups a:first').tab('show');
+            this.toggleTabs();
+
+            $('#navigation').draggable({
+                axis: 'x'
+            });
+        },
+
+        initComponents: function(){
+            this.controller = new Mock.MocksController();
             ws
                 .uiselectable({
                     filter: '.block'
@@ -25,14 +36,6 @@ $(document).ready(function(){
                         grid: [5, 5]
                     }
                 });
-            ws.on('multidraggablestop', this.onDragStop.createDelegate(this));
-
-            /*$('#navigation > div').splitter({
-                type: 'h',
-                sizeTop: true,
-                accessKey:"P"
-            });*/
-
             this.menu = new Mock.menu.Menu({
                 menu: [
                     ['menu_undo', 'menu_redo'],
@@ -43,14 +46,28 @@ $(document).ready(function(){
                     ['menu_layers_group', 'menu_layers_ungroup']
                 ]
             });
+            console.log(pageCollection);
 
             this.pages = new Mock.page.PageController({
                 collection: pageCollection
             });
+
+            $('#navigation > div').splitter({
+                type: 'h',
+                sizeTop: true,
+                accessKey:"P"
+            });
+        },
+
+        initEvents: function(){
+            ws.on('multidraggablestop', this.onDragStop.createDelegate(this));
+
             this.pages.on('route:load', this.controller.fetch.createDelegate(this.controller));
+            this.pages.on('route:load', this.toggleTabs);
+            this.pages.on('deletepages', this.toggleTabs);
             Backbone.history.start();
 
-            $('#groups .groups-content > p').each(function(index, item){
+            $('#groups .tab-pane > div').each(function(index, item){
                 var el = allElements.get(parseInt(this.id.replace('el','')));
                 $(this).draggable({
                     cursorAt: {
@@ -62,6 +79,16 @@ $(document).ready(function(){
                     }
                 });
             });
+
+        },
+
+        toggleTabs: function(){
+            var pages = $('#pages .active');
+            if (pages.size() > 0){
+                $('#groups, #navigation .hsplitbar').show();
+            } else {
+                $('#groups, #navigation .hsplitbar').hide();
+            }
         },
 
         onDragStop: function(e, el, ui){
@@ -71,3 +98,4 @@ $(document).ready(function(){
 
     var directory = new DirectoryView();
 });
+

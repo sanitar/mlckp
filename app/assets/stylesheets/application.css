@@ -8,8 +8,21 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *= require_self
  *= require bootstrap.css
  *= require bootstrap-responsive.css
  *= require jquery-ui-1.8.18.custom.css
+ *= require_self
 */
+#navigation{
+    height: 100%;
+    width: 260px;
+    position: fixed;
+}
+.nav .nav-info{
+    color: gray;
+    font-size: 11px;
+    padding-bottom: 5px;
+}
+[class^="icon-"], [class*=" icon-"]{
+    background-image: url("glyphicons-halflings.png");
+}

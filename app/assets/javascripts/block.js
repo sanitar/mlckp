@@ -79,7 +79,6 @@ Mock.block.BlockView = Backbone.View.extend({
         var self = this,
             html = _.template($("#" + this.tpl_id).html())(this.el_model.toJSON()),
             params = JSON.parse(this.model.get('params'));
-        console.log('params in render: ', params);
         this.el = $(html)[0];
         this.$el = $(this.el);
 

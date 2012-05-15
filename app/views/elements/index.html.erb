@@ -1,28 +1,73 @@
-<%= stylesheet_link_tag "home"%>
+<%= stylesheet_link_tag "developer_tools"%>
+<%= stylesheet_link_tag "codemirror"%>
+<%= stylesheet_link_tag "elegant"%>
+
+<%= javascript_include_tag "codemirror/codemirror"%>
+<%= javascript_include_tag "codemirror/xml"%>
+<%= javascript_include_tag "codemirror/css"%>
+<%= javascript_include_tag "codemirror/javascript"%>
+<%= javascript_include_tag "codemirror/htmlmixed"%>
+
+<%= javascript_include_tag "developer_tools"%>
+
+<style type="text/css">
+  body {
+
+  }
+</style>
+
+<% content_for :title do %>
+  Программист
+<% end %>
 
 <% content_for :nav_elements do %>
   class="active"
 <% end %>
 
-<!-- fixme -->
-<% content_for :breadcrumb do %>
-  <%= link_to "Элементы", elements_path %>
-<% end %>
+<div id="navigation">
+  <div id="elements">
+      <ul class="nav nav-list">
+        <li class="nav-header">Elements List<i class="icon-plus" title="Add page"></i></li>
+        <li class="nav-info">All changes saved</li>
+        <div id="" class="well">
+          <ul class="nav nav-list">
+            <% @elements.each do |element| %>
+              <li id="el#{element.id }">
+                <a href="#{element.id}"> <%= element.label %>
+                  <span style="display: none;">
+                    <i class="icon-trash" title="Remove page"></i>
+                    <i class="icon-pencil" title="Edit page"></i>
+                  </span>
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </ul>
+  </div>
+  <div id="params">
+  </div>
+</div>
 
-<h2>Список элементов проекта</h2>
-<ul class="projects">
-  <% if not @elements.present? %>
-      <div class="empty">Нет страниц</div>
-  <% end %>
-
-  <% @elements.each do |element| %>
-      <li>
-        <%= link_to "", edit_element_path(element.id), :class => "btn-edit" %>
-        <%= link_to "", element_path(element.id), :confirm => "Are you sure?", :method => :delete, :class => "btn-delete" %>
-        <%= link_to element.label, edit_element_path(element.id) %>
-        <div class="description"><%= element.html %></div>
-      </li>
-  <% end %>
-
-  <li><%= link_to "Добавить страницу", new_element_path %></li>
-</ul>
+<div id="workspace">
+  <div class="leftside">
+      <div id="htmlcode">
+        <div class="codetype">HTML</div>
+        <textarea id="html"></textarea>
+      </div>
+      <div id="jscode">
+        <div class="codetype">javaScript</div>
+        <textarea id="js">js</textarea>
+      </div>
+  </div>
+  <div class="rightside">
+      <div id="csscode">
+        <div class="codetype">css</div>
+        <textarea id="css">css</textarea>
+      </div>
+      <div id="resultcode">
+        <div class="codetype">Refresh</div>
+        <div id="result">result</div>
+      </div>
+  </div>
+</div>

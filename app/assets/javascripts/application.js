@@ -15,6 +15,7 @@
 //= require jquery.ui.uiselectable.js
 //= require jquery.ui.multidraggable.js
 //= require jquery.ui.editable.js
+//= require jquery.ui.splitter.js
 //= require underscore.js
 //= require backbone.js
 //= require bootstrap.js

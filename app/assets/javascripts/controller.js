@@ -10,7 +10,7 @@ Mock.MocksController = Mock.extend(null, {
         this.collection = new Mock.block.BlocksCollection();
         this.collection.on('reset', this.onCollectionFetch.createDelegate(this));
 
-        $('#groups .groups-content > p').on('dragstop', this.createMock.createDelegate(this));
+        $('#groups .tab-pane > div').on('dragstop', this.createMock.createDelegate(this));
         $('.block').live({
             'resizestop': this.updateMock.createDelegate(this),
             'editstop': this.onEditStopMock.createDelegate(this)
@@ -92,11 +92,10 @@ Mock.MocksController = Mock.extend(null, {
 
     createModel: function(e){
         var ws = Mock.C.ws,
-            left = e.pageX - ws.offset().left - 10,
-            top = e.pageY - ws.offset().top - 10,
+            left = e.pageX - ws.offset().left - 17,
+            top = e.pageY - ws.offset().top - 17,
             attrs = allElements.get(parseInt(e.target.id.replace('el',''))).attributes;
 
-        console.log('before create: ', left, top);
         var item = this.collection.add([{
             element_id: attrs.id,
             params: JSON.stringify({
