@@ -1,17 +1,17 @@
-Mock.namespace('Mock.page');
+Mock.namespace('Mock.element');
 
-Mock.page.Model = Backbone.Model.extend({
+Mock.element.Model = Backbone.Model.extend({
 });
 
-Mock.page.Collection = Backbone.Collection.extend({
-    model: Mock.page.Model,
+Mock.element.Collection = Backbone.Collection.extend({
+    model: Mock.element.Model,
     initialize: function(o){
         $.extend(this, o);
     }
 
 });
 
-Mock.page.View = Backbone.View.extend({
+Mock.element.View = Backbone.View.extend({
     events: {
         'click .icon-pencil': 'clickEdit',
         'click .icon-trash': 'clickDelete'
@@ -61,7 +61,7 @@ Mock.page.View = Backbone.View.extend({
     }
 });
 
-Mock.page.Controller = Backbone.Router.extend({
+Mock.element.Controller = Backbone.Router.extend({
     prefix: 'nav',
     nameAttr: 'name',
     routes: {
@@ -97,7 +97,7 @@ Mock.page.Controller = Backbone.Router.extend({
     },
 
     createView: function(model){
-        var view = new Mock.page.View({
+        var view = new Mock.element.View({
             model: model,
             prefix: this.prefix,
             selector: this.selector,

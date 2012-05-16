@@ -32,7 +32,7 @@
         <ul class="nav nav-list">
           <li class="nav-header"><%= link_to @project.name, project_pages_path(@project.id) %></li>
           <li class="nav-info">Все изменения сохранены</li>
-          <div id="pages" class="well">
+          <div id="page" class="well">
             <h6>Pages: <i class="icon-plus" title="Add page"></i></h6>
             <ul class="nav nav-list">
             </ul>
@@ -75,7 +75,7 @@
       </ul>
     </div>
 
-    <div class="modal hide fade in" id="modal-pages-dialog" style="display: none;">
+    <div class="modal hide fade in" id="add-edit-dialog" style="display: none;">
       <div class="modal-header">
         <button class="close" data-dismiss="modal">×</button>
         <h4></h4>
@@ -108,7 +108,9 @@
   <script type="text/javascript">
     var allElements = new Backbone.Collection();
     allElements.reset($.parseJSON("<%= @elements.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));
-    var pageCollection = new Mock.page.PageCollection();
+    var pageCollection = new Mock.page.Collection({
+      url: 'pages/'
+    });
     pageCollection.reset($.parseJSON("<%= @pages.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));
   </script>
 
@@ -121,7 +123,7 @@
   </script>
 
   <script type="text/template" id="page-item-template">
-      <li id="page{{ id }}">
+      <li id="el{{ id }}">
         <a href="#{{ id }}"> {{ name }}
           <span style="display: none;">
             <i class="icon-trash" title="Remove page"></i>

@@ -11,12 +11,14 @@ class ElementsController < ApplicationController
   end
 
   def create
-    @element = Element.new(params[:element])
+    data = params[:element]
+    @element = Element.new(data)
     if @element.save
-      redirect_to elements_path
+      data = @element
     else
-      render :action => 'new'
+      data = []
     end
+    render :text => data.to_json
   end
 
   def edit
@@ -26,17 +28,19 @@ class ElementsController < ApplicationController
 
   def update
     @element = Element.find(params[:id])
+    response.headers['Content-type'] = "text/plain; charset=utf-8"
     if @element.update_attributes(params[:element])
-      redirect_to elements_path
+      data = @element
     else
-      render :action => 'edit'
+      data = []
     end
-
+    render :text => data.to_json
   end
 
   def destroy
     @element = Element.find(params[:id])
     @element.destroy
-    redirect_to elements_path
+    response.headers['Content-type'] = "text/plain; charset=utf-8"
+    render :text => [].to_json
   end
 end

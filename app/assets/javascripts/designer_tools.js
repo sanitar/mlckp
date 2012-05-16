@@ -48,8 +48,13 @@ $(document).ready(function(){
             });
             console.log(pageCollection);
 
-            this.pages = new Mock.page.PageController({
+            /*this.pages = new Mock.page.PageController({
                 collection: pageCollection
+            });*/
+            this.pages = new Mock.page.Controller({
+                collection: pageCollection,
+                prefix: 'page'
+                //selector: '#elements .well ul'
             });
 
             $('#navigation > div').splitter({
@@ -83,7 +88,7 @@ $(document).ready(function(){
         },
 
         toggleTabs: function(){
-            var pages = $('#pages .active');
+            var pages = $('#page .active');
             if (pages.size() > 0){
                 $('#groups, #navigation .hsplitbar').show();
             } else {

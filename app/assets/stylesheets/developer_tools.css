@@ -9,34 +9,9 @@ body{
 #navigation{
     background-color: white;
 }
-
-/*--------------- elements --------------*/
-#elements{
-    padding-top: 10px;
-}
-#elements .well li{
-    cursor: pointer;
-}
-#elements .nav.nav-list li span{
-    display: inline-block;
-    float: right;
-}
-#elements [class^="icon-"], [class*=" icon-"]{
-    cursor: pointer;
-    float: right;
-    opacity: 0.5;
-}
-#elements [class^="icon-"]:hover, [class*=" icon-"]:hover{
-    opacity: 1;
-}
-
-#elements .well{
-    padding: 5px;
-}
-
 /*--------------- params --------------*/
 #params{
-    background-color: blueviolet;
+    margin-top: 10px;
 }
 /*--------------- workspace --------------*/
 #workspace{
@@ -85,11 +60,20 @@ body{
     right: 5px;
     font-family: monospace;
 }
+
 .vsplitbar{
     height: 5px;
     width: 5px;
     background-color: transparent;
 }
 
+#navigation > div .hsplitbar {
+    height: 5px;
+    background-color: #EFEFEF;
+
+}
+#navigation > div .hsplitbar.active, #navigation > div .hsplitbar:hover {
+    background-color: #999999;
+}
 
 

@@ -25,27 +25,29 @@
 <% end %>
 
 <div id="navigation">
-  <div id="elements">
-      <ul class="nav nav-list">
-        <li class="nav-header">Elements List<i class="icon-plus" title="Add page"></i></li>
-        <li class="nav-info">All changes saved</li>
-        <div id="" class="well">
-          <ul class="nav nav-list">
-            <% @elements.each do |element| %>
-              <li id="el#{element.id }">
-                <a href="#{element.id}"> <%= element.label %>
-                  <span style="display: none;">
-                    <i class="icon-trash" title="Remove page"></i>
-                    <i class="icon-pencil" title="Edit page"></i>
-                  </span>
-                </a>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      </ul>
-  </div>
-  <div id="params">
+  <div>
+    <div id="elements">
+        <ul class="nav nav-list">
+          <li class="nav-header">Some header</li>
+          <li class="nav-info">All changes saved</li>
+          <div id="element" class="well">
+            <h6>Elements List<i class="icon-plus" title="Add page"></i></h6>
+            <ul class="nav nav-list">
+            </ul>
+          </div>
+        </ul>
+    </div>
+    <div id="params">
+      <div>
+        <label>some param: </label>
+        <input type="text" />
+      </div>
+      <div>
+        <label>some else param: </label>
+        <input type="text" />
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -71,3 +73,36 @@
       </div>
   </div>
 </div>
+
+  <script type="text/template" id="element-item-template">
+      <li id="el{{ id }}">
+        <a href="#{{ id }}"> {{ label }}
+          <span style="display: none;">
+            <i class="icon-trash" title="Remove page"></i>
+            <i class="icon-pencil" title="Edit page"></i>
+          </span>
+        </a>
+      </li>
+  </script>
+
+      <div class="modal hide fade in" id="add-edit-dialog" style="display: none;">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h4></h4>
+      </div>
+      <div class="modal-body control-group">
+        <label class="control-label" for="inputName">Label:</label>
+        <input type="text" placeholder="Type name..." id="inputName"/>
+      </div>
+      <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn">Close</a>
+        <a href="#" class="btn btn-primary">Save changes</a>
+      </div>
+    </div>
+
+  <script type="text/javascript">
+    var elementCollection = new Mock.element.Collection({
+      url: 'elements/'
+    });
+    elementCollection.reset($.parseJSON("<%= @elements.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));
+  </script>

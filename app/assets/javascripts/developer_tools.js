@@ -13,7 +13,11 @@ $(document).ready(function(){
             $('#elements .well li').hover(function(e, el){
                 $(this).find('span').toggle();
             });
-            this.initSlitters();
+
+            $('#workspace').splitter({
+                type: 'v'
+            });
+
             this.html = CodeMirror.fromTextArea($('#html')[0], {
                 mode: "text/html",
                 tabMode: "indent",
@@ -27,38 +31,30 @@ $(document).ready(function(){
                 lineNumbers: true,
                 value: '<code>some code</code>'
             });
+
             this.js = CodeMirror.fromTextArea($('#js')[0], {
                 mode: "text/javascript",
                 tabMode: "indent",
                 lineNumbers: true,
                 value: '<code>some code</code>'
             });
-        },
-        initSlitters: function(){
-            $('#workspace').splitter({
-                type: 'v'
-            });
-            /*$('#htmlcode > .CodeMirror, #csscode > .CodeMirror').resizable({
-                handles: 's'
-            });*/
-            /*$('.leftside').splitter({
-                type: 'h'
-            });
-            $('.rightside').splitter({
-                type: 'h'
-            });*/
 
-            /*$('#navigation > div').splitter({
-                type: 'h',
-                sizeTop: true,
-                accessKey:"P"
+            this.elements = new Mock.element.Controller({
+                collection: elementCollection,
+                prefix: 'element',
+                nameAttr: 'label'
             });
-
+            Backbone.history.start();
+            this.elements.on('route:load', this.loadElement.createDelegate(this));
             $('#navigation > div').splitter({
                 type: 'h',
                 sizeTop: true,
                 accessKey:"P"
-            });*/
+            });
+        },
+
+        loadElement: function(id){
+            console.log('load el data', id);
         }
     });
 

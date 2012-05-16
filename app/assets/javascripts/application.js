@@ -25,4 +25,6 @@
 //= require block.js
 //= require controller.js
 //= require collection.js
+//= require element.js
 //= require page.js
+
