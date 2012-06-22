@@ -51,6 +51,23 @@ $(document).ready(function(){
                 sizeTop: true,
                 accessKey:"P"
             });
+            $('#params').tableList({
+                tables: [{
+                    name: 'Initial',
+                    prefix: 'initial', // prefix for events from this grid
+                    mode: 'e',
+                    table: {
+                        'width': 'label',
+                        'height': 'label'
+                    }
+                },{
+                    name: 'Parameters',
+                    prefix: 'params',
+                    mode: 'aed',
+                    table: {
+                    }
+                }]
+            });
         },
 
         loadElement: function(id){

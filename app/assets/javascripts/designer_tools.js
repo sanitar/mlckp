@@ -22,13 +22,13 @@ $(document).ready(function(){
         },
 
         initComponents: function(){
-            this.controller = new Mock.MocksController();
-            ws
-                .uiselectable({
-                    filter: '.block'
+            this.controller = new Mock.BlockGroupComposite();
+
+            ws.uiselectable({
+                    filter: '.block:not(.group-block), .group:not(.group-block)'
                 })
                 .multidraggable({
-                    filter: '.block',
+                    filter: '.block:not(.group-block), .group:not(.group-block)',
                     dragOptions: {
                         containment: '#workspace',
                         distance: 3,
@@ -40,21 +40,19 @@ $(document).ready(function(){
                 menu: [
                     ['menu_undo', 'menu_redo'],
                     ['menu_duplicate', 'menu_remove'],
-                    ['menu_align_right', 'menu_align_center', 'menu_align_left',
-                        'menu_align_bottom', 'menu_align_middle', 'menu_align_top'],
+                    ['menu_align_bottom', 'menu_align_middle', 'menu_align_top',
+                        'menu_align_right', 'menu_align_center', 'menu_align_left'],
                     ['menu_move_forwards', 'menu_move_backwards', 'menu_move_front', 'menu_move_back'],
                     ['menu_layers_group', 'menu_layers_ungroup']
                 ]
             });
-            console.log(pageCollection);
+            $('.menu_undo, .menu_redo, .editreview').css({
+                opacity: '0.6'
+            })
 
-            /*this.pages = new Mock.page.PageController({
-                collection: pageCollection
-            });*/
             this.pages = new Mock.page.Controller({
                 collection: pageCollection,
                 prefix: 'page'
-                //selector: '#elements .well ul'
             });
 
             $('#navigation > div').splitter({
@@ -85,6 +83,59 @@ $(document).ready(function(){
                 });
             });
 
+            $(this.menu).on('menu_layers_group menu_layers_ungroup', this.onGroupAction.createDelegate(this));
+            $(this.menu).on('menu_move_forwards menu_move_backwards\
+                            menu_move_front menu_move_back',
+                            this.onMoveAction.createDelegate(this));
+            $(this.menu).on('menu_duplicate menu_remove',
+                            this.onEditAction.createDelegate(this));
+            $(this.menu).on('menu_align_right menu_align_center menu_align_left \
+                             menu_align_bottom menu_align_middle menu_align_top',
+                            this.onAlignAction.createDelegate(this));
+
+            var timer = undefined;
+            $('#navigation .nav-info').ajaxStart(function(e){
+               $(this).text('Сохранение...')
+            });
+
+            $('#navigation .nav-info').ajaxStop(function(){
+               var el = $(this);
+               if (timer) return;
+               timer = setTimeout((function(el){
+                   return function(){ el.text('Все изменения сохранены.'); timer = undefined; };
+               }(el)), 1000);
+            });
+        },
+
+        onEditAction: function(e, el){
+            if (e.type == 'menu_remove'){
+                this.controller.remove($('.ui-selected'));
+            }
+            if (e.type == 'menu_duplicate'){
+                this.controller.duplicate($('.ui-selected'));
+            }
+        },
+
+        onGroupAction: function(e){
+            if (e.type == 'menu_layers_group'){
+                this.controller.group($('.ui-selected'));
+            }
+            if (e.type == 'menu_layers_ungroup'){
+                this.controller.ungroup($('.ui-selected'));
+            }
+        },
+
+        onAlignAction: function(e){
+            var els = $('.ui-selected');
+            els.align(e.type);
+            this.controller.save(els);
+        },
+
+        onMoveAction: function(e){
+            var selected = $('.ui-selected');
+            if (selected.length < 1) return;
+            $('.ui-selected').zindexchange(e.type);
+            this.controller.updateZIndex();
         },
 
         toggleTabs: function(){
@@ -97,7 +148,8 @@ $(document).ready(function(){
         },
 
         onDragStop: function(e, el, ui){
-            this.controller.save();
+            var sel = $('.ui-selected');
+            this.controller.update(sel);
         }
     });
 

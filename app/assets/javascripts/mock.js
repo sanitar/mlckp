@@ -72,6 +72,36 @@ $.extend(Array.prototype, {
             this.splice(index, 1);
         }
         return this;
+    },
+
+    qsort: function(compare, change){
+        var a = this,
+            f_compare = compare,
+            f_change  = change;
+
+        if (f_compare == undefined) { // Будем использовать простую функцию (для чисел)
+            f_compare = function(a, b) {return ((a == b) ? 0 : ((a > b) ? 1 : -1));};
+        };
+        if (f_change == undefined) { // Будем использовать простую смены (для чисел)
+            f_change = function(a, i, j) {var c = a[i];a[i] = a[j];a[j] = c;};
+        };
+
+        var qs = function (l, r)  {
+            var i = l,
+                j = r,
+                x = a[Math.floor(Math.random()*(r-l+1))+l];
+                // x = a[l]; // Если нет желания использовать объект Math
+
+            while(i <= j) {
+                while(f_compare(a[i], x) == -1) {i++;}
+                while(f_compare(a[j], x) == 1) {j--;}
+                if(i <= j) {f_change(a, i++, j--);}
+            };
+            if(l < j) {qs(l, j);}
+            if(i < r) {qs(i, r);}
+        };
+
+        qs(0, a.length-1);
     }
 });
 
@@ -116,3 +146,15 @@ Mock.dialog.AddEditDialog = Backbone.View.extend({
         $(this).trigger('save', [this.isEdit, text]);
     }
 });
+
+Mock.buffer = (function(){
+    var buffer;
+    return {
+        set: function(val){
+            buffer = val;
+        },
+        get: function(){
+            return buffer;
+        }
+    }
+}());

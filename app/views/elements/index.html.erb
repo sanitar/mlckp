@@ -1,13 +1,14 @@
 <%= stylesheet_link_tag "developer_tools"%>
-<%= stylesheet_link_tag "codemirror"%>
-<%= stylesheet_link_tag "elegant"%>
+<%= stylesheet_link_tag "libs/codemirror"%>
+<%= stylesheet_link_tag "libs/elegant"%>
 
-<%= javascript_include_tag "codemirror/codemirror"%>
-<%= javascript_include_tag "codemirror/xml"%>
-<%= javascript_include_tag "codemirror/css"%>
-<%= javascript_include_tag "codemirror/javascript"%>
-<%= javascript_include_tag "codemirror/htmlmixed"%>
+<%= javascript_include_tag "libs/codemirror/codemirror"%>
+<%= javascript_include_tag "libs/codemirror/xml"%>
+<%= javascript_include_tag "libs/codemirror/css"%>
+<%= javascript_include_tag "libs/codemirror/javascript"%>
+<%= javascript_include_tag "libs/codemirror/htmlmixed"%>
 
+<%= javascript_include_tag "jquery.ui.tableList"%>
 <%= javascript_include_tag "developer_tools"%>
 
 <style type="text/css">
@@ -38,14 +39,51 @@
         </ul>
     </div>
     <div id="params">
-      <div>
+      <ul class="table-list">
+        <li>
+          <div>
+            <i class="icon-chevron-right"></i>
+            Main
+            <i class="icon-plus"></i>
+          </div>
+          <table class="table table-bordered"><tbody>
+              <tr>
+                <td>some</td>
+                <td>some1</td>
+              </tr>
+              <tr>
+                <td>some</td>
+                <td>some1</td>
+              </tr>
+          </tbody></table>
+        </li>
+        <li>
+          <div>
+            <i class="icon-chevron-right"></i>
+            Main
+            <i class="icon-plus"></i>
+          </div>
+          <table class="table table-bordered"><tbody>
+              <tr>
+                <td>some</td>
+                <td>some1</td>
+              </tr>
+              <tr>
+                <td>some</td>
+                <td>some1</td>
+              </tr>
+          </tbody></table>
+        </li>
+
+      </ul>
+      <!--<div>
         <label>some param: </label>
         <input type="text" />
       </div>
       <div>
         <label>some else param: </label>
         <input type="text" />
-      </div>
+      </div>-->
 
     </div>
   </div>

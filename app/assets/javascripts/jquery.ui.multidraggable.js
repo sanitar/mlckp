@@ -6,7 +6,8 @@ $.widget("ui.multidraggable", $.ui.mouse, {
             dragOptions: {}
         },
         _create: function() {
-            var self = this;
+            var self = this,
+                o = this.options;
             $(self.options.filter, self.element[0]).live({
                 'dragstart': self._blockDragStart.createDelegate(self),
                 'drag': self._blockDrag.createDelegate(self),

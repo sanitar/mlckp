@@ -64,7 +64,7 @@
 
 
   <div id="workspace">
-    <div id="master-panel" style="left: 1100px; top: 10px;">
+    <!--<div id="master-panel" style="left: 1100px; top: 10px;">
       <div><span class="mini-btn"></span></div>
       <ul>
         <% @elements.each do |element| %>
@@ -73,7 +73,7 @@
         </li>
         <% end %>
       </ul>
-    </div>
+    </div>-->
 
     <div class="modal hide fade in" id="add-edit-dialog" style="display: none;">
       <div class="modal-header">
@@ -94,17 +94,18 @@
 
   <script type="text/template" id="block-template">
     <div class="block">
-      <div class="btn-controls">
+      <!--<div class="btn-controls">
         <span class="btn-delete"></span>
         <span class="btn-edit"></span>
         <span class="btn-copy"></span>
         <span class="btn-select"></span>
-      </div>
+      </div>-->
       <div class="content">
         {{ html }}
       </div>
     </div>
   </script>
+
   <script type="text/javascript">
     var allElements = new Backbone.Collection();
     allElements.reset($.parseJSON("<%= @elements.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));

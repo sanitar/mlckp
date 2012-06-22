@@ -16,15 +16,18 @@
 //= require jquery.ui.multidraggable.js
 //= require jquery.ui.editable.js
 //= require jquery.ui.splitter.js
-//= require underscore.js
-//= require backbone.js
-//= require bootstrap.js
+//= require jquery.fn.zindexchange.js
+//= require jquery.fn.align.js
+//= require libs/underscore.js
+//= require libs/backbone.js
+//= require libs/bootstrap.js
 
 //= require mock.js
+//= require collection.js
 //= require appearance.js
 //= require block.js
-//= require controller.js
-//= require collection.js
 //= require element.js
 //= require page.js
+//= require block_group_composite.js
+
 

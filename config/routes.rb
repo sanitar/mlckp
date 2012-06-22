@@ -3,10 +3,11 @@ Molockup10::Application.routes.draw do
 
   resources :projects do
     resources :pages do
-      post "blocks/update" => "pages#update_mocks"
-      post "blocks/delete" => "pages#destroy_mocks"
-      post "blocks/create" => "pages#create_mocks"
-      get "blocks" => "pages#get_mocks"
+      post "blocks/update" => "blocks#update"
+      post "blocks/delete" => "blocks#destroy"
+      post "blocks/create" => "blocks#create"
+      post "blocks/save" => "blocks#save"
+      get "blocks" => "blocks#index"
     end
   end
 

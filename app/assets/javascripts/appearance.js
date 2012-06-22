@@ -39,7 +39,7 @@ Mock.menu.Menu = Mock.extend(null, {
                     el.find('span').css({
                         backgroundImage: path
                     });
-                    el.on('click', self.fireEvent.createDelegate(self, [menu_item]));
+                    el.on('click', self.fireEvent.createDelegate(self));
                     self.menu[menu_item] = el;
                 }
                 self.appendDivider();
@@ -47,7 +47,14 @@ Mock.menu.Menu = Mock.extend(null, {
         });
     },
 
-    fireEvent: function(menu_item){
+    fireEvent: function(e, el){
+        var menu_item;
+        $.each(this.menu, function(key, value){
+            if (value[0] == el) {
+                menu_item = key;
+            }
+        });
+
         $(this).trigger(menu_item, [this.menu[menu_item]]);
     },
 

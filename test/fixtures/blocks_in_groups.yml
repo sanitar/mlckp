@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  group: 
+  inner_id: 
+  type: 
+
+two:
+  group: 
+  inner_id: 
+  type: 

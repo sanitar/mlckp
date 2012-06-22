@@ -135,7 +135,7 @@ div.btn-controls span{
     border: 1px solid transparent;
     background-image: url("ui-icons_888888_256x240.png");
 }
-div.block.ui-selected{
+div.block.ui-selected, div.group.ui-selected{
     border-color: rgba(82, 168, 236, 0.8);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
 }
@@ -152,13 +152,48 @@ div.block.ui-selected{
     border-radius: 5px;
     padding: 0;
 }
+/* ---------- */
 .mock-input{
     width: 200px;
     height: 25px;
 }
 .mock-input .content > *{
 }
+/* ---------- */
+.mock-img{
+    width: 100px;
+    height: 100px;
+}
+.mock-img .content {
+    opacity: 0.5;
 
+}
+.mock-img .content > div{
+    background-color: #1A1818;
+    display: table;
+
+}
+.mock-img .content > div > div{
+    display: table-cell;
+    vertical-align: middle;
+}
+.mock-img .content > div > div > div{
+    background-image: url("picture.png");
+    background-color: white;
+    width: 48px;
+    height: 48px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mock-select{
+    width: 100px;
+    height: 30px;
+}
+.mock-label{
+    width: 50px;
+    height: 20px;
+}
 .ui-icon{
     background-image: url("ui-icons_222222_256x240.png") !important;
 }
@@ -195,4 +230,8 @@ div.block.ui-selected{
 #master-panel > div > span{
     float: right;
     background-position: -80px -128px;
+}
+.group{
+    position: absolute;
+    border: 1px dotted gray;
 }
