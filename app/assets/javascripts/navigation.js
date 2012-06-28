@@ -8,7 +8,6 @@ Mock.navigation.Collection = Backbone.Collection.extend({
     initialize: function(o){
         $.extend(this, o);
     }
-
 });
 
 Mock.navigation.View = Backbone.View.extend({

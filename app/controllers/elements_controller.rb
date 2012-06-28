@@ -1,7 +1,7 @@
 class ElementsController < ApplicationController
   def index
     @groups = ElementGroup.all
-    @elements = Element.all
+    @elements = Element.all.to_json
  end
 
   def new

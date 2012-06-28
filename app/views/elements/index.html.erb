@@ -1,6 +1,6 @@
 <%= stylesheet_link_tag "developer_tools"%>
-<%= stylesheet_link_tag "libs/codemirror"%>
-<%= stylesheet_link_tag "libs/elegant"%>
+<%= stylesheet_link_tag "libs/codemirror/codemirror"%>
+<%= stylesheet_link_tag "libs/codemirror/elegant"%>
 
 <%= javascript_include_tag "libs/codemirror/codemirror"%>
 <%= javascript_include_tag "libs/codemirror/xml"%>
@@ -8,14 +8,7 @@
 <%= javascript_include_tag "libs/codemirror/javascript"%>
 <%= javascript_include_tag "libs/codemirror/htmlmixed"%>
 
-<%= javascript_include_tag "jquery.ui.tableList"%>
 <%= javascript_include_tag "developer_tools"%>
-
-<style type="text/css">
-  body {
-
-  }
-</style>
 
 <% content_for :title do %>
   Программист
@@ -40,13 +33,28 @@
     </div>
     <div id="params">
       <ul class="table-list">
+        <li id="initial">
+          <div>
+            <i class="icon-chevron-down"></i>
+            Initial
+          </div>
+          <table class="table table-condensed table-bordered"><tbody>
+              <tr><td>width: </td><td> <input type="text" value ="200" class="input-mini input-condensed input-number" /> </td></tr>
+              <tr><td>height: </td><td> <input type="text" value ="200" class="input-mini input-condensed input-number" /></td></tr>
+              <tr class="initial-resizable"><td>resizable: </td><td><input type="checkbox" checked="checked" /></td></tr>
+              <tr><td>&emsp;&emsp;x: </td><td><input type="checkbox" /></td></tr>
+              <tr><td>&emsp;&emsp;y: </td><td><input type="checkbox" /></td></tr>
+              <tr><td>editable: </td><td><input type="checkbox" /></td></tr>
+          </tbody></table>
+        </li>
+
         <li>
           <div>
-            <i class="icon-chevron-right"></i>
-            Main
+            <i class="icon-chevron-down"></i>
+            Parameters
             <i class="icon-plus"></i>
           </div>
-          <table class="table table-bordered"><tbody>
+          <table class="table table-bordered table-condensed"><tbody>
               <tr>
                 <td>some</td>
                 <td>some1</td>
@@ -57,13 +65,14 @@
               </tr>
           </tbody></table>
         </li>
+
         <li>
           <div>
-            <i class="icon-chevron-right"></i>
-            Main
+            <i class="icon-chevron-down"></i>
+            Dependencies
             <i class="icon-plus"></i>
           </div>
-          <table class="table table-bordered"><tbody>
+          <table class="table table-bordered table-condensed"><tbody>
               <tr>
                 <td>some</td>
                 <td>some1</td>
@@ -76,20 +85,11 @@
         </li>
 
       </ul>
-      <!--<div>
-        <label>some param: </label>
-        <input type="text" />
-      </div>
-      <div>
-        <label>some else param: </label>
-        <input type="text" />
-      </div>-->
-
     </div>
   </div>
 </div>
 
-<div id="workspace">
+<div id="workspace" class="disabled">
   <div class="leftside">
       <div id="htmlcode">
         <div class="codetype">HTML</div>
@@ -114,7 +114,7 @@
 
   <script type="text/template" id="element-item-template">
       <li id="el{{ id }}">
-        <a href="#{{ id }}"> {{ label }}
+        <a href="#{{ id }}"> {{ name }}
           <span style="display: none;">
             <i class="icon-trash" title="Remove page"></i>
             <i class="icon-pencil" title="Edit page"></i>
@@ -139,8 +139,7 @@
     </div>
 
   <script type="text/javascript">
-    var elementCollection = new Mock.element.Collection({
-      url: 'elements/'
-    });
-    elementCollection.reset($.parseJSON("<%= @elements.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));
+    Mock.data = {
+        elements: <%=raw @elements %>
+    }
   </script>

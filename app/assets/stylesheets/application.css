@@ -16,6 +16,11 @@
 [class^="icon-"], [class*=" icon-"]{
     background-image: url("glyphicons-halflings.png");
 }
+input.input-condensed{
+    width: 50px;
+    padding: 0;
+    margin-bottom: 0;
+}
 /*---------- navigation ------------*/
 #navigation{
     height: 100%;

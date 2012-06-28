@@ -46,6 +46,9 @@ ul.table-list{
     padding-top: 5px;
     height: 100%;
 }
+#workspace.disabled{
+    opacity: 0.4;
+}
 
 .leftside, .rightside{
     float: left;

@@ -108,11 +108,11 @@
 
   <script type="text/javascript">
     var allElements = new Backbone.Collection();
-    allElements.reset($.parseJSON("<%= @elements.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));
+    allElements.reset(<%=raw @elements.to_json %>);
     var pageCollection = new Mock.page.Collection({
       url: 'pages/'
     });
-    pageCollection.reset($.parseJSON("<%= @pages.to_json %>".replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">")));
+    pageCollection.reset(<%=raw @pages.to_json %>);
   </script>
 
   <script type="text/template" id="menu-item-template">

@@ -22,6 +22,7 @@
 //= require libs/backbone.js
 //= require libs/bootstrap.js
 
+//= require common.js
 //= require mock.js
 //= require collection.js
 //= require appearance.js

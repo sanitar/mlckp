@@ -1,8 +1,0 @@
-<script>
-  var allElements = new Backbone.Collection();
-  allElements.reset(<%= @elements.to_json %>);
-  var pageCollection = new Mock.page.Collection({
-    url: 'pages/'
-  });
-  pageCollection.reset(<%= @pages.to_json %>);
-</script>
