@@ -1,0 +1,8 @@
+development:
+  adapter: mysql2
+  host: localhost
+  encoding: utf8
+  database: molockup_development
+  pool: 5
+  username: user
+  password: 'passwd'

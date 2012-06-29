@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120626113350) do
+ActiveRecord::Schema.define(:version => 20120629043817) do
 
   create_table "blocks", :force => true do |t|
     t.integer  "element_id"
@@ -35,11 +35,11 @@ ActiveRecord::Schema.define(:version => 20120626113350) do
     t.text     "html"
     t.text     "css"
     t.text     "js"
-    t.datetime "created_at",                                                                                     :null => false
-    t.datetime "updated_at",                                                                                     :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.string   "name"
     t.text     "description"
-    t.text     "initial",          :default => "{\"w\":200,\"h\":200,\"e\":true,\"r\":{\"x\":true,\"y\":true}}", :null => false
+    t.text     "initial"
   end
 
   create_table "mocks", :force => true do |t|
