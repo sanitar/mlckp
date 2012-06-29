@@ -25,14 +25,14 @@ require "bundler/capistrano"
 
 server "192.168.1.15", :web, :app, :db, primary: true
 
-set :application, "molockup"
+set :application, "mlckp"
 set :user, "deployer"
 set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
 
 set :scm, "git"
-set :repository, "git@github.com:sanitar/mlckp.git"
+set :repository, "git@github.com:sanitar/#{application}.git"
 set :branch, "master"
 
 default_run_options[:pty] = true
