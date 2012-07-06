@@ -94,6 +94,9 @@ Mock.block.BlockView = Backbone.View.extend({
                     grid: [5, 5]
                 });
         }
+        if (Mock.F[this.el_model.id]){
+            Mock.F[this.el_model.id].apply(this.el);
+        }
 
         /*.editable({
             filter: ".block"

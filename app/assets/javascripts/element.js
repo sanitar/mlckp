@@ -8,6 +8,20 @@ Mock.element.Collection = Mock.ModelCollection.extend({
 /* ---------------------------------------------- */
 /* ---------------- navigation ------------------ */
 
+Mock.element.nav.Dialog = Mock.extend(Mock.dialog.Dialog, {
+    options: {
+        titlePrefix: 'element',
+        dialogConfig: { minWidth: 350 },
+        form: {
+            'name': 'Name',
+            'description': {
+                type: 'textarea',
+                label: 'Description'
+            }
+        }
+    }
+});
+
 Mock.element.nav.View = Backbone.View.extend({
     events: {
         'click .icon-pencil': 'clickEdit',
@@ -67,10 +81,11 @@ Mock.element.nav.Controller = Mock.extend(null, {
 
     initComponents: function(){
         this.views = new Mock.Collection();
-        this.dialog = new Mock.dialog.AddEditDialog({
+        this.dialog = new Mock.element.nav.Dialog();
+        /*this.dialog = new Mock.dialog.AddEditDialog({
            addHeader: 'Add Element',
            editHeader: 'Edit Element'
-        });
+        });*/
     },
 
     initEvents: function(){
@@ -96,12 +111,12 @@ Mock.element.nav.Controller = Mock.extend(null, {
     },
 
     onAddClick: function(){
-        this.dialog.show();
+        this.dialog.add();
     },
 
     onEditClick: function(e, view, model){
         this.editModel = model;
-        this.dialog.show(model.attributes.name);
+        this.dialog.edit(model.attributes);
     },
 
     onRemoveClick: function(e, view, model){
@@ -112,21 +127,19 @@ Mock.element.nav.Controller = Mock.extend(null, {
         }
     },
 
-    save: function (e, isEdit, text){
+    save: function (e, conf, dialog){
         var self = this;
-        if (isEdit){
-            this.editModel.set('name', text);
-            this.collection.save();
-        } else {
-             var model = this.collection.add({
-                 'name': text,
-                 'element_group_id': 1
-             }).last();
+        if (dialog.mode == 'add'){
+            conf['element_group_id'] = 1;
+            this.collection.add(conf).last();
             this.collection.save({
                 'success': function(model, data){
                     self.createView(model[0]);
                 }
             });
+        } else {
+            this.editModel.set(conf);
+            this.collection.save();
         }
     },
 
@@ -181,7 +194,12 @@ Mock.element.CodeEditor = Mock.extend(null, {
 
     updateCode: function(funcs, conf){
         var self = this,
-            changeset = {};
+            changeset = {},
+            modeConf = {
+                htmlmixed: 'html',
+                css: 'css',
+                javascript: 'js'
+            };
 
         var func = function(mode){
             var val = self[mode].getValue();
@@ -190,7 +208,8 @@ Mock.element.CodeEditor = Mock.extend(null, {
                 self.values[mode] = val;
             }
         }
-        func(conf.mode == 'htmlmixed' ? 'html' : conf.mode);
+
+        func(modeConf[conf.mode]);
         if (!$.isEmptyObject(changeset)){
             $(this).trigger('update', changeset);
         }

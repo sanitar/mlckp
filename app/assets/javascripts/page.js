@@ -53,6 +53,20 @@ Mock.page.View = Backbone.View.extend({
     }
 });
 
+Mock.page.Dialog = Mock.extend(Mock.dialog.Dialog, {
+    options: {
+        titlePrefix: 'page',
+        dialogConfig: { minWidth: 350 },
+        form: {
+            'name': 'Name',
+            'description': {
+                type: 'textarea',
+                label: 'Description'
+            }
+        }
+    }
+});
+
 Mock.page.Controller = Backbone.Router.extend({
     routes: {
         ':element': 'load',
@@ -72,10 +86,7 @@ Mock.page.Controller = Backbone.Router.extend({
     initComponents: function(){
         this.collection = new Mock.page.Collection(Mock.data.pages);
         this.views = new Mock.Collection();
-        this.dialog = new Mock.dialog.AddEditDialog({
-            addHeader: 'Add Page',
-            editHeader: 'Edit Page'
-        });
+        this.dialog = new Mock.page.Dialog()
     },
 
     initEvents: function(){
@@ -100,12 +111,12 @@ Mock.page.Controller = Backbone.Router.extend({
     },
 
     onAddClick: function(){
-        this.dialog.show();
+        this.dialog.add();
     },
 
     onEditClick: function(e, view, model){
         this.editModel = model;
-        this.dialog.show(model.attributes['name']);
+        this.dialog.edit(model.attributes);
     },
 
     onRemoveClick: function(e, view, model){
@@ -117,23 +128,22 @@ Mock.page.Controller = Backbone.Router.extend({
         }
     },
 
-    save: function (e, isEdit, text){
+    save: function (e, conf, dialog){
         var self = this;
-        if (isEdit){
-            this.editModel.set('name', text);
-            this.editModel.save();
-        } else {
-            var model = this.collection.add({'name': text}).last();
+        if (dialog.mode == 'add'){
+            var model = this.collection.add(conf).last();
             model.save({}, {
                 success: function(){
                     self.createView(model);
                 }
             });
+        } else {
+            this.editModel.set(conf);
+            this.editModel.save();
         }
     },
 
     load: function(el_id){
-        console.log(el_id);
         this.current_page = el_id;
         $('#page ul li').removeClass('active');
         if (el_id){

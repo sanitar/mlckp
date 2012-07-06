@@ -1,36 +1,84 @@
-
 Mock.namespace('Mock.dialog');
 
-Mock.dialog.AddEditDialog = Backbone.View.extend({
-    isEdit: false,
-    editHeader: 'Edit',
-    addHeader: 'Add',
-    elId: '#add-edit-dialog',
-    events: {
-        'click .btn-primary': 'onSaveClick'
+Mock.dialog.Dialog = Mock.extend(null, {
+    options: {
+        dialogConfig: { title: '' },
+        form: {},
+    },
+    mode: 'add',
+    types: {
+        'text': '<input type="text" name="{{name}}" />',
+        'textarea': '<textarea name="{{name}}" ></textarea>'
     },
 
-    initialize: function(cfg){
-        $.extend(this, cfg);
-        this.$el = $(this.elId).modal({ show: false });
-        this.el = this.$el.get()[0];
+    initialize: function(o){
+        $.extend(this.options, o);
+        this.$el = $('<div class="dialog"></div>').appendTo('body');
+        this.render();
+        this.$el.dialog($.extend({
+            autoOpen: false,
+            modal: true,
+            zIndex: 1032,
+            buttons: {
+                'Save': this.onClickSave.createDelegate(this),
+                'Cancel': this.hide.createDelegate(this)
+            }
+        }, this.options.dialogConfig));
+
+        $('.ui-dialog .ui-dialog-buttonset button').addClass('btn').first().addClass('btn-primary');
     },
 
-    show: function(text){
-        this.isEdit = text ? true : false;
-        this.$el.find('input').attr('value', text || "");
-        this.$el.find('.modal-header > h4').text(text ? this.editHeader : this.addHeader);
-        this.$el.modal('show');
+    render: function(){
+        var f = this.options.form;
+        if ($.isEmptyObject(f)) return;
+
+        var html = '<table><tbody>';
+        for (var i in f){
+            if (typeof f[i] == 'string') {
+                f[i] = {
+                    type: 'text',
+                    label: f[i]
+                }
+            }
+            html += '<tr><td class="ui-dialog-label">' + f[i].label + ':&ensp;</td><td>';
+            html += _.template(this.types[f[i].type], { 'name': i });
+            html += '</td></tr>';
+        }
+        html += '</tbody></table>';
+        this.$el.append($(html));
+    },
+
+    onClickSave: function(e, el){
+        var trs = $(el).find('table tr td:not(.ui-dialog-label)').children(),
+            obj = {};
+        trs.each(function(){
+            obj[$(this).attr('name')] = $(this).val();
+        });
+        $(this).trigger('save', obj);
+        this.$el.dialog('close');
+    },
+
+    show: function(){
+        this.$el.dialog('open');
     },
 
     hide: function(){
-        this.$el.modal('hide');
+        this.$el.dialog('close');
     },
 
-    onSaveClick: function(){
-        this.hide();
-        var text = this.$el.find('input').attr('value');
-        $(this).trigger('save', [this.isEdit, text]);
-        return false;
+    add: function(){
+        this.$el.find('table tr td:not(.ui-dialog-label)').children().val('');
+        this.mode = 'add';
+        this.$el.dialog('option', 'title', 'Add ' + this.options.titlePrefix);
+        this.show();
+    },
+
+    edit: function(attrs){
+        for (var i in attrs){
+            this.$el.find('[name="' + i + '"]').val(attrs[i]);
+        }
+        this.mode = 'edit';
+        this.$el.dialog('option', 'title', 'Edit ' + this.options.titlePrefix);
+        this.show();
     }
 });
