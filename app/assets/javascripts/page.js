@@ -1,14 +1,10 @@
 Mock.namespace('Mock.page');
 
-Mock.page.Model = Backbone.Model.extend({
-});
-
 Mock.page.Collection = Backbone.Collection.extend({
-    model: Mock.page.Model,
+    url: 'pages',
     initialize: function(o){
         $.extend(this, o);
     }
-
 });
 
 Mock.page.View = Backbone.View.extend({
@@ -19,19 +15,16 @@ Mock.page.View = Backbone.View.extend({
 
     initialize: function(o){
         $.extend(this, o);
-        this.tpl_id = '#' + this.prefix + '-item-template';
-
-        this.root = $(this.selector);
-        this.model.on('change:' + this.nameAttr, this.onChangeName.createDelegate(this));
+        this.model.on('change:name', this.onChangeName.createDelegate(this));
         this.model.on('destroy', this.onModelRemove.createDelegate(this));
         this.render();
     },
 
     render: function(){
-        var template = _.template($(this.tpl_id).html());
+        var template = _.template($('#page-item-template').html());
         this.$el = $(template(this.model.toJSON()));
-        this.el = this.$el.get()[0];
-        this.root.append(this.el);
+        this.el = this.$el.get(0);
+        $('#page ul').append(this.el);
 
         this.$el.hover(function(e, el){
             $(this).find('span').toggle();
@@ -39,12 +32,12 @@ Mock.page.View = Backbone.View.extend({
     },
 
     clickEdit: function(){
-        $(this).trigger('edit' + this.prefix, [this, this.model]);
+        $(this).trigger('editpage', [this, this.model]);
         return false;
     },
 
     clickDelete: function(){
-        $(this).trigger('delete' + this.prefix, [this, this.model]);
+        $(this).trigger('deletepage', [this, this.model]);
         return false;
     },
 
@@ -57,40 +50,41 @@ Mock.page.View = Backbone.View.extend({
 
     onModelRemove: function(){
         this.remove();
-        this.$el.unbind();
     }
 });
 
 Mock.page.Controller = Backbone.Router.extend({
-    prefix: 'nav',
-    nameAttr: 'name',
     routes: {
-        ':element': 'load'
+        ':element': 'load',
+        '': 'load'
     },
 
     initialize: function(o){
         $.extend(this, o);
         this.current_page = -1;
-        this.views = new Mock.Collection({
-            url: '/' + this.prefix
-        });
-        if (!this.selector) this.selector = '#' + this.prefix + ' ul';
 
-        this.prefixCapital = this.prefix.charAt(0).toUpperCase() + this.prefix.slice(1);
-        this.prefixPlural = this.prefix + 's';
-        this.dialog = new Mock.dialog.AddEditDialog({
-           addHeader: 'Add ' + this.prefixCapital,
-           editHeader: 'Edit ' + this.prefixCapital
-        });
+        this.initComponents();
+        this.initEvents();
 
-        $(this.dialog).on('save', this.save.createDelegate(this));
-        $('#' + this.prefix + ' .icon-plus').click(this.onAddClick.createDelegate(this));
         this.render();
+    },
+
+    initComponents: function(){
+        this.collection = new Mock.page.Collection(Mock.data.pages);
+        this.views = new Mock.Collection();
+        this.dialog = new Mock.dialog.AddEditDialog({
+            addHeader: 'Add Page',
+            editHeader: 'Edit Page'
+        });
+    },
+
+    initEvents: function(){
+        $(this.dialog).on('save', this.save.createDelegate(this));
+        $('#page .icon-plus').click(this.onAddClick.createDelegate(this));
     },
 
     render: function(){
         var self = this;
-
         this.collection.each(function(item, index){
             self.createView(item);
         });
@@ -98,14 +92,11 @@ Mock.page.Controller = Backbone.Router.extend({
 
     createView: function(model){
         var view = new Mock.page.View({
-            model: model,
-            prefix: this.prefix,
-            selector: this.selector,
-            nameAttr: this.nameAttr
+            model: model
         });
         this.views.add(view);
-        $(view).bind('edit' + this.prefix, this.onEditClick.createDelegate(this));
-        $(view).bind('delete' + this.prefix, this.onRemoveClick.createDelegate(this));
+        $(view).bind('editpage', this.onEditClick.createDelegate(this));
+        $(view).bind('deletepage', this.onRemoveClick.createDelegate(this));
     },
 
     onAddClick: function(){
@@ -114,45 +105,39 @@ Mock.page.Controller = Backbone.Router.extend({
 
     onEditClick: function(e, view, model){
         this.editModel = model;
-        this.dialog.show(model.attributes[this.nameAttr]);
+        this.dialog.show(model.attributes['name']);
     },
 
     onRemoveClick: function(e, view, model){
-        if (confirm('Do you really want to delete ' + this.prefix + ' "'+ model.attributes[this.nameAttr] + '"?')){
-            var id = model.attributes.id;
-            if (id == this.current_page){
-                this.navigate('#');
+        if (confirm('Do you really want to delete page "'+ model.attributes['name'] + '"?')){
+            if (model.attributes.id == this.current_page){
+                this.navigate('#', { trigger: true }) ;
             }
             model.destroy();
-            this.trigger('delete' + this.prefixPlural, [this, id]);
         }
     },
 
     save: function (e, isEdit, text){
         var self = this;
         if (isEdit){
-            this.editModel.set(this.nameAttr, text);
-            this.editModel.save({},{
-                success: function(){
-                    self.trigger('edit' + self.prefixPlural, [self, self.editModel]);
-                }
-            });
+            this.editModel.set('name', text);
+            this.editModel.save();
         } else {
-            var cfg = {};
-            cfg[this.nameAttr] = text;
-            var model = this.collection.add(cfg).last();
+            var model = this.collection.add({'name': text}).last();
             model.save({}, {
                 success: function(){
                     self.createView(model);
-                    self.trigger('add' + self.prefixPlural, [self, model]);
                 }
             });
         }
     },
 
-    load: function(el){
-        this.current_page = el;
-        $('#' + this.prefix + ' ul li').removeClass('active')
-        $('#el' + el).addClass('active');
+    load: function(el_id){
+        console.log(el_id);
+        this.current_page = el_id;
+        $('#page ul li').removeClass('active');
+        if (el_id){
+            $('#el' + el_id).addClass('active');
+        }
     }
 });

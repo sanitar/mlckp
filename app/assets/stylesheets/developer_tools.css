@@ -1,9 +1,9 @@
-/*------------- table list -------------*/
+/*------------- Списки параметров для элемента -------------*/
 .table-list{
     margin-left: 0;
     list-style: none;
+    padding-right: 10px;
 }
-
 .table-list i{
     opacity: 0.5;
     cursor: pointer;
@@ -14,41 +14,53 @@
 .table-list i.icon-plus{
     float: right;
 }
-
 .table-list > li > div{
     padding-right: 10px;
 }
 
-
-/*-------------- main -----------------------*/
-html{
+/*-------------- Общее -----------------------*/
+html.developer{
     height: 100%;
 }
-body{
+.developer body{
     background-color: #EFEFEF;
     padding: 40px 0 0 0;
     height: 89%;
+}
+
+.developer #navigation{
+    background-color: white;
+}
+
+.developer #workspace{
+    margin-left: 260px;
+    padding-top: 5px;
+    height: 100%;
+}
+.developer #workspace.disabled{
+    opacity: 0.4;
+}
+
+.developer .vsplitbar{
+    height: 5px;
+    width: 5px;
+    background-color: transparent;
+}
+
+.developer #navigation > div .hsplitbar {
+    height: 5px;
+    background-color: #EFEFEF;
 
 }
-#navigation{
-    background-color: white;
+.developer #navigation > div .hsplitbar.active, .developer #navigation > div .hsplitbar:hover {
+    background-color: #999999;
 }
 /*--------------- params --------------*/
 #params{
     padding: 10px 0 0 10px;
 }
-ul.table-list{
-    padding-right: 10px;
-}
-/*--------------- workspace --------------*/
-#workspace{
-    margin-left: 260px;
-    padding-top: 5px;
-    height: 100%;
-}
-#workspace.disabled{
-    opacity: 0.4;
-}
+
+/*--------------- Код --------------*/
 
 .leftside, .rightside{
     float: left;
@@ -63,9 +75,7 @@ ul.table-list{
 .leftside > div, .rightside > div{
 
 }
-
-
-#workspace textarea {
+.developer #workspace textarea {
     resize:none;
 }
 
@@ -89,21 +99,6 @@ ul.table-list{
     position: absolute;
     right: 5px;
     font-family: monospace;
-}
-
-.vsplitbar{
-    height: 5px;
-    width: 5px;
-    background-color: transparent;
-}
-
-#navigation > div .hsplitbar {
-    height: 5px;
-    background-color: #EFEFEF;
-
-}
-#navigation > div .hsplitbar.active, #navigation > div .hsplitbar:hover {
-    background-color: #999999;
 }
 
 

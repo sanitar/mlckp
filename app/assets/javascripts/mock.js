@@ -1,5 +1,6 @@
 var Mock = Mock || {};
 
+// создаёт объекты в указанной цепочке, если их не существует
 Mock.namespace = function(ns_string){
     var parts = ns_string.split('.'),
         parent = Mock,
@@ -16,6 +17,7 @@ Mock.namespace = function(ns_string){
     return parent;
 };
 
+// для наследования
 Mock.extend = function(Parent, props){
     var Child, F, i;
 
@@ -43,10 +45,7 @@ Mock.extend = function(Parent, props){
     return Child;
 };
 
-Mock.isArray = function(obj){
-    return Object.prototype.toString.call(obj, []) === '[object Array]';
-};
-
+// позволяет устанавливать scope для функции при её определении
 $.extend(Function.prototype, {
     createDelegate: function(obj, args, appendArgs){
         var method = this;
@@ -65,59 +64,7 @@ $.extend(Function.prototype, {
     }
 });
 
-$.extend(Array.prototype, {
-   remove : function(o){
-        var index = this.indexOf(o);
-        if(index != -1){
-            this.splice(index, 1);
-        }
-        return this;
-    }
-});
-
-$(document).ready(function(){
-    Mock.constants = Mock.C = {
-        workspace_id: '#workspace',
-        ws: $('#workspace')
-    }
-});
-
-Mock.namespace('Mock.dialog');
-
-Mock.dialog.AddEditDialog = Backbone.View.extend({
-    isEdit: false,
-    editHeader: 'Edit',
-    addHeader: 'Add',
-    elId: '#add-edit-dialog',
-    events: {
-        'click .btn-primary': 'onSaveClick'
-    },
-
-    initialize: function(cfg){
-        $.extend(this, cfg);
-        this.$el = $(this.elId).modal({ show: false });
-        this.el = this.$el.get()[0];
-    },
-
-    show: function(text){
-        this.isEdit = text ? true : false;
-        this.$el.find('input').attr('value', text || "");
-        this.$el.find('.modal-header > h4').text(text ? this.editHeader : this.addHeader);
-        this.$el.modal('show');
-    },
-
-    hide: function(){
-        this.$el.modal('hide');
-    },
-
-    onSaveClick: function(){
-        this.hide();
-        var text = this.$el.find('input').attr('value');
-        $(this).trigger('save', [this.isEdit, text]);
-        return false;
-    }
-});
-
+// буфер ввода
 Mock.buffer = (function(){
     var buffer;
     return {

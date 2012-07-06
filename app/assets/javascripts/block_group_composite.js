@@ -1,5 +1,3 @@
-Mock.namespace('Mock.BlockGroupController');
-
 Mock.BlockGroupComposite = Mock.extend(null, {
     current_page: null,
     initialize: function(o){

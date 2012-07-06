@@ -1,14 +1,3 @@
-<%= stylesheet_link_tag "home"%>
-<style>
-  .button_to{
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-  }
-  .button_to input{
-    border: none;
-  }
-</style>
 <% content_for :nav_project do %>
   class="active"
 <% end %>
@@ -26,8 +15,8 @@
 
   <% @projects.each do |project| %>
       <li>
-        <%= link_to "", edit_project_path(project.id), :class => "btn-edit" %>
-        <%= button_to "", project, :confirm => "Are you sure?", :method => :delete, :class => "btn-delete" %>
+        <%= link_to "", edit_project_path(project.id), :class => "icon-pencil" %>
+        <%= link_to "", project, :confirm => "Are you sure?", :method => :delete, :class => "icon-trash" %>
         <%= link_to project.name, project_pages_path(project.id) %>
         <div class="description"><%= project.description %></div>
       </li>

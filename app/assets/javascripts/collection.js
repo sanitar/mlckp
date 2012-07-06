@@ -1,15 +1,13 @@
-Mock.namespace('Mock.Collection');
-
 Mock.Collection = Mock.extend(null, {
     initialize: function(o){
         this.collection = [];
-        if (Mock.isArray(o)){
+        if ($.isArray(o)){
             this.collection = o;
         }
     },
 
     add: function(c, silent){
-        if (Mock.isArray(c)){
+        if ($.isArray(c)){
             for (var i = 0, len = c.length; i < len; i++){
                 if (!this.inArray(c[i])){
                     this.collection.push(c[i]);
@@ -26,36 +24,32 @@ Mock.Collection = Mock.extend(null, {
     },
 
     remove: function(c, silent){
-        if (Mock.isArray(c)){
-            var self = this;
-            for (var i = 0, len = c.length; i < len; i++){
-                this.collection.remove(c[i]);
+        if ($.isArray(c)){
+            if (!c.length) return;
+            var arr = [];
+            while(c.length > 0){
+                arr.push(c[0]);
+                if (this.remove(c[0], true) === false){
+                    c.splice(0, 1);
+                    arr.pop();
+                }
             }
+            c = arr;
         } else {
-            this.collection.remove(c);
+            var index = this.collection.indexOf(c);
+            if (index != -1){
+                this.collection.splice(index, 1);
+            } else {
+                return false;
+            }
         }
         if (silent !== true){
             $(this).trigger('removeitem', [c, this.collection]);
         }
     },
 
-    // если есть элемент - удалить, если нет элемента - добавить
-    toggle: function(c){
-        if (this.inArray(c)){
-            this.remove(c);
-        } else {
-            this.add(c);
-        }
-    },
-
     removeAll: function(){
-        if (!this.isEmpty()){
-            var c = this.collection;
-            this.each(function(index, item){
-                item.remove();
-            });
-            $(this).trigger('removeitem', [c, this.collection]);
-        }
+        this.remove(this.collection);
     },
 
     isEmpty: function(){
@@ -139,11 +133,7 @@ Mock.ModelCollection = Backbone.Collection.extend({
                         $.each(responce, function(key, value){
                            model = self.getByCid(key);
                            models.push(model);
-                            if (model){
-                                model.set({
-                                    id: value.id
-                                });
-                            }
+                           model.set(value);
                         });
                         if (opts && opts.success){
                             opts.success(models, responce);

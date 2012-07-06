@@ -1,14 +1,6 @@
-<%= stylesheet_link_tag "developer_tools"%>
-<%= stylesheet_link_tag "libs/codemirror/codemirror"%>
-<%= stylesheet_link_tag "libs/codemirror/elegant"%>
-
-<%= javascript_include_tag "libs/codemirror/codemirror"%>
-<%= javascript_include_tag "libs/codemirror/xml"%>
-<%= javascript_include_tag "libs/codemirror/css"%>
-<%= javascript_include_tag "libs/codemirror/javascript"%>
-<%= javascript_include_tag "libs/codemirror/htmlmixed"%>
-
-<%= javascript_include_tag "developer_tools"%>
+<% content_for :html_class do %>
+    developer
+<% end %>
 
 <% content_for :title do %>
   Программист
@@ -20,6 +12,7 @@
 
 <div id="navigation">
   <div>
+
     <div id="elements">
         <ul class="nav nav-list">
           <li class="nav-header">Some header</li>
@@ -27,10 +20,13 @@
           <div id="element" class="well">
             <h6>Elements List<i class="icon-plus" title="Add page"></i></h6>
             <ul class="nav nav-list">
+
+
             </ul>
           </div>
         </ul>
     </div>
+
     <div id="params">
       <ul class="table-list">
         <li id="initial">
@@ -39,57 +35,21 @@
             Initial
           </div>
           <table class="table table-condensed table-bordered"><tbody>
-              <tr><td>width: </td><td> <input type="text" value ="200" class="input-mini input-condensed input-number" /> </td></tr>
-              <tr><td>height: </td><td> <input type="text" value ="200" class="input-mini input-condensed input-number" /></td></tr>
-              <tr class="initial-resizable"><td>resizable: </td><td><input type="checkbox" checked="checked" /></td></tr>
-              <tr><td>&emsp;&emsp;x: </td><td><input type="checkbox" /></td></tr>
-              <tr><td>&emsp;&emsp;y: </td><td><input type="checkbox" /></td></tr>
-              <tr><td>editable: </td><td><input type="checkbox" /></td></tr>
+              <tr><td>width: </td><td> <input type="text" name="w" value ="200" class="input-mini input-condensed input-number" /> </td></tr>
+              <tr><td>height: </td><td> <input type="text" name="h" value ="200" class="input-mini input-condensed input-number" /></td></tr>
+              <tr class="initial-resizable"><td>resizable: </td><td><input name="r" type="checkbox" checked="checked" /></td></tr>
+              <tr><td>&emsp;&emsp;x: </td><td><input type="checkbox" name="x" /></td></tr>
+              <tr><td>&emsp;&emsp;y: </td><td><input type="checkbox" name="y" /></td></tr>
+              <tr><td>editable: </td><td><input type="checkbox" name="e" /></td></tr>
           </tbody></table>
         </li>
-
-        <li>
-          <div>
-            <i class="icon-chevron-down"></i>
-            Parameters
-            <i class="icon-plus"></i>
-          </div>
-          <table class="table table-bordered table-condensed"><tbody>
-              <tr>
-                <td>some</td>
-                <td>some1</td>
-              </tr>
-              <tr>
-                <td>some</td>
-                <td>some1</td>
-              </tr>
-          </tbody></table>
-        </li>
-
-        <li>
-          <div>
-            <i class="icon-chevron-down"></i>
-            Dependencies
-            <i class="icon-plus"></i>
-          </div>
-          <table class="table table-bordered table-condensed"><tbody>
-              <tr>
-                <td>some</td>
-                <td>some1</td>
-              </tr>
-              <tr>
-                <td>some</td>
-                <td>some1</td>
-              </tr>
-          </tbody></table>
-        </li>
-
       </ul>
     </div>
+
   </div>
 </div>
 
-<div id="workspace" class="disabled">
+<div id="workspace">
   <div class="leftside">
       <div id="htmlcode">
         <div class="codetype">HTML</div>
@@ -141,5 +101,8 @@
   <script type="text/javascript">
     Mock.data = {
         elements: <%=raw @elements %>
-    }
+    };
+    $(function(){
+       Mock.init.developer();
+    });
   </script>

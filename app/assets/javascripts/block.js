@@ -17,7 +17,11 @@ Mock.block.BlockView = Backbone.View.extend({
         if (this.is_group == true){
             this.renderGroup();
         } else {
-            this.el_model = this.findModel(this.model.get('element_id'));
+            var id = this.model.get('element_id');
+            this.el_model = $.grep(Mock.data.elements, function(item){
+                    return id == item.id;
+                })[0];
+
             if (!this.el_model){
                 console.log('el_model: ', this.model.get('element_id'), '  not found!');
                 return;
@@ -59,33 +63,38 @@ Mock.block.BlockView = Backbone.View.extend({
 
     renderBlock: function(){
         var self = this,
-            html = _.template($("#" + this.tpl_id).html())(this.el_model.toJSON()),
+            html = _.template($("#" + this.tpl_id).html())(this.el_model),
+            initial = $.parseJSON(this.el_model.initial),
             params = JSON.parse(this.model.get('params'));
         this.el = $(html)[0];
         this.$el = $(this.el);
 
         this.$el.attr('id', 'block-' + this.cid);
-        this.$el.addClass(this.el_model.attributes.css);
+        this.$el.find('.content').addClass('mock-' + this.el_model.id);
         this.$el.css({
-           left: params.x,
-           top: params.y,
-           position: 'absolute'
+            left: params.x,
+            top: params.y,
+            width: params.w,
+            height: params.h,
+            position: 'absolute'
         });
-        if (params.w !== undefined){
-            this.$el.width(params.w);
-        }
-        if (params.h !== undefined){
-            this.$el.height(params.h);
-        }
 
         $('#workspace').append(this.$el);
 
-        $(this.$el)
-        .resizable({
-            containment: '#workspace',
-            autoHide: true,
-            grid: [5, 5]
-        });
+        if (initial.r.x || initial.r.y){
+            var ix = initial.r.x,
+                iy = initial.r.y,
+                ixy = initial.r.x && initial.r.y;
+
+            $(this.$el)
+                .resizable({
+                    containment: '#workspace',
+                    autoHide: true,
+                    handles: ixy ? 'e, s, se' : (ix ? 'e' : 's'),
+                    grid: [5, 5]
+                });
+        }
+
         /*.editable({
             filter: ".block"
         });*/
@@ -100,12 +109,6 @@ Mock.block.BlockView = Backbone.View.extend({
     enable: function(){
         this.$el.resizable('enable');
         this.$el.draggable('enable');
-    },
-
-    findModel: function(element_id){
-        return allElements.where({
-            'id': element_id
-        })[0];
     },
 
     updatePosition: function(){
@@ -150,10 +153,14 @@ Mock.block.BlocksController = Mock.extend(null, {
     },
 
     fetch: function(page){
+        this.views.each(function(item, i){
+            this.remove();
+        });
+        this.views.removeAll();
+        if (!page) return;
+
         var self = this,
             url = 'pages/' + page + '/' + this.url;
-
-        this.views.removeAll();
 
         this.collection.fetch({
             silent: true,
@@ -223,18 +230,24 @@ Mock.block.BlocksController = Mock.extend(null, {
         var data = {};
 
         if (e instanceof jQuery.Event){
-            var ws = Mock.C.ws,
+            var ws = $('#workspace'),
                 left = e.pageX - ws.offset().left - 17,
                 top = e.pageY - ws.offset().top - 17,
-                attrs = allElements.get(parseInt(e.target.id.replace('el',''))).attributes;
+                id = parseInt(e.target.id.replace('el',''), 10);
+            var attrs = $.grep(Mock.data.elements, function(item){
+                    return id == item.id;
+                })[0],
+                params = $.parseJSON(attrs.initial);
 
             data = {
-                element_id: attrs.id,
-                z_index: this.last_order,
-                params: JSON.stringify({
-                    x: left,
-                    y: top
-                })
+               element_id: attrs.id,
+               z_index: this.last_order,
+               params: JSON.stringify({
+                   x: left,
+                   y: top,
+                   w: params.w,
+                   h: params.h
+               })
             }
         } else {
             data = e;
@@ -274,7 +287,7 @@ Mock.block.BlocksController = Mock.extend(null, {
     },
 
     onDragStopElement: function(e){
-        var size = Mock.C.ws.offset();
+        var size = $('#workspace').offset();
         if ((e.pageX-10) > size.left && (e.pageY-10) > size.top){
             this.create(e);
         }

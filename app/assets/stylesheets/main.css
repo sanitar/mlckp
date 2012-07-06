@@ -1,0 +1,12 @@
+.projects{
+    list-style: none;
+}
+.projects .empty{
+    font-size: 11px;
+    color: gray;
+}
+.projects .description{
+    color: gray;
+    font-size: 11px;
+    padding-left: 40px;
+}

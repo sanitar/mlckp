@@ -21,14 +21,21 @@
 //= require libs/underscore.js
 //= require libs/backbone.js
 //= require libs/bootstrap.js
+//= require libs/codemirror/codemirror.js
+//= require libs/codemirror/xml.js
+//= require libs/codemirror/css.js
+//= require libs/codemirror/javascript.js
+//= require libs/codemirror/htmlmixed.js
 
-//= require common.js
 //= require mock.js
+//= require dialog.js
 //= require collection.js
 //= require appearance.js
 //= require block.js
 //= require element.js
 //= require page.js
 //= require block_group_composite.js
+//= require init.js
+
 
 

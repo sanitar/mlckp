@@ -4,43 +4,39 @@ class ElementsController < ApplicationController
     @elements = Element.all.to_json
  end
 
-  def new
-    @element = Element.new
-    @group_id = params[:group_id]
-    render 'new', :layout => true
-  end
-
   def create
-    data = params[:element]
-    @element = Element.new(data)
-    if @element.save
-      data = @element
-    else
-      data = []
+    data = params[:data]
+    res = {}
+    data.each do |obj|
+      element = Element.new(obj[1])
+      if element.save
+        res[obj[0]] = element
+      else
+        res[obj[0]] = "error"
+      end
     end
-    render :text => data.to_json
-  end
-
-  def edit
-    @element = Element.find(params[:id])
-    @group_id = params[:group_id]
+    render :text => res.to_json
   end
 
   def update
-    @element = Element.find(params[:id])
-    response.headers['Content-type'] = "text/plain; charset=utf-8"
-    if @element.update_attributes(params[:element])
-      data = @element
-    else
-      data = []
+    data = params[:data]
+    res = []
+    data.each do |obj|
+      element = Element.find(obj[0])
+      if (not element.update_attributes(obj[1]))
+        res.push({obj[0] => 'error'})
+      end
     end
-    render :text => data.to_json
+    render :text => res.to_json
+
   end
 
   def destroy
-    @element = Element.find(params[:id])
-    @element.destroy
-    response.headers['Content-type'] = "text/plain; charset=utf-8"
+    data = params[:data]
+    data.each do |obj|
+      element = Element.find(obj)
+      element.destroy
+    end
     render :text => [].to_json
   end
 end

@@ -4,6 +4,26 @@ class PagesController < ApplicationController
     @elements = Element.all
     @project = Project.find(params[:project_id])
     @pages = Page.where(:project_id => params[:project_id])
+    @css = ''
+    @elements.each do |element|
+      s = element.css
+      while s.size > 0 do
+        extra = s[/(\/\*(.)*?\*\/|\s|\t)*/m]
+        if extra != nil
+          @css += extra
+          s = s[extra.size, s.size]
+        end
+        if s.index(/{.*?}/m) != nil
+          ind = s.index('}')
+          @css += '.mock-' + element.id.to_s + ' ' + s[0, ind + 1]
+          s = s[ind + 1, s.size]
+        else
+          @css += s
+          s = ""
+        end
+      end
+      @css += "\n"
+    end
   end
 
   def create
@@ -36,5 +56,4 @@ class PagesController < ApplicationController
     response.headers['Content-type'] = "text/plain; charset=utf-8"
     render :text => [].to_json
   end
-
 end

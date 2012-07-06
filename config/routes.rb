@@ -1,5 +1,11 @@
 Molockup10::Application.routes.draw do
-  resources :developer_tools, :reviewer_tools, :elements
+  resources :developer_tools, :reviewer_tools
+
+  post "elements/update" => "elements#update"
+  post "elements/delete" => "elements#destroy"
+  post "elements/create" => "elements#create"
+  post "elements/save" => "elements#save"
+  get "elements" => "elements#index"
 
   resources :projects do
     resources :pages do

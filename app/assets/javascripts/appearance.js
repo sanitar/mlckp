@@ -26,7 +26,7 @@ Mock.menu.Menu = Mock.extend(null, {
         this.appendDivider();
 
         $.each(menu, function(index, item){
-            if (Mock.isArray(item)){
+            if ($.isArray(item)){
                 for (var i = 0; i < item.length; i++){
                     var menu_item = item[i],
                         el = $(template({
