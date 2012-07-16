@@ -7,6 +7,9 @@ Molockup10::Application.routes.draw do
   post "elements/save" => "elements#save"
   get "elements" => "elements#index"
 
+  get "elements/result/:id" => "elements#result"
+  get "elements/result" => "elements#result"
+
   resources :projects do
     resources :pages do
       post "blocks/update" => "blocks#update"

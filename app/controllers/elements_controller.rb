@@ -39,4 +39,12 @@ class ElementsController < ApplicationController
     end
     render :text => [].to_json
   end
+
+  def result
+    if params[:id]
+      @element = Element.find(params[:id])
+      @element[:css] = add_class_to_css(@element)
+    end
+    render 'result', :layout => false
+  end
 end

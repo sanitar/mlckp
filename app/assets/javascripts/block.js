@@ -262,6 +262,14 @@ Mock.block.BlocksController = Mock.extend(null, {
         return this.createBlockView(item);
     },
 
+    findModelByEl: function(els){
+        var self = this;
+        return els.map(function(index, item){
+            var view = self.views.findBy('el', item)[0];
+            return view.model;
+        });
+    },
+
     update: function(els){
         var self = this;
         els.each(function(){
@@ -311,7 +319,6 @@ Mock.block.BlocksController = Mock.extend(null, {
                 last_order = index + 1;
             }
         });
-        console.log(this.collection.changesConfig);
         this.collection.save();
     }
 

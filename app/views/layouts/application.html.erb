@@ -8,24 +8,26 @@
 </head>
 <body>
 
-<% if content_for?(:navigation) %>
-<%=  yield(:navigation) %>
-<% else %>
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container-fluid">
         <a class="brand">MolockUp</a>
         <div class="nav-collapse">
           <ul class="nav">
+            <% if content_for?(:navigation) %>
+                <%=  yield(:navigation) %>
+            <% else %>
             <li <%= content_for?(:nav_home) ? yield(:nav_home) : "" %>><a href="/">Home</a></li>
             <li <%= content_for?(:nav_project) ? yield(:nav_project) : "" %>><%= link_to "Список проектов", projects_path %></li>
             <li <%= content_for?(:nav_elements) ? yield(:nav_elements) : "" %>><%= link_to "Элементы", elements_path %></li>
+            <% end %>
           </ul>
         </div>
       </div>
     </div>
   </div>
-<% end %>
+
+
   <% if content_for?(:breadcrumb) %>
     <ul class="breadcrumb">
       <li><a href="/">Home</a> <span class="divider">></span></li>

@@ -7,24 +7,14 @@ designer
 <% end %>
 
 <% content_for :navigation do %>
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="brand">MolockUp</a>
-                <div class="nav-collapse">
-                    <ul class="nav">
-                        <li class="active editreview"><a href="#edit">Edit</a></li>
-                        <li class="editreview"><a href="#review">Review</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    <li class="active editreview"><a href="#edit">Edit</a></li>
+    <li class="editreview"><a href="#review">Review</a></li>
 <%  end %>
 
 <style type="text/css">
     <%=raw @css %>
 </style>
+
 <script type="text/javascript">
     Mock.F = {
         <% @elements.each do |element| %>
@@ -77,6 +67,34 @@ designer
 
 </div>
 
+<form id="props_panel" class="well">
+    <h4>Properties</h4>
+    <div class="props-initial">
+      <h6>Initial</h6>
+      <div class="no-props" style="display: none;">Нет данных для отображения</div>
+      <table><tbody>
+        <tr>
+          <td>x: </td>
+          <td> <input type="text" class="input-condensed input-number" name="x" /> </td>
+          <td>width: </td>
+          <td> <input type="text" class="input-condensed input-number" name="w" /> </td>
+        </tr><tr>
+          <td>y: </td>
+          <td> <input type="text" class="input-condensed input-number" name="y" /> </td>
+          <td>height: </td>
+          <td> <input type="text" class="input-condensed input-number" name="h" /> </td>
+        </tr>
+      </tbody></table>
+    </div>
+
+    <div class="props-params">
+      <h6>Parameters</h6>
+      <div class="no-props" style="display: none;">Нет данных для отображения</div>
+      <table><tbody>
+      </tbody></table>
+    </div>
+</form>
+
 <div id="templates">
     <script type="text/template" id="block-template">
         <div class="block">
@@ -104,6 +122,11 @@ designer
             </a>
         </li>
     </script>
+
+  <script type="text/template" id="params-item-template">
+      <tr class="prop-{{type}}"><td class="td-first">{{name}}: </td> <td> {{{tpl}}} </td> </tr>
+  </script>
+
 </div>
 
 <script type="text/javascript">
@@ -113,5 +136,5 @@ designer
     };
     $(function(){
         Mock.init.designer();
-    })
+    });
 </script>

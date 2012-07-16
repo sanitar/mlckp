@@ -36,6 +36,7 @@ Mock.init.developer = function(){
         initialize: function(){
             this.initComponents();
             this.initEvents();
+            Backbone.history.start();
 
             ws.splitter({
                 type: 'v'
@@ -50,9 +51,36 @@ Mock.init.developer = function(){
 
         initComponents: function(){
             this.controller = new Mock.element.Controller();
+            this.iframe = $('#result iframe');
+            this.iframe_loader = $('.ajax-loader-container');
+        },
+
+        loadIframe: function(url){
+            if (url !== '' || url !== this.iframe.attr('src')){
+                this.iframe_loader.show();
+                $('.alert').toggle(false);
+                this.iframe.attr('src', url);
+            }
+        },
+
+        onRoute: function(){
+            var element_id = document.location.hash.substring(1);
+            this.loadIframe('');
+            $('.alert').toggle(element_id ? true : false);
         },
 
         initEvents: function(){
+            this.controller.on('route:load', this.onRoute.createDelegate(this));
+            var self = this;
+
+            // Run button
+            $('.navbar .btn').click(function(){
+                self.loadIframe('elements/result/' + document.location.hash.substring(1));
+            });
+
+            this.iframe.on('load', function(){
+                self.iframe_loader.hide();
+            });
         }
     });
 
@@ -82,7 +110,8 @@ Mock.init.designer = function(){
             this.controller = new Mock.BlockGroupComposite();
 
             ws.uiselectable({
-                filter: '.block:not(.group-block), .group:not(.group-block)'
+                filter: '.block:not(.group-block), .group:not(.group-block)',
+                stop: this.controller.reloadPropsPanel.createDelegate(this.controller)
             })
                 .multidraggable({
                     filter: '.block:not(.group-block), .group:not(.group-block)',
@@ -206,6 +235,48 @@ Mock.init.designer = function(){
 
         onDragStop: function(e, el, ui){
             this.controller.update($('.ui-selected'));
+        }
+    });
+
+    var directory = new DirectoryView();
+}
+
+/* ------------------------------------------------------- */
+/* ----------------- developer - result ------------------ */
+
+Mock.init.developer_result = function(){
+    var ws = $('#workspace');
+
+    var DirectoryView = Mock.extend(null, {
+        initialize: function(){
+            $('html').addClass('developer_result');
+            this.initComponents();
+        },
+
+        initComponents: function(){
+            var elements = Mock.data.elements;
+            if (elements.length){
+                var element = elements[0],
+                    initial = $.parseJSON(element.initial);
+
+                var block_data = {
+                    element_id: element.id,
+                    id: element.id,
+                    is_group: false,
+                    params: '{"x":10,"y":10,"w":' + initial.w + ',"h":' + initial.h + '}',
+                    parent_id: null,
+                    z_index: 1
+                };
+
+                var model = new Backbone.Model(block_data);
+
+                var view = new Mock.block.BlockView({
+                    model: model
+                })
+                view.$el.draggable({
+                    containment: 'parent'
+                })
+            }
         }
     });
 

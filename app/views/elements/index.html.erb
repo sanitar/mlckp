@@ -6,8 +6,11 @@
   Программист
 <% end %>
 
-<% content_for :nav_elements do %>
-  class="active"
+<% content_for :navigation do %>
+    <li xmlns="http://www.w3.org/1999/html"><a href="/">Home</a></li>
+    <li><%= link_to "Список проектов", projects_path %></li>
+    <li class="active"><%= link_to "Элементы", elements_path %></li>
+    <li> <div class="btn btn-info"><i class="icon-play icon-white"></i> Run </div> </li>
 <% end %>
 
 <div id="navigation">
@@ -20,8 +23,7 @@
           <div id="element" class="well">
             <h6>Elements List<i class="icon-plus" title="Add page"></i></h6>
             <ul class="nav nav-list">
-
-
+              <!-- список элементов -->
             </ul>
           </div>
         </ul>
@@ -35,12 +37,22 @@
             Initial
           </div>
           <table class="table table-condensed table-bordered"><tbody>
-              <tr><td>width: </td><td> <input type="text" name="w" value ="200" class="input-mini input-condensed input-number" /> </td></tr>
-              <tr><td>height: </td><td> <input type="text" name="h" value ="200" class="input-mini input-condensed input-number" /></td></tr>
-              <tr class="initial-resizable"><td>resizable: </td><td><input name="r" type="checkbox" checked="checked" /></td></tr>
-              <tr><td>&emsp;&emsp;x: </td><td><input type="checkbox" name="x" /></td></tr>
-              <tr><td>&emsp;&emsp;y: </td><td><input type="checkbox" name="y" /></td></tr>
-              <tr><td>editable: </td><td><input type="checkbox" name="e" /></td></tr>
+              <tr><td>width </td><td> <input type="text" name="w" value ="200" class="input-mini input-condensed input-number" /> </td></tr>
+              <tr><td>height </td><td> <input type="text" name="h" value ="200" class="input-mini input-condensed input-number" /></td></tr>
+              <tr class="initial-resizable"><td>resizable </td><td><input name="r" type="checkbox" checked="checked" /></td></tr>
+              <tr><td>&emsp;&emsp;x </td><td><input type="checkbox" name="x" /></td></tr>
+              <tr><td>&emsp;&emsp;y </td><td><input type="checkbox" name="y" /></td></tr>
+              <tr><td>editable </td><td><input type="checkbox" name="e" /></td></tr>
+          </tbody></table>
+        </li>
+
+        <li id="parameters">
+          <div>
+            <i class="icon-chevron-down"></i>
+            Parameters
+            <i class="icon-plus"></i>
+          </div>
+          <table class="table table-condensed table-bordered"><tbody>
           </tbody></table>
         </li>
       </ul>
@@ -66,12 +78,20 @@
         <textarea id="css">css</textarea>
       </div>
       <div id="resultcode">
-        <div class="codetype">Refresh</div>
-        <div id="result">result</div>
+        <div id="result">
+          <div class="alert" style="display: none;"> Click "<strong>Run</strong>" button to see result. </div>
+          <div class="ajax-loader-container" style="display: none;">
+            <div>
+                <div class="ajax-loader"></div>
+            </div>
+          </div>
+          <iframe src=""></iframe>
+        </div>
       </div>
   </div>
 </div>
 
+<div class="templates">
   <script type="text/template" id="element-item-template">
       <li id="el{{ id }}">
         <a href="#{{ id }}"> {{ name }}
@@ -82,6 +102,26 @@
         </a>
       </li>
   </script>
+
+  <script type="text/template" id="parameter-item-template">
+    <tr><td class="td-first">{{name}}</td><td> <code>{{type}}</code>
+      <span style="display: none;">
+        <i class="icon-pencil" title="Edit page"></i>
+        <i class="icon-trash" title="Remove page"></i>
+      </span>
+    </td> </tr>
+  </script>
+
+
+  <script type="text/template" id="text-extra-parameters-template">
+    <label class="checkbox"> <input type="checkbox" /> Number field </label>
+    <label class="checkbox"> <input type="checkbox" /> Custom validation </label>
+    <div class="child" style="display: none;"> <label>Reg exp:</label> <input type="text" class="input-mini input-condensed"/></div>
+    <div> <label>Default value:</label> <input type="text" class="input-condensed"/> </div>
+    <div> <label>Empty text:</label> <input type="text" class="input-condensed"/> </div>
+  </script>
+
+</div>
 
 <script type="text/javascript">
     Mock.data = {

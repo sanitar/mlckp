@@ -11,7 +11,6 @@
         },
 
         _blockClick: function(e, el){
-            console.log('block clicked');
             this.selectees = $(this.options.filter, this.element[0]);
             var selected = this.selectees.filter('.ui-selected'),
             ifSelected = selected.filter(el).size() > 0,
@@ -30,6 +29,7 @@
             if (this.options.autoRefresh) {
                 this.refresh();
             }
+            this._trigger('stop');
         },
 
         _blockDragStart: function(e, h, el){
@@ -42,6 +42,7 @@
             if (this.options.autoRefresh) {
                 this.refresh();
             }
+            this._trigger('stop');
         },
 
         _mouseStart: function(event){

@@ -55,9 +55,18 @@ html.developer{
 .developer #navigation > div .hsplitbar.active, .developer #navigation > div .hsplitbar:hover {
     background-color: #999999;
 }
+
 /*--------------- params --------------*/
 #params{
     padding: 10px 0 0 10px;
+}
+
+.developer #parameters table span{
+    float: right;
+    position: relative;
+}
+.developer #parameters .td-first{
+    width: 110px;
 }
 
 /*--------------- Код --------------*/
@@ -100,5 +109,66 @@ html.developer{
     right: 5px;
     font-family: monospace;
 }
+#result iframe{
+    width: 100%;
+    height: 98%;
+    border: none;
+}
+/* ------------------ ajax loader in result ------------------ */
+.developer .ajax-loader-container{
+    position: absolute;
+    display: table;
+    width: 98%;
+    height: 50%;
+}
+.developer .ajax-loader-container > div{
+    display: table-cell;
+    vertical-align: middle;
 
+}
+.developer .ajax-loader{
+    margin: 0 auto;
+}
+.developer .alert {
+    position: absolute;
+    width: 85%;
+}
+.developer_result #workspace{
+    width: 100%;
+    height: 100%;
+}
 
+/* ------------ styles for parameter dialog --------- */
+
+.extra-parameters {
+    background-color: #F5F5F5;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.extra-parameters > div{
+    padding: 10px;
+}
+.extra-parameters input.input-condensed{
+    padding: 1px;
+    margin-bottom: 5px;
+    width: 200px;
+}
+
+.extra-parameters div.child input.input-condensed {
+    width: 100px;
+}
+
+.extra-parameters div.child {
+    padding-left: 20px;
+
+}
+.extra-parameters .sub-parameter div > label{
+    display: block;
+    float: left;
+    width: 100px;
+}
+
+.extra-parameters div.child label{
+    width: 80px;
+}

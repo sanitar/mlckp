@@ -3,6 +3,7 @@ Mock.BlockGroupComposite = Mock.extend(null, {
     initialize: function(o){
         $.extend(this, o);
         this.blocks = new Mock.block.BlocksController();
+        this.propsPanel = new Mock.props.Panel();
     },
 
     fetch: function(page){
@@ -11,6 +12,12 @@ Mock.BlockGroupComposite = Mock.extend(null, {
 
     update: function(els){
         this.blocks.update(els);
+    },
+
+    reloadPropsPanel: function(e, s, ws){
+        var sel = $(ws).find('.ui-selected');
+        var models = this.blocks.findModelByEl(sel);
+        this.propsPanel.render(models, sel);
     },
 
     remove: function(els){
@@ -41,7 +48,6 @@ Mock.BlockGroupComposite = Mock.extend(null, {
                 collection.remove(view.model);
             }
         });
-        console.log(this.blocks.collection.changesConfig);
         collection.save();
         this.blocks.updateOrder();
     },

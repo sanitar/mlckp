@@ -3,12 +3,13 @@ Mock.namespace('Mock.dialog');
 Mock.dialog.Dialog = Mock.extend(null, {
     options: {
         dialogConfig: { title: '' },
-        form: {},
+        form: {}
     },
     mode: 'add',
     types: {
         'text': '<input type="text" name="{{name}}" />',
-        'textarea': '<textarea name="{{name}}" ></textarea>'
+        'textarea': '<textarea name="{{name}}" ></textarea>',
+        'select': '<select name="{{name}}">{{#each options}}<option>{{this}}</option>{{/each}}</select>'
     },
 
     initialize: function(o){
@@ -41,7 +42,8 @@ Mock.dialog.Dialog = Mock.extend(null, {
                 }
             }
             html += '<tr><td class="ui-dialog-label">' + f[i].label + ':&ensp;</td><td>';
-            html += _.template(this.types[f[i].type], { 'name': i });
+            f[i].name = i;
+            html += Handlebars.compile(this.types[f[i].type])(f[i]);
             html += '</td></tr>';
         }
         html += '</tbody></table>';

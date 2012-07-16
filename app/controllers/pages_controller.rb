@@ -6,23 +6,7 @@ class PagesController < ApplicationController
     @pages = Page.where(:project_id => params[:project_id])
     @css = ''
     @elements.each do |element|
-      s = element.css
-      while s.size > 0 do
-        extra = s[/(\/\*(.)*?\*\/|\s|\t)*/m]
-        if extra != nil
-          @css += extra
-          s = s[extra.size, s.size]
-        end
-        if s.index(/{.*?}/m) != nil
-          ind = s.index('}')
-          @css += '.mock-' + element.id.to_s + ' ' + s[0, ind + 1]
-          s = s[ind + 1, s.size]
-        else
-          @css += s
-          s = ""
-        end
-      end
-      @css += "\n"
+      @css += add_class_to_css(element)
     end
   end
 

@@ -18,9 +18,12 @@
 //= require jquery.ui.splitter.js
 //= require jquery.fn.zindexchange.js
 //= require jquery.fn.align.js
+
 //= require libs/underscore.js
 //= require libs/backbone.js
 //= require libs/bootstrap.js
+//= require libs/handlebars-1.0.0.beta.6.js
+
 //= require libs/codemirror/codemirror.js
 //= require libs/codemirror/xml.js
 //= require libs/codemirror/css.js
@@ -29,6 +32,7 @@
 
 //= require mock.js
 //= require dialog.js
+//= require properties.js
 //= require collection.js
 //= require appearance.js
 //= require block.js

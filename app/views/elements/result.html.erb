@@ -1,0 +1,45 @@
+<%= javascript_include_tag "application" %>
+<%= stylesheet_link_tag    "application", :media => "all" %>
+
+<style>
+    body{
+        padding: 0;
+    }
+    <% if @element != nil %>
+        <%=raw @element.css %>
+    <% end %>
+
+</style>
+
+
+<script>
+    Mock = Mock || {};
+
+    Mock.data = {
+        elements : [<%=raw @element.to_json%>]
+    };
+
+    <% if @element != nil %>
+        Mock.F = {
+            <%= @element.id %> : function(){
+                <%=raw @element.js %>
+            }
+        }
+    <% end %>
+    $(function(){
+        Mock.init.developer_result();
+    });
+
+
+</script>
+<div id="workspace">
+
+</div>
+
+<script type="text/template" id="block-template">
+  <div class="block">
+    <div class="content">
+      {{ html }}
+    </div>
+  </div>
+</script>

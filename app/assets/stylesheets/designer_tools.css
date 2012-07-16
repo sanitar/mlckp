@@ -50,7 +50,6 @@
     overflow: hidden;
 }
 
-/*---------------------------------*/
 /*---------табы в навигации--------*/
 #groups{
     margin-top: 10px;
@@ -86,7 +85,36 @@
     vertical-align: middle;
 }
 
-/* ----------------------------------------------- */
+/*------------ плавающая панель с параметрами -----------*/
+#props_panel{
+    /*width: 200px;*/
+    /*height: 300px;*/
+    position: absolute;
+    right: 10px;
+    top: 50px;
+    opacity: 0.7;
+    color: #393939;
+}
+
+#props_panel .no-props{
+    color: gray;
+    padding: 10px 0 10px 10px;
+    font-size: 11px;
+}
+#props_panel .props-initial input{
+    width: 40px;
+    margin: 0 5px;
+}
+
+#props_panel .props-params .td-first {
+    max-width: 70px;
+    text-transform: capitalize;
+}
+
+#props_panel .props-params input, #props_panel .props-params textarea, #props_panel .props-params select{
+    min-width: 150px;
+}
+
 /* --------- общая часть для блоков и групп ----------- */
 div.block .content{
     width: 100%;

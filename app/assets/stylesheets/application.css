@@ -14,70 +14,7 @@
  *= require libs/codemirror/codemirror.css
  *= require libs/codemirror/elegant.css
 
- *= require_self
  *= require designer_tools.css
  *= require developer_tools.css
  *= require main.css
 */
-
-body {
-    padding-top: 60px;
-    padding-bottom: 40px;
-    padding-left: 20px;
-}
-.sidebar-nav {
-    padding: 9px 0;
-}
-
-[class^="icon-"], [class*=" icon-"]{
-    background-image: url("glyphicons-halflings.png");
-}
-.ui-icon{
-    background-image: url("ui-icons_222222_256x240.png") !important;
-}
-input.input-condensed{
-    width: 50px;
-    padding: 0;
-    margin-bottom: 0;
-}
-/*---------- navigation ------------*/
-#navigation{
-    height: 100%;
-    width: 260px;
-    position: fixed;
-}
-
-#navigation .nav-info{
-    color: gray;
-    font-size: 11px;
-    padding-bottom: 5px;
-}
-#navigation .well{
-    padding: 5px;
-}
-#navigation .well .nav.nav-list li{
-    cursor: pointer;
-}
-#navigation .well .nav.nav-list li span{
-    display: inline-block;
-    float: right;
-}
-#navigation .well [class^="icon-"], [class*=" icon-"]{
-    cursor: pointer;
-    float: right;
-    opacity: 0.5;
-}
-#navigation .well [class^="icon-"]:hover, [class*=" icon-"]:hover{
-    opacity: 1;
-}
-
-#navigation > div{
-    width: 100%;
-    height: 100%;
-    position: relative;
-    z-index: 100;
-}
-
-#navigation .nav-header{
-    color: #0088CC;
-}

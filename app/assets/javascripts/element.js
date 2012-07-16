@@ -1,6 +1,7 @@
 Mock.namespace('Mock.element.nav');
 Mock.namespace('Mock.element.params');
 
+// коллекция элементов
 Mock.element.Collection = Mock.ModelCollection.extend({
     url: 'elements'
 });
@@ -8,6 +9,7 @@ Mock.element.Collection = Mock.ModelCollection.extend({
 /* ---------------------------------------------- */
 /* ---------------- navigation ------------------ */
 
+// диалог добавления и редактирования названия элемента
 Mock.element.nav.Dialog = Mock.extend(Mock.dialog.Dialog, {
     options: {
         titlePrefix: 'element',
@@ -82,10 +84,6 @@ Mock.element.nav.Controller = Mock.extend(null, {
     initComponents: function(){
         this.views = new Mock.Collection();
         this.dialog = new Mock.element.nav.Dialog();
-        /*this.dialog = new Mock.dialog.AddEditDialog({
-           addHeader: 'Add Element',
-           editHeader: 'Edit Element'
-        });*/
     },
 
     initEvents: function(){
@@ -231,6 +229,7 @@ Mock.element.CodeEditor = Mock.extend(null, {
 /* ---------------------------------------------- */
 /* ------------------ params -------------------- */
 
+// список начальных параметров
 Mock.element.params.Initial = Mock.extend(null, {
     values: null,
     initialize: function(o){
@@ -309,6 +308,143 @@ Mock.element.params.Initial = Mock.extend(null, {
     }
 });
 
+// диалог для добавления/редактирования дополнительных параметров
+Mock.element.params.ParametersDialog = Mock.extend(Mock.dialog.Dialog, {
+    options: {
+        titlePrefix: 'parameter',
+        dialogConfig: { minWidth: 350 },
+        form: {
+            'name': 'Name',
+            'opt': 'Option name',
+            'type': {
+                type: 'select',
+                label: 'Type',
+                options: ['text', 'textarea', 'checkbox', 'radioGroup', 'select', 'images']
+            }
+        }
+    },
+
+    render: function(){
+        this.uber.render.apply(this, arguments);
+        this.$el.append('<div class="extra-parameters"><div></div></div>');
+
+        var self = this,
+            types = this.options.form.type.options,
+            el = this.$el.find('.extra-parameters div'),
+            els_list = [];
+
+        for (var i = 0; i < types.length; i++){
+            var html = $('#' + types[i] + '-extra-parameters-template');
+            $('<div class="sub-parameter" />').attr('select-type', types[i]).appendTo(el)
+                .append(html.html());
+        }
+
+        this.$el.find('select').change(function(){
+            el.children('.sub-parameter').hide().filter('[select-type="' + $(this).val() + '"]').show();
+        });
+        this.initEvents();
+    },
+    initEvents: function(){
+        this.$el.find('.sub-parameter[select-type="text"] label:nth-child(2)').click(function(){
+            var el = $(this);
+            console.log(el.next().toggle(el.find('input').is(':checked')));
+            el.next().toggle(el.find('input').is(':checked'));
+        });
+    }
+
+});
+
+// список дополнительных параметров для элемента
+Mock.element.params.Parameters = Mock.extend(null, {
+    values: [],
+    initialize: function(o){
+        $.extend(this, o);
+        this.initComponents();
+        this.initEvents();
+    },
+
+    initComponents: function(){
+        this.$el = $('#parameters');
+        this.dialog = new Mock.element.params.ParametersDialog();
+        this.tpl = Handlebars.compile($('#parameter-item-template').html());
+    },
+
+    initEvents: function(){
+        this.$el.find('.icon-plus').click(this.onAddClick.createDelegate(this));
+        $(this.dialog).on('save', this.save.createDelegate(this));
+        this.$el.find('table tr').live({
+            'mouseenter': function(){
+                $(this).find('span').show();
+            },
+            'mouseleave': function(){
+                $(this).find('span').hide();
+            }
+        });
+        this.$el.find('table tr .icon-pencil').live('click', this.onEditClick.createDelegate(this));
+        this.$el.find('table tr .icon-trash').live('click', this.onRemoveClick.createDelegate(this));
+    },
+
+    load: function(values){
+        this.$el.find('table tbody').html('');
+        if (!values) return;
+        this.values = values;
+        for (var i = 0; i < values.length; i++){
+            this.renderParam(values[i]);
+        }
+    },
+
+    renderParam: function(config){
+        if ($.isNumeric(config)){
+            var index = config;
+            config = this.values[index];
+            var el = $(this.tpl(config));
+            this.$el.find('table tr').eq(index).after(el).remove();
+        } else {
+            $(this.tpl(config)).appendTo(this.$el.find('table tbody'));
+        }
+    },
+
+    onAddClick: function(){
+        this.dialog.add();
+    },
+
+    onEditClick: function(e, el){
+        var index = this.$el.find('tr').index($(el).parents('tr').get(0));
+        this.editValue = this.values[index];
+        this.dialog.edit(this.values[index]);
+    },
+
+    onRemoveClick: function(e, el){
+        var index = this.$el.find('tr').index($(el).parents('tr').get(0)),
+            config = this.values[index];
+        if (confirm('Do you really want to delete parameter "'+ config.name + '"?')){
+            this.values.splice(index, 1);
+            this.$el.find('table tr').eq(index).remove();
+            $(this).trigger('update', { params: JSON.stringify(this.values) });
+        }
+    },
+
+    save: function(e, opts, dialog){
+        var changes = false;
+        if (dialog.mode == 'add'){
+            this.values.push(opts);
+            changes = true;
+            this.renderParam(opts);
+        } else {
+            if (this.editValue != opts){
+                changes = true;
+                var index = $.inArray(this.editValue, this.values);
+                this.values[index] = opts;
+                this.renderParam(index);
+            }
+        }
+        if (changes){
+            $(this).trigger('update', { params: JSON.stringify(this.values) });
+        }
+    }
+});
+
+// общий контроллер для всех параметров
 Mock.element.params.Controller = Mock.extend(null, {
     initialize: function(o){
         $.extend(this, o);
@@ -318,9 +454,11 @@ Mock.element.params.Controller = Mock.extend(null, {
     initComponents: function(){
         this.$el = $('#params');
         this.initial = new Mock.element.params.Initial();
+        this.parameters = new Mock.element.params.Parameters();
     },
     initEvents: function(){
         $(this.initial).on('update', this.updateValues.createDelegate(this));
+        $(this.parameters).on('update', this.updateValues.createDelegate(this));
         this.$el.find('i.icon-chevron-down, i.icon-chevron-right').click(function(){
             $(this).parents('li').find('table').toggle($(this).hasClass('icon-chevron-right'));
             $(this).toggleClass('icon-chevron-down icon-chevron-right');
@@ -330,6 +468,7 @@ Mock.element.params.Controller = Mock.extend(null, {
     load: function(model){
         if (model){
             this.initial.load($.parseJSON(model.attributes.initial));
+            this.parameters.load($.parseJSON(model.attributes.params));
         }
     },
 
@@ -356,7 +495,6 @@ Mock.element.Controller = Backbone.Router.extend({
         $.extend(this, o);
         this.initComponents();
         this.initEvents();
-        Backbone.history.start();
     },
 
     initComponents: function(){
@@ -364,6 +502,7 @@ Mock.element.Controller = Backbone.Router.extend({
         this.navigation = new Mock.element.nav.Controller({ collection: this.collection });
         this.codeEditors = new Mock.element.CodeEditor();
         this.params = new Mock.element.params.Controller();
+
     },
 
     initEvents: function(){

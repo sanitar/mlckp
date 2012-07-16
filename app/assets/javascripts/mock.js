@@ -17,11 +17,12 @@ Mock.namespace = function(ns_string){
     return parent;
 };
 
-// для наследования
+// функция наследования
 Mock.extend = function(Parent, props){
     var Child, F, i;
 
     Child = function(){
+        this.uber = Child.uber;
         if (Child.uber && Child.uber.hasOwnProperty("initialize")){
             Child.uber.initialize.apply(this, arguments);
         }
@@ -45,7 +46,7 @@ Mock.extend = function(Parent, props){
     return Child;
 };
 
-// позволяет устанавливать scope для функции при её определении
+// позволяет устанавливать scope для функции заранее, до её выполнения
 $.extend(Function.prototype, {
     createDelegate: function(obj, args, appendArgs){
         var method = this;
@@ -64,7 +65,7 @@ $.extend(Function.prototype, {
     }
 });
 
-// буфер ввода
+// буфер ввода (для cut+copy+paste)
 Mock.buffer = (function(){
     var buffer;
     return {
