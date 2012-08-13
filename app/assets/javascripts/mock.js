@@ -77,3 +77,20 @@ Mock.buffer = (function(){
         }
     }
 }());
+
+Mock.history = (function(){
+    return {
+        memoryNumber: 50,
+        history: [],
+        set: function(val){
+            if (this.history.length >= this.memoryNumber){
+                this.history = this.history.slice( 1 - this.memoryNumber);
+            }
+            this.history.push(val);
+            console.log('history: ', this.history);
+        },
+        clear: function(){
+            this.history = [];
+        }
+    }
+}());

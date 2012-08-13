@@ -122,7 +122,7 @@ Mock.init.designer = function(){
             this.initEvents();
 
             $('#groups a:first').tab('show');
-            this.toggleTabs();
+//            this.toggleTabs();
 
             $('#navigation').draggable({
                 axis: 'x'
@@ -157,9 +157,9 @@ Mock.init.designer = function(){
                 ]
             });
 
-            $('.menu_undo, .menu_redo').css({
-                opacity: '0.6'
-            })
+//            $('.menu_undo, .menu_redo').css({
+//                opacity: '0.6'
+//            })
 
             this.pages = new Mock.page.Controller();
 
@@ -173,8 +173,7 @@ Mock.init.designer = function(){
         initEvents: function(){
             ws.on('multidraggablestop', this.onDragStop.createDelegate(this));
 
-            this.pages.on('route:load', this.controller.fetch.createDelegate(this.controller));
-            this.pages.on('route:load', this.toggleTabs);
+            this.pages.on('route:load', this.changePage.createDelegate(this));
             Backbone.history.start();
 
             $('#groups .tab-pane > div').each(function(index, item){
@@ -205,6 +204,7 @@ Mock.init.designer = function(){
             $(this.menu).on('menu_align_right menu_align_center menu_align_left \
                              menu_align_bottom menu_align_middle menu_align_top', this.onAlignAction.createDelegate(this));
             $(this.menu).on('menu_edit menu_review', this.onPreviewAction.createDelegate(this));
+            $(this.menu).on('menu_undo menu_redo', this.onHistoryAction.createDelegate(this));
 
 
             var timer = undefined;
@@ -263,8 +263,14 @@ Mock.init.designer = function(){
             ws.children('.block').find('.content').trigger(preview ? 'review' : 'edit');
         },
 
-        toggleTabs: function(){
-            $('#groups, #navigation .hsplitbar').toggle($('#page .active').size() > 0);
+        onHistoryAction: function(e, el){
+            var type = e.type.split('_')[1];
+        },
+
+        changePage: function(page_num, el){
+            var isPage = $.isNumeric(page_num);
+            this.controller.fetch(page_num);
+            $('#groups, #navigation .hsplitbar').toggle(isPage);
         },
 
         onDragStop: function(e, el, ui){

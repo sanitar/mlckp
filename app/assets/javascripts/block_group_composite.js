@@ -1,6 +1,7 @@
 Mock.BlockGroupComposite = Mock.extend(null, {
     selected: null,
     current_page: null,
+    historyStorage: {},
     initialize: function(o){
         $.extend(this, o);
         this.blocks = new Mock.block.BlocksController();
@@ -8,7 +9,12 @@ Mock.BlockGroupComposite = Mock.extend(null, {
     },
 
     fetch: function(page){
+        var isPage = $.isNumeric(page);
+        if (this.current_page) this.historyStorage[this.current_page] = Mock.history;
         this.blocks.fetch(page);
+        if (this.historyStorage[page]) {
+
+        }
     },
 
     update: function(els){

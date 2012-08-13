@@ -3,7 +3,8 @@ Mock.namespace('Mock.block');
 /* ------------ block collection ------------ */
 
 Mock.block.BlocksCollection = Mock.ModelCollection.extend({
-    url: 'blocks'
+    url: 'blocks',
+    history: true
 });
 
 /* ---------------- block view -------------- */

@@ -74,6 +74,7 @@ Mock.Collection = Mock.extend(null, {
 
 Mock.ModelCollection = Backbone.Collection.extend({
     model: Backbone.Model,
+    history: false,
     changesConfig: {
         'delete': [],
         'update': {},
@@ -119,11 +120,15 @@ Mock.ModelCollection = Backbone.Collection.extend({
         }
 
         if (type !== undefined){
+            if (this.history){
+                Mock.history.set(ch[type]);
+            }
+
             $.ajax({
                 url: this.url + '/' + type,
                 type: 'post',
                 data: {
-                    'data': ch[type]
+                    data: ch[type]
                 },
                 dataType: 'json',
                 traditional: false,
