@@ -1,8 +1,8 @@
-development:
+production:
   adapter: mysql2
   host: localhost
   encoding: utf8
-  database: molockup_development
+  database: molockup_production
   pool: 5
-  username: user
-  password: 'passwd'
+  username: deployer
+  password: 'secret'
