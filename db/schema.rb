@@ -11,17 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120710054003) do
+ActiveRecord::Schema.define(:version => 20120808111158) do
 
   create_table "blocks", :force => true do |t|
     t.integer  "element_id"
     t.integer  "page_id"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.text     "params"
     t.integer  "z_index"
     t.integer  "parent_id"
-    t.boolean  "is_group",   :default => false, :null => false
+    t.boolean  "is_group",      :default => false, :null => false
+    t.text     "custom_params"
+    t.text     "data"
   end
 
   create_table "element_groups", :force => true do |t|
@@ -41,6 +43,8 @@ ActiveRecord::Schema.define(:version => 20120710054003) do
     t.text     "description"
     t.text     "initial"
     t.text     "params"
+    t.text     "dependencies"
+    t.text     "data"
   end
 
   create_table "pages", :force => true do |t|

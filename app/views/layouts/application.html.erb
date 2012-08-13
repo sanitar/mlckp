@@ -17,9 +17,9 @@
             <% if content_for?(:navigation) %>
                 <%=  yield(:navigation) %>
             <% else %>
-            <li <%= content_for?(:nav_home) ? yield(:nav_home) : "" %>><a href="/">Home</a></li>
-            <li <%= content_for?(:nav_project) ? yield(:nav_project) : "" %>><%= link_to "Список проектов", projects_path %></li>
-            <li <%= content_for?(:nav_elements) ? yield(:nav_elements) : "" %>><%= link_to "Элементы", elements_path %></li>
+            <li class="<%= home_active %>"> <a href="/">Home</a> </li>
+            <li class="<%= projects_active %>">  <%= link_to "Список проектов", projects_path %> </li>
+            <li class="<%= elements_active %>"><%= link_to "Элементы", elements_path %></li>
             <% end %>
           </ul>
         </div>

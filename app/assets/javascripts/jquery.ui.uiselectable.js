@@ -33,7 +33,6 @@
         },
 
         _blockDragStart: function(e, h, el){
-            console.log('block drag start');
             if (!$(el).hasClass('ui-selected')){
                 this.selectees = $(this.options.filter, this.element[0]);
                 this.selectees.filter('.ui-selected').removeClass('ui-selected');
@@ -43,14 +42,6 @@
                 this.refresh();
             }
             this._trigger('stop');
-        },
-
-        _mouseStart: function(event){
-            $.ui.selectable.prototype._mouseStart.call(this, event);
-        },
-
-        _mouseStop: function(event){
-            $.ui.selectable.prototype._mouseStop.call(this, event);
         },
 
         destroy: function() {

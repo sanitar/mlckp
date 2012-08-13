@@ -1,0 +1,39 @@
+<script type="text/template" id="block-template">
+  <div class="block">
+    <div class="content">
+      {{ html }}
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="menu-template">
+  <li class="active editreview" data-menu="menu_edit"><a>Edit</a></li>
+  <li class="editreview" data-menu="menu_review"><a>Review</a></li>
+
+  {{#each menu}}
+      <li class="divider"><a></a></li>
+      {{#each this}}
+          <li data-menu="{{this.item}}">
+            <a title="{{this.tooltip}}">
+              <span style="background-image: url(/assets/menu/{{this.item}}.png);" class="menu-btn {{this.item}}"></span>
+            </a>
+          </li>
+      {{/each}}
+  {{/each}}
+
+</script>
+
+<script type="text/template" id="page-item-template">
+  <li id="el{{ id }}">
+    <a href="#{{ id }}"> {{ name }}
+                <span style="display: none;">
+                    <i class="icon-trash" title="Remove page"></i>
+                    <i class="icon-pencil" title="Edit page"></i>
+                </span>
+    </a>
+  </li>
+</script>
+
+<script type="text/template" id="params-item-template">
+  <tr class="prop-{{type}}"><td>{{name}}: </td> <td> {{{tpl}}} </td> </tr>
+</script>

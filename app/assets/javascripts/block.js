@@ -94,13 +94,25 @@ Mock.block.BlockView = Backbone.View.extend({
                     grid: [5, 5]
                 });
         }
-        if (Mock.F[this.el_model.id]){
-            Mock.F[this.el_model.id].apply(this.el);
+
+        /* get values before init funtion for blocks */
+        var el_params = $.parseJSON(this.el_model.params),
+            params = {};
+
+        if (el_params && el_params.length > 0){
+            var custom_params = $.parseJSON(this.model.get('custom_params')),
+                opt;
+            for (var i = 0; i < el_params.length; i++){
+                opt = el_params[i].opt;
+                params[opt] = custom_params && custom_params[opt] ? custom_params[opt] : el_params[i].def;
+            }
         }
 
-        /*.editable({
-            filter: ".block"
-        });*/
+        if (Mock.F[this.el_model.id]){
+            var context = this.$el.find('.content');
+            Mock.F[this.el_model.id].call(context, params, this.model.get('data'));
+        }
+
         return this;
     },
 
@@ -220,13 +232,30 @@ Mock.block.BlocksController = Mock.extend(null, {
 
     createBlockView: function(model){
         var self = this,
-            view = new Mock.block.BlockView({
-            model: model
-        });
+            view = new Mock.block.BlockView({ model: model });
 
         view.$el.on('resizestop', this.onResizeStopElement.createDelegate(this));
+        view.$el.on('save', this.save.createDelegate(this));
+        view.$el.children('.content').on('save', this.saveData.createDelegate(this));
         this.views.add(view);
         return view;
+    },
+
+    save: function(e, ui, el){
+        console.log('save!!!', e, ui, el);
+        var view = $.findInArray(this.views.collection, function(item, index){
+            return item.el == el;
+        });
+        view.model.set(ui);
+        this.collection.save();
+    },
+    saveData: function(e, data, el){
+        console.log('save data', e, data, el);
+        el = $(el).parent('.block');
+        if (el.length == 0) return false;
+
+        this.save(e, { data: data }, el[0]);
+        return false;
     },
 
     create: function(e){

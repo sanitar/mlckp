@@ -1,7 +1,7 @@
 class BlocksController < ApplicationController
   def index
     data = Block.find(:all,
-      :select => 'id, element_id, params, z_index, parent_id, is_group',
+      :select => 'id, element_id, params, z_index, parent_id, is_group, custom_params, data',
       :conditions => {:page_id => params[:page_id]},
       :order => 'z_index, parent_id')
     render :text => data.to_json

@@ -1,0 +1,234 @@
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+  padding-left: 20px;
+}
+.sidebar-nav {
+  padding: 9px 0;
+}
+
+[class^="icon-"], [class*=" icon-"]{
+  background-image: url("glyphicons-halflings.png");
+}
+.icon-white{
+  background-image: url("glyphicons-halflings-white.png");
+}
+
+.ui-icon{
+  background-image: url("ui-icons_222222_256x240.png") !important;
+}
+input.input-condensed{
+  width: 50px;
+  padding: 0;
+  margin-bottom: 0;
+}
+.ajax-loader{
+  background-image: url("ajax-loader.gif");
+  width: 32px;
+  height: 32px;
+}
+
+[class^="icon-"], [class*="icon-"]{
+    cursor: pointer;
+    opacity: 0.5;
+    &:hover { opacity: 1; }
+}
+
+/*---------- navigation ------------*/
+#navigation{
+    height: 100%;
+    width: 270px;
+    position: fixed;
+    .nav-info{
+        color: gray;
+        font-size: 11px;
+        padding-bottom: 5px;
+    }
+    .well{
+        padding: 5px;
+        .nav.nav-list li {
+            cursor: pointer;
+            span {
+                display: inline-block;
+                float: right;
+            }
+        }
+    }
+}
+
+#navigation .well [class^="icon-"], #navigation .well [class*="icon-"]{
+  float: right;
+}
+#navigation > div{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 100;
+}
+
+#navigation .nav-header{
+  color: #0088CC;
+}
+
+/* ------------- projects page ------------- */
+.projects{
+    list-style: none;
+    .empty{
+        font-size: 11px;
+        color: gray;
+    }
+    .description{
+        color: gray;
+        font-size: 11px;
+        padding-left: 40px;
+    }
+}
+
+/* ----------------- dialog ---------------- */
+
+.ui-dialog {
+  .ui-widget-header{
+    background-color: #0088CC;
+    background-image: -moz-linear-gradient(center top , #0088CC, #0055CC);
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+    .ui-state-hover{
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+  }
+  .ui-dialog-titlebar-close span{
+    background-color: transparent;
+    opacity: 0.5;
+    &:hover { opacity: 1; }
+  }
+  .ui-dialog-label{
+    text-align: right;
+  }
+
+}
+
+.ui-widget-overlay{
+  opacity: 0.8;
+  background-color: #000000;
+  -moz-transition: opacity 0.15s linear 0s;
+}
+
+/* ----------- colorPicker --------------- */
+
+$text_color: #D9D9D9;
+$border_color: #525252;
+
+@mixin ui_color_picker_text {
+  color: $text_color;
+  font-family: Monospace, monospace;
+  border: 1px solid $border_color;
+}
+
+.ui-color-picker {
+  position: absolute;
+  z-index: 1035;
+  background-color: rgba(55, 53, 53, 0.79);
+  border-radius: 5px;
+  width: 295px;
+  @include ui_color_picker_text;
+
+  .ui-color-panel{
+    float: right;
+    width: 70px;
+    height: 100%;
+    margin: 0 15px 10px 15px;
+
+    > * {
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    input {
+      padding: 0;
+      margin: 0;
+      width: 30px;
+      float: right;
+      @include ui_color_picker_text;
+      text-align: right;
+      background: transparent;
+      &:focus { border-color: #C4C4C4; }
+    }
+
+    .ui-color-hash input{
+      width: 50px;
+    }
+
+    button{
+      background-color: rgba(0, 133, 204, 0.1);
+      @include ui_color_picker_text;
+      border: 1px solid rgba(118, 145, 204, 0.23);
+      border-radius: 5px 5px 5px 5px;
+      padding: 2px 0;
+      &:hover { background-color: rgba(0, 133, 204, 0.2); }
+      i{
+        opacity: 0.7;
+      }
+    }
+
+    .ui-colors {
+      height: 60px;
+      margin-bottom: 5px;
+
+      div {
+        height: 46%;
+        border: 1px solid $border_color;
+        border-radius: 3px;
+      }
+      .ui-color-choosen { margin-top: 2px; }
+      .ui-color-current { cursor: pointer; }
+    }
+  }
+
+  .ui-picker{
+    float: left;
+  }
+}
+
+div.colorpicker input{
+  width: 185px;
+}
+
+.icon-colorpicker{
+  background: url(color_picker.png)
+}
+
+.color-picker{
+  position: absolute;
+  background: none repeat scroll 0 0 #555555;
+  border: 1px solid #AAAAAA;
+  z-index: 99999999;
+  border-radius: 4px 4px 4px 4px !important;
+  left: 0;
+}
+
+/* --------------- list component ----------------- */
+.list {
+  padding: 5px;
+  input {
+    background-color: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+    margin-bottom: 2px;
+    padding:  2px;
+    width: auto;
+    &:focus{
+      background-color: white;
+      border: 1px solid #CCCCCC;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    }
+    &.focused{
+      background-color: #FBFFFF;
+      border: 1px solid #CCCCCC;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    }
+  }
+  a { cursor: pointer; }
+}

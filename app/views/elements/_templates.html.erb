@@ -1,0 +1,28 @@
+<script type="text/template" id="element-item-template">
+  <li id="el{{ id }}">
+    <a href="#{{ id }}"> {{ name }}
+          <span style="display: none;">
+            <i class="icon-trash" title="Remove page"></i>
+            <i class="icon-pencil" title="Edit page"></i>
+          </span>
+    </a>
+  </li>
+</script>
+
+<script type="text/template" id="parameter-item-template">
+  <tr><td class="td-first">{{name}}</td><td> <code>{{type}}</code>
+      <span style="display: none;">
+        <i class="icon-pencil" title="Edit page"></i>
+        <i class="icon-trash" title="Remove page"></i>
+      </span>
+  </td> </tr>
+</script>
+
+<script type="text/template" id="dependency-item-template">
+  <tr><td><a href="{{dependencies}}" target="_blank">{{dependencies}}</a>
+      <span style="display: none;">
+        <i class="icon-pencil" title="Edit page"></i>
+        <i class="icon-trash" title="Remove page"></i>
+      </span>
+  </td> </tr>
+</script>

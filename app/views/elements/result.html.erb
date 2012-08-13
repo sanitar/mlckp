@@ -11,7 +11,12 @@
 
 </style>
 
-
+<% @links['js'].each do |js| %>
+    <script type="text/javascript" src="<%=raw js %>"></script>
+<% end %>
+<% @links['css'].each do |css| %>
+    <link rel="stylesheet" type="text/css" href="<%=raw css %>">
+<% end %>
 <script>
     Mock = Mock || {};
 
@@ -21,7 +26,7 @@
 
     <% if @element != nil %>
         Mock.F = {
-            <%= @element.id %> : function(){
+            <%= @element.id %> : function(parameters, data){
                 <%=raw @element.js %>
             }
         }

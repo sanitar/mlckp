@@ -44,6 +44,7 @@ class ElementsController < ApplicationController
     if params[:id]
       @element = Element.find(params[:id])
       @element[:css] = add_class_to_css(@element)
+      @links = get_links(@element.dependencies)
     end
     render 'result', :layout => false
   end

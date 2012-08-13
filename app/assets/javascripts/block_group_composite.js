@@ -1,9 +1,10 @@
 Mock.BlockGroupComposite = Mock.extend(null, {
+    selected: null,
     current_page: null,
     initialize: function(o){
         $.extend(this, o);
         this.blocks = new Mock.block.BlocksController();
-        this.propsPanel = new Mock.props.Panel();
+        this.propsPanel = new Mock.properties.Controller();
     },
 
     fetch: function(page){
@@ -15,9 +16,22 @@ Mock.BlockGroupComposite = Mock.extend(null, {
     },
 
     reloadPropsPanel: function(e, s, ws){
-        var sel = $(ws).find('.ui-selected');
-        var models = this.blocks.findModelByEl(sel);
-        this.propsPanel.render(models, sel);
+       var sel = $(ws).find('.ui-selected');
+        if (!this.isSimilar(this.selected, sel)){
+            var models = this.blocks.findModelByEl(sel);
+            this.propsPanel.render(models, sel);
+            this.selected = sel;
+        }
+    },
+    isSimilar: function(arr1, arr2){
+        if (!arr1 || !arr2) return false;
+        var len1 = arr1.length,
+            len2 = arr2.length;
+        if (len1 !== len2) return false;
+        for (var i = 0; i < len1; i++){
+            if (arr1[i] != arr2[i]) return false;
+        }
+        return true;
     },
 
     remove: function(els){

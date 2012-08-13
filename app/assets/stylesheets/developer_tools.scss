@@ -1,0 +1,144 @@
+.table-list{
+    margin-left: 0;
+    list-style: none;
+    padding-right: 10px;
+    i.icon-plus { float: right; }
+    > li > div {
+        padding-right: 10px;
+    }
+}
+
+/*-------------- Общее -----------------------*/
+.developer{
+    height: 100%;
+    body {
+        background-color: #EFEFEF;
+        padding: 40px 0 0 0;
+        height: 89%;
+    }
+
+    #navigation {
+        background-color: white;
+        > div .hsplitbar{
+            height: 5px;
+            background-color: #EFEFEF;
+            &.active, &:hover { background-color: #999999; }
+        }
+    }
+
+    #workspace {
+        margin-left: 270px;
+        padding-top: 5px;
+        height: 100%;
+        &.disabled { opacity: 0.4; }
+        textarea { resize: none; }
+    }
+
+    .vsplitbar{
+        height: 5px;
+        width: 5px;
+        background-color: transparent;
+    }
+
+    #parameters {
+        table span {
+            float: right;
+            position: relative;
+        }
+        .td-first{
+            width: 110px;
+        }
+    }
+    #dependencies{
+        span {
+            float: right;
+            position: relative;
+        }
+    }
+
+    .ajax-loader-container{
+        position: absolute;
+        display: table;
+        width: 98%;
+        height: 50%;
+        > div {
+            display: table-cell;
+            vertical-align: middle;
+            .ajax-loader { margin: 0 auto; }
+        }
+    }
+
+    .alert {
+        position: absolute;
+        width: 85%;
+    }
+
+}
+
+
+/*--------------- params --------------*/
+#params {
+    padding: 10px 0 0 10px;
+}
+
+/*--------------- Код --------------*/
+
+.leftside, .rightside{
+    float: left;
+    height: 100%;
+}
+
+.leftside > div{
+    margin: 0 2px 5px 5px;
+}
+
+.rightside > div{
+    margin: 0 5px 5px 2px;
+}
+
+
+#result, #htmlcode > .CodeMirror, #jscode > .CodeMirror, #csscode > .CodeMirror{
+    background-color: white;
+    border: 1px solid #CCCCCC;
+    border-radius: 3px 3px 3px 3px;
+    padding: 4px;
+    height: 300px;
+    overflow: auto;
+}
+.codetype{
+    width: 90px;
+    height: 20px;
+    padding: 2px;
+    border-radius: 3px;
+    border: 1px solid #CCCCCC;
+    background-color: #f2f2f2;
+    color: #555555;
+    text-align: center;
+    position: absolute;
+    right: 5px;
+    font-family: monospace;
+}
+#result iframe{
+    width: 100%;
+    height: 98%;
+    border: none;
+}
+/* ------------------ ajax loader in result ------------------ */
+.developer_result #workspace{
+    width: 100%;
+    height: 100%;
+}
+
+/* ------------ styles for parameter dialog --------- */
+
+.dialog {
+    .list {
+        border: 1px dotted gray;
+        margin-bottom: 7px;
+    }
+    .td-more-info, .td-less-info{
+        text-align: right;
+        a { color: #0088CC; }
+    }
+    hr { margin: 5px 0 10px; }
+}

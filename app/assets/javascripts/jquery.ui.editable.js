@@ -1,61 +1,64 @@
 (function( $, undefined ) {
 
 $.widget("ui.editable", {
-	widgetEventPrefix: 'edit',
-        options: {
-        },
+    widgetEventPrefix: 'edit',
+    options: {
+    },
 
-	_create: function() {
-            var o = this.options;
-            this.element.on({
-                'dblclick': this._blockDblClick.createDelegate(this)
-            });
-	},
+    _create: function() {
+        var o = this.options;
+        this.element.on({
+            'dblclick': this.show.createDelegate(this)
+        });
+    },
 
-        _blockDblClick: function(){
-            var el = this.element;
+    show: function(){
+        this._trigger('start');
+        var self = this,
+            el = this.element,
+            pos = el.position();
 
-            this._trigger('start');
-            el.find('.content').hide();
+        this.dragEl = this.element.parents('.ui-draggable');
+        this.dragOption = this.dragEl.draggable('option', 'cancel');
+        this.dragEl.draggable('option', 'cancel', 'textarea');
 
-            if (el.children('textarea').size() == 0){
-                this.textarea = $('<textarea />').appendTo(el).css({
-                    height: '100%',
-                    width: '100%',
-                    padding: '0'
-                });
-                this.textarea.on({
-                    'blur': this.hideTextarea.createDelegate(this),
-                    'keypress': this._onKeyPress.createDelegate(this)
-                });
-            } else {
-                this.textarea = el.children('textarea');
-                this.textarea.show();
-            }
-            this.cancelOption = el.draggable('option', 'cancel');
-            el.draggable('option', 'cancel', 'textarea');
-            this.textarea.focus();
-        },
+        this.textarea = $('<textarea/>').css({
+            width: el.outerWidth(),
+            height: el.outerHeight(),
+            position: 'absolute',
+            left: pos.left,
+            top: pos.top
+        });
+        this.editText = el.text().trim();
 
-        _onKeyPress: function(e, el){
-            if (e.which == 13){ //enter
-                this.hideTextarea();
-            }
-        },
+        el.hide().parent().append(this.textarea);
+        this.textarea.focus().val(this.editText).keyup(this._onKeyPress.createDelegate(this));
+        $('body').on('mouseup', function(e){
+            if (self.textarea[0] != e.target) self.hide();
+        });
+    },
 
-        hideTextarea: function(e, el){
-            var textarea = this.element.children('textarea');
-            textarea.hide();
-            this.element.draggable('option', 'cancel', this.cancelOption);
-            this.element.find('.content').show();
-            this._trigger('stop', e, {
-                text: textarea.val()
-            });
-        },
+    _onKeyPress: function(e, el){
+        if (e.which == 27){ //esc
+            this.hide(true);
+        }
+    },
 
-	destroy: function() {
-            return this;
-	}
+    hide: function(silent){
+        var text = this.textarea.val();
+        if (silent !== true && this.editText !== text){
+            this._trigger('stop', null, text);
+            this.element.text(text);
+        }
+        this.textarea.remove();
+        this.element.show();
+        $('body').unbind('mouseup');
+        this.dragEl.draggable('option', 'cancel', this.dragOption);
+    },
+
+    destroy: function() {
+        return this;
+    }
 });
 
 })(jQuery);

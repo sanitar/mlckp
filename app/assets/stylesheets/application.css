@@ -13,8 +13,10 @@
  *= require libs/jquery-ui-1.8.21.custom.css
  *= require libs/codemirror/codemirror.css
  *= require libs/codemirror/elegant.css
+ *= require libs/farbtastic.css
+ *= require libs/chosen.css
 
- *= require designer_tools.css
- *= require developer_tools.css
- *= require main.css
+ *= require designer_tools.scss
+ *= require developer_tools.scss
+ *= require main.scss
 */

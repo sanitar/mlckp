@@ -12,17 +12,23 @@
 //
 //= require jquery
 //= require jquery-ui
+//= require jquery.findInArray.js
 //= require jquery.ui.uiselectable.js
 //= require jquery.ui.multidraggable.js
 //= require jquery.ui.editable.js
 //= require jquery.ui.splitter.js
 //= require jquery.fn.zindexchange.js
+//= require jquery.fn.validation.js
 //= require jquery.fn.align.js
+//= require jquery.ui.colorPicker.js
 
 //= require libs/underscore.js
 //= require libs/backbone.js
 //= require libs/bootstrap.js
 //= require libs/handlebars-1.0.0.beta.6.js
+//= require libs/farbtastic.js
+//= require libs/cursor.js
+//= require libs/chosen.jquery.js
 
 //= require libs/codemirror/codemirror.js
 //= require libs/codemirror/xml.js
@@ -37,6 +43,8 @@
 //= require appearance.js
 //= require block.js
 //= require element.js
+//= require element.nav.js
+//= require element.params.js
 //= require page.js
 //= require block_group_composite.js
 //= require init.js

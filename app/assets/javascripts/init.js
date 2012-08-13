@@ -8,7 +8,7 @@ $(document).ready(function(){
         'keydown': function(e){
             var key = e.keyCode,
                 val;
-            if (key != 46 && key != 8 && key != 9 && key != 37 && key != 39 && (key < 48 || key > 57 )) {
+            if (!e.altKey && !e.ctrlKey && key != 46 && key != 8 && key != 9 && key != 37 && key != 39 && (key < 48 || key > 57 )) {
                 e.preventDefault();
             }
             if (key == 38){ // up key
@@ -21,7 +21,30 @@ $(document).ready(function(){
                 $(this).val(val);
             }
         }
-    })
+    });
+    /* --- list component --- */
+    $('div.list-item').live({
+        'mouseenter': function(){
+            $(this).find('input').addClass('focused');
+            $(this).find('i').show();
+        },
+        'mouseleave': function(){
+            $(this).find('input').removeClass('focused');
+            $(this).find('i').hide();
+        }
+    });
+    $('div.list a').live({
+        'click': function(){
+            var el = $('<div class="list-item"><input type="text" /><i class="icon-trash" style="display: none;"></i></div>');
+            $(this).before(el);
+            el.find('input').focus();
+        }
+    });
+    $('div.list i').live({
+        'click': function(){
+            $(this).parents('div.list-item').remove();
+        }
+    });
 });
 
 Mock.init = {};
@@ -119,7 +142,8 @@ Mock.init.designer = function(){
                         containment: '#workspace',
                         distance: 3,
                         cancel: null,
-                        grid: [5, 5]
+                        grid: [5, 5],
+                        snap: true
                     }
                 });
             this.menu = new Mock.menu.Menu({
@@ -132,7 +156,8 @@ Mock.init.designer = function(){
                     ['menu_layers_group', 'menu_layers_ungroup']
                 ]
             });
-            $('.menu_undo, .menu_redo, .editreview').css({
+
+            $('.menu_undo, .menu_redo').css({
                 opacity: '0.6'
             })
 
@@ -175,14 +200,12 @@ Mock.init.designer = function(){
             });
 
             $(this.menu).on('menu_layers_group menu_layers_ungroup', this.onGroupAction.createDelegate(this));
-            $(this.menu).on('menu_move_forwards menu_move_backwards\
-                            menu_move_front menu_move_back',
-                this.onMoveAction.createDelegate(this));
-            $(this.menu).on('menu_duplicate menu_remove',
-                this.onEditAction.createDelegate(this));
+            $(this.menu).on('menu_move_forwards menu_move_backwards menu_move_front menu_move_back', this.onMoveAction.createDelegate(this));
+            $(this.menu).on('menu_duplicate menu_remove', this.onEditAction.createDelegate(this));
             $(this.menu).on('menu_align_right menu_align_center menu_align_left \
-                             menu_align_bottom menu_align_middle menu_align_top',
-                this.onAlignAction.createDelegate(this));
+                             menu_align_bottom menu_align_middle menu_align_top', this.onAlignAction.createDelegate(this));
+            $(this.menu).on('menu_edit menu_review', this.onPreviewAction.createDelegate(this));
+
 
             var timer = undefined;
             $('#navigation .nav-info').ajaxStart(function(e){
@@ -229,6 +252,17 @@ Mock.init.designer = function(){
             this.controller.updateZIndex();
         },
 
+        onPreviewAction: function(e, el){
+            el = $(el);
+            var preview = el.is('[data-menu="menu_review"]');
+            if (el.hasClass('active')) return;
+
+            el.siblings('.editreview').andSelf().toggleClass('active');
+            el.parent().find('[data-menu]:not(.editreview)').toggle(!preview);
+            $('#navigation, #props_panel').toggle(!preview);
+            ws.children('.block').find('.content').trigger(preview ? 'review' : 'edit');
+        },
+
         toggleTabs: function(){
             $('#groups, #navigation .hsplitbar').toggle($('#page .active').size() > 0);
         },
@@ -272,10 +306,10 @@ Mock.init.developer_result = function(){
 
                 var view = new Mock.block.BlockView({
                     model: model
-                })
+                });
                 view.$el.draggable({
                     containment: 'parent'
-                })
+                });
             }
         }
     });

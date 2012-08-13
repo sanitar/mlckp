@@ -5,8 +5,12 @@ class PagesController < ApplicationController
     @project = Project.find(params[:project_id])
     @pages = Page.where(:project_id => params[:project_id])
     @css = ''
+    @links = {'js' => [], 'css' => []}
     @elements.each do |element|
       @css += add_class_to_css(element)
+      @link = get_links(element.dependencies)
+      @links['js'] += @link['js']
+      @links['css'] += @link['css']
     end
   end
 

@@ -21,4 +21,21 @@ class ApplicationController < ActionController::Base
     @css += "\n"
     return @css
   end
+
+  def get_links(str)
+    res = { 'js' => [], 'css' => [] }
+    if !str
+      return res
+    end
+    urls = JSON.parse(str)
+    urls.each do |url|
+      if /(.)*\.js/.match url
+        res['js'].push(url)
+      end
+      if /(.)*\.css/.match url
+        res['css'].push(url)
+      end
+    end
+    return res
+  end
 end
