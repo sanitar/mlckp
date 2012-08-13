@@ -14,3 +14,4 @@ config/database.yml
 /log/*.log
 /.idea
 /tmp
+*~
