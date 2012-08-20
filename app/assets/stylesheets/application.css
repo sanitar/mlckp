@@ -18,5 +18,6 @@
 
  *= require designer_tools.scss
  *= require developer_tools.scss
+ *= require projects.scss
  *= require main.scss
 */

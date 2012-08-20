@@ -1,4 +1,9 @@
 <!-- fixme -->
+<% content_for :html_class do %>
+    projects
+<% end %>
+
+<!-- fixme -->
 <% content_for :breadcrumb do %>
   <li class="active"><%= link_to "Список проектов", projects_path %></li>
 <% end %>
@@ -11,8 +16,8 @@
 
   <% @projects.each do |project| %>
       <li>
-        <%= link_to "", edit_project_path(project.id), :class => "icon-pencil" %>
-        <%= link_to "", project, :confirm => "Are you sure?", :method => :delete, :class => "icon-trash" %>
+        <%= button_to "", edit_project_path(project.id), :method=> :get, :class => "icon-pencil" %>
+        <%= button_to "", project, :confirm => "Are you sure you want to delete?", :method => :delete, :class => "icon-trash" %>
         <%= link_to project.name, project_pages_path(project.id) %>
         <div class="description"><%= project.description %></div>
       </li>

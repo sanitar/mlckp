@@ -6,7 +6,7 @@
   </div>
 </script>
 
-<script type="text/template" id="menu-template">
+<script type="text/template" id="menu-left-template">
   <li class="active editreview" data-menu="menu_edit"><a>Edit</a></li>
   <li class="editreview" data-menu="menu_review"><a>Review</a></li>
 
@@ -20,7 +20,28 @@
           </li>
       {{/each}}
   {{/each}}
-
+</script>
+<script type="text/template" id="menu-right-template">
+  <ul class="nav pull-right">
+    <li class="dropdown">
+      <a class="dropdown-toggle">
+        <i class="icon-cog icon-white"></i>
+        <b class="caret"></b>
+        <div class="dropdown-menu">
+          <table><tbody>
+            <tr><td>Width: </td><td> <input type="text" name="width" class="input-condensed input-number"/> </td></tr>
+            <tr><td>Height: </td><td> <input type="text" name="height" class="input-condensed input-number"/> </td></tr>
+            <tr><td colspan="2"> <label class="checkbox"> <input name="showRuler" type="checkbox" /> Show ruler </label> </td></tr>
+            <tr><td colspan="2"> <label class="checkbox"> <input name="showGrid" type="checkbox" /> Show grid </label> </td></tr>
+            <tr><td>Grid width: </td><td> <input type="text" name="gridWidth" class="input-condensed input-number"/> </td></tr>
+            <tr><td>Grid height: </td><td> <input type="text" name="gridHeight" class="input-condensed input-number"/> </td></tr>
+            <tr><td colspan="2"> <label class="checkbox"> <input name="snapToGrid" type="checkbox" /> Snap to grid </label> </td></tr>
+            <tr><td colspan="2"> <label class="checkbox"> <input name="snapToObject" type="checkbox" /> Snap to object </label> </td></tr>
+          </tbody></table>
+        </div>
+      </a>
+    </li>
+  </ul>
 </script>
 
 <script type="text/template" id="page-item-template">

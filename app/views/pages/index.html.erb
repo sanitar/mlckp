@@ -69,8 +69,14 @@ designer
     </div>
 </div>
 
-<div id="workspace">
+<div id="container">
+  <div class="ruler ruler-top"></div>
+  <div class="ruler ruler-left"></div>
+  <div id="workspace" style="width:<%=raw @project.width %>px; height:<%=raw @project.height %>px;">
+    <div class="guide guide-vertical" style="display:none;"></div>
+    <div class="guide guide-horizontal" style="display:none;"></div>
 
+  </div>
 </div>
 
 <form id="props_panel" class="well">
@@ -99,25 +105,6 @@ designer
     <table><tbody>
     </tbody></table>
   </div>
-
-  <h5>Live Search</h5>
-  <div class="magic-search">
-
-    <table><tbody><tr>
-        <td>Опции поиска:</td>
-        <td> <select> <option>Text</option> <option>Images</option> </select> </td>
-    </tr></tbody></table>
-
-    <div class="input-append">
-      <input type="text" /><span class="add-on"><i class="icon-search"></i></span>
-    </div>
-
-    <div class="no-props" style="display: none;">Нет данных для отображения</div>
-
-    <div class="search-result">
-    </div>
-
-  </div>
 </form>
 
 <div id="templates">
@@ -127,7 +114,8 @@ designer
 <script type="text/javascript">
     Mock.data = {
         elements: <%=raw @elements.to_json %>,
-        pages: <%=raw @pages.to_json %>
+        pages: <%=raw @pages.to_json %>,
+        project: <%=raw @project.to_json %>
     };
     $(function(){
         Mock.init.designer();

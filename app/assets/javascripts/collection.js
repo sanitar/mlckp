@@ -75,10 +75,15 @@ Mock.Collection = Mock.extend(null, {
 Mock.ModelCollection = Backbone.Collection.extend({
     model: Backbone.Model,
     history: false,
+    hist: {
+        delete: [],
+        update: [],
+        create: []
+    },
     changesConfig: {
-        'delete': [],
-        'update': {},
-        'create': {}
+        delete: [],
+        update: {},
+        create: {}
     },
 
     initialize: function(){
@@ -90,12 +95,20 @@ Mock.ModelCollection = Backbone.Collection.extend({
 
     onAdd: function(model, ui){
         this.changes.create[model.cid] = model.attributes;
+        this.hist.create.push({
+            model: model,
+            attrs: $.extend({}, model.attributes)
+        });
     },
 
     onRemove: function(model, col, obj){
         if (!model.isNew()){
             this.changes['delete'].push(model.id);
         }
+        this.hist.delete.push({
+            model: model,
+            attrs: $.extend({}, model.attributes)
+        });
     },
 
     onChange: function(model, ui){
@@ -104,11 +117,17 @@ Mock.ModelCollection = Backbone.Collection.extend({
             id = isNew ? model.cid : model.id,
             arr = this.changes[isNew ? 'create' : 'update'];
         arr[id] = arr[id] || {};
+        this.hist.update.push({
+            model: model,
+            prevAttrs: $.extend({}, model.previousAttributes()),
+            attrs: $.extend({}, model.changedAttributes())
+        });
         $.extend(arr[id], model.changedAttributes());
     },
 
     save: function(opts){
-        var self = this,
+        var opts = opts || {},
+            self = this,
             model, type,
             ch = this.changes;
 
@@ -120,8 +139,8 @@ Mock.ModelCollection = Backbone.Collection.extend({
         }
 
         if (type !== undefined){
-            if (this.history){
-                Mock.history.set(ch[type]);
+            if (this.history && opts.addToHistory !== false ){
+                Mock.history.set({ type: type, data: this.hist[type] });
             }
 
             $.ajax({
@@ -140,11 +159,11 @@ Mock.ModelCollection = Backbone.Collection.extend({
                            models.push(model);
                            model.set(value);
                         });
-                        if (opts && opts.success){
+                        if (opts.success){
                             opts.success(models, responce);
                         }
                     } else {
-                        if (opts && opts.success){
+                        if (opts.success){
                             opts.success(responce);
                         }
                     }
@@ -154,5 +173,6 @@ Mock.ModelCollection = Backbone.Collection.extend({
             if (console) console.log('oops! No any data to save, but have to!');
         }
         this.changes[type] = $.isArray(ch[type]) ? [] : {};
+        this.hist[type] = [];
     }
 });

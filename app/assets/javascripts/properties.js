@@ -259,63 +259,13 @@ Mock.properties.panel.SizeAndPosition = Mock.extend(null, {
     }
 });
 
-Mock.properties.panel.MagicSearch = Mock.extend(null, {
-    initialize: function(o){
-        this.$el = $('#props_panel .magic-search');
-        this.chooseEl = this.$el.find('table select');
-        this.searchEl = this.$el.find('input');
-        this.searchResultEl = this.$el.find('.search-result');
-        this.initEvents();
-    },
-
-    initEvents: function(){
-        this.$el.find('span').click(this.search.createDelegate(this));
-        this.$el.find('input').keyup(this.onKeyUp.createDelegate(this));
-    },
-
-    render: function(ui, el){
-        this.$el.find('.input-append').show();
-        this.searchResultEl.show();
-    },
-
-    clear: function(){
-        this.searchEl.val('').parents('.input-append').hide();
-        this.searchResultEl.html('').hide();
-    },
-
-    onKeyUp: function(e, el){
-        if (e.which == 13) this.search();
-    },
-
-    search: function(){
-        var val = this.chooseEl.val();
-        $.ajax({
-            url: 'http://www.searchmash.com/results/images:cat',
-            success: function(s1, s2, s3){
-                console.log('success!!', s1,s2, s3);
-            },
-            error: function(s1, s2, s3){
-                console.log('error!!', s1,s2, s3);
-            }
-        });
-        if (val == 'Text'){
-
-        }
-        if (val == 'Images'){
-
-        }
-        console.log('search', val);
-    }
-});
-
 /* ---------- controller --------- */
 Mock.properties.Controller = Mock.extend(null, {
     initialize: function(){
         this.$el = $('#props_panel');
         this.panels = [
             new Mock.properties.panel.SizeAndPosition(),
-            new Mock.properties.panel.Parameters(),
-            new Mock.properties.panel.MagicSearch()
+            new Mock.properties.panel.Parameters()
         ];
         this.make(function(){
             this.$el.children().hide();

@@ -39,6 +39,19 @@ Mock.block.BlockView = Backbone.View.extend({
         }
         this.$el.trigger('create');
         this.model.on('remove', this.onRemove.createDelegate(this));
+        this.model.on('change', this.onChange.createDelegate(this));
+    },
+
+    onChange: function(model, changes){
+        if (changes.changes.params === true){
+            var params = $.parseJSON(model.get('params'));
+            this.$el.css({
+                top: params.y,
+                left: params.x,
+                width: params.w,
+                height: params.h
+            });
+        }
     },
 
     renderGroup: function(){

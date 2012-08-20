@@ -68,7 +68,7 @@ Mock.BlockGroupComposite = Mock.extend(null, {
                 collection.remove(view.model);
             }
         });
-        collection.save();
+        this.blocks.collection.save();
         this.blocks.updateOrder();
     },
 
@@ -264,6 +264,58 @@ Mock.BlockGroupComposite = Mock.extend(null, {
         });
         this.blocks.collection.save();
         this.blocks.collection.save();
+    },
+
+    normalizeAttributes: function(model, attrs, justReplace){
+        var denied = ['updated_at', 'created_at', 'id'],
+            model_attrs = model.attributes;
+        for (var model_attr in model_attrs){
+            if ($.inArray(model_attr, denied) == -1 && attrs[model_attr] !== undefined && attrs[model_attr] != model_attrs[model_attr]){
+                model.set(model_attr, attrs[model_attr]);
+            }
+            if (justReplace !== true && ($.inArray(model_attr, denied) !== -1 || model_attrs[model_attr] === null)){
+                model.unset(model_attr);
+            }
+        }
+        return model;
+    },
+
+    historyUndo: function(){
+        var obj = Mock.history.undo();
+        if (!obj) return;
+        for (var i = 0; i < obj.data.length; i++){
+            var block = obj.data[i];
+            if (obj.type == 'delete'){
+                var model = this.blocks.collection.add(this.normalizeAttributes(block.model, block.attrs)).last();
+                this.blocks.createBlockView(model);
+            }
+            if (obj.type == 'create'){
+                this.blocks.collection.remove(block.model);
+            }
+            if (obj.type == 'update'){
+                this.normalizeAttributes(block.model, block.prevAttrs, true);
+            }
+        }
+        this.blocks.collection.save({ addToHistory: false });
+    },
+
+    historyRedo: function(){
+        var obj = Mock.history.redo();
+        if (!obj) return;
+        for (var i = 0; i < obj.data.length; i++){
+            var block = obj.data[i];
+            if (obj.type == 'delete'){
+                this.blocks.collection.remove(block.model);
+            }
+            if (obj.type == 'create'){
+                var model = this.blocks.collection.add(this.normalizeAttributes(block.model, block.attrs)).last();
+                this.blocks.createBlockView(model);
+            }
+            if (obj.type == 'update'){
+                this.normalizeAttributes(block.model, block.attrs, true);
+            }
+        }
+        this.blocks.collection.save({ addToHistory: false });
     },
 
     updateZIndex: function(){

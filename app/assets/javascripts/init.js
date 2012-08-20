@@ -132,20 +132,6 @@ Mock.init.designer = function(){
         initComponents: function(){
             this.controller = new Mock.BlockGroupComposite();
 
-            ws.uiselectable({
-                filter: '.block:not(.group-block), .group:not(.group-block)',
-                stop: this.controller.reloadPropsPanel.createDelegate(this.controller)
-            })
-                .multidraggable({
-                    filter: '.block:not(.group-block), .group:not(.group-block)',
-                    dragOptions: {
-                        containment: '#workspace',
-                        distance: 3,
-                        cancel: null,
-                        grid: [5, 5],
-                        snap: true
-                    }
-                });
             this.menu = new Mock.menu.Menu({
                 menu: [
                     ['menu_undo', 'menu_redo'],
@@ -157,10 +143,6 @@ Mock.init.designer = function(){
                 ]
             });
 
-//            $('.menu_undo, .menu_redo').css({
-//                opacity: '0.6'
-//            })
-
             this.pages = new Mock.page.Controller();
 
             $('#navigation > div').splitter({
@@ -168,10 +150,12 @@ Mock.init.designer = function(){
                 sizeTop: true,
                 accessKey:"P"
             });
+            ws.workspace();
         },
 
         initEvents: function(){
             ws.on('multidraggablestop', this.onDragStop.createDelegate(this));
+            ws.on('uiselectablestop', this.controller.reloadPropsPanel.createDelegate(this.controller));
 
             this.pages.on('route:load', this.changePage.createDelegate(this));
             Backbone.history.start();
@@ -264,7 +248,9 @@ Mock.init.designer = function(){
         },
 
         onHistoryAction: function(e, el){
-            var type = e.type.split('_')[1];
+            if (!$(el).hasClass('active')) return;
+            if (e.type == 'menu_undo') this.controller.historyUndo();
+            if (e.type == 'menu_redo') this.controller.historyRedo();
         },
 
         changePage: function(page_num, el){

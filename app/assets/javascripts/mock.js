@@ -81,16 +81,48 @@ Mock.buffer = (function(){
 Mock.history = (function(){
     return {
         memoryNumber: 50,
+        current: -1,
         history: [],
         set: function(val){
+            if (this.history.length > this.current){
+                this.history = this.history.slice(0, this.current);
+            }
             if (this.history.length >= this.memoryNumber){
                 this.history = this.history.slice( 1 - this.memoryNumber);
             }
             this.history.push(val);
-            console.log('history: ', this.history);
+            this.current = this.history.length;
+            this.render();
         },
+
+        render: function(){
+            if (!this.$undoEl) this.$undoEl = $('[data-menu="menu_undo"]');
+            if (!this.$redoEl) this.$redoEl = $('[data-menu="menu_redo"]');
+            var isHist = this.history.length > 0,
+                canDoUndo = isHist && this.current != 0,
+                canDoRedo = isHist && this.current < this.history.length;
+            this.$undoEl.toggleClass('active', canDoUndo);
+            this.$redoEl.toggleClass('active', canDoRedo);
+        },
+
+        undo: function(){
+            if (this.current == 0) return;
+            this.current--;
+            this.render();
+            return this.history[this.current];
+        },
+
+        redo: function(){
+            if (this.current >= this.history.length) return;
+            this.current++;
+            this.render();
+            return this.history[this.current - 1];
+        },
+
         clear: function(){
             this.history = [];
+            this.current = -1;
+            this.render();
         }
     }
 }());

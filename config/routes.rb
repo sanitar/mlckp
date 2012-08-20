@@ -11,6 +11,7 @@ Molockup10::Application.routes.draw do
   get "elements/result" => "elements#result"
 
   resources :projects do
+    post "update/params" => "projects#updateParams"
     resources :pages do
       post "blocks/update" => "blocks#update"
       post "blocks/delete" => "blocks#destroy"

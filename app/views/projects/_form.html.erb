@@ -19,18 +19,30 @@
         Редактирование проекта
       <% end %>
     </legend>
+
     <div class="control-group">
       <label class="control-label">Название проекта</label>
       <div class="controls">
         <%= f.text_field :name, :class => "input-xxlarge" %>
       </div>
     </div>
+
     <div class="control-group">
       <label class="control-label">Описание</label>
       <div class="controls">
         <%= f.text_area :description, :class => "input-xxlarge" %>
       </div>
     </div>
+
+    <div class="control-group">
+      <label class="control-label">Размеры страницы</label>
+      <div class="controls">
+        <%= f.text_field :width, :class => "input-mini input-number" %>
+        x
+        <%= f.text_field :height, :class => "input-mini input-number" %>
+      </div>
+    </div>
+
     <div class="form-actions">
       <%= f.submit %>
     </div>

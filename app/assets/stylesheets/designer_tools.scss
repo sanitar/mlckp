@@ -9,13 +9,78 @@
         padding: 0;
     }
 
-    #workspace {
-        background: url("/assets/grid.png") repeat scroll 0 0 transparent;
-        height: 1800px;
-        margin-top: 40px;
-        position: relative;
-        width: 100%;
-        overflow: hidden;
+    #container{
+        margin: 40px 0 40px 280px;
+        .ruler-top{
+            height: 20px;
+            width: 100%;
+        }
+        .ruler-left{
+            width: 20px;
+            height: 100%;
+            background-color: red;
+            float: left;
+        }
+
+        #workspace {
+            border-right: 1px solid #d9d9d9;
+            border-bottom: 1px solid #d9d9d9;
+            position: relative;
+            overflow: hidden;
+
+            div.block {
+                .content{
+                    width: 100%;
+                    height: 100%;
+                    > *{
+                        -webkit-box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        -ms-box-sizing: border-box;
+                        -o-box-sizing: border-box;
+                        box-sizing: border-box;
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+
+            .guide {
+                background-color: #FFA4A4;
+                position: absolute;
+                top: 10px;
+                left: 20px;
+                z-index: 999;
+                box-shadow: 0 0 2px rgba(255, 137, 137, 0.34);
+                &.guide-horizontal {
+                    height: 1px;
+                    width: 100%;
+                    left: 0;
+                }
+                &.guide-vertical {
+                    width: 1px;
+                    height: 100%;
+                    top: 0;
+                }
+            }
+
+            div.block.ui-selected, div.group.ui-selected{
+                border-color: rgba(82, 168, 236, 0.8);
+                box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+            }
+
+            .group{
+                position: absolute;
+                border: 1px dotted gray;
+            }
+        }
+    }
+
+    .navbar {
+        .dropdown-menu {
+            color: #333;
+            text-shadow: none;
+            padding-left: 10px;
+        }
     }
 
     /*---------- Навигация ----------*/
@@ -44,6 +109,10 @@
     width: 16px;
     height: 16px;
     cursor: pointer;
+}
+[data-menu="menu_undo"], [data-menu="menu_redo"]{
+    opacity: 0.5;
+    &.active { opacity: 1; }
 }
 
 /*----------Общая часть----------*/
@@ -167,30 +236,4 @@
     }
 }
 
-/* --------- общая часть для блоков и групп ----------- */
-div.block {
-    .content{
-        width: 100%;
-        height: 100%;
-        > *{
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            -ms-box-sizing: border-box;
-            -o-box-sizing: border-box;
-            box-sizing: border-box;
-            width: 100%;
-            height: 100%;
-        }
-    }
-}
 
-
-div.block.ui-selected, div.group.ui-selected{
-    border-color: rgba(82, 168, 236, 0.8);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-}
-
-.group{
-    position: absolute;
-    border: 1px dotted gray;
-}

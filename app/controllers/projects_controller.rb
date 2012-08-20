@@ -21,6 +21,13 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
   end
 
+  def updateParams
+    @project = Project.find(params[:id])
+    if @project.update_attributes(params[:project])
+      render :text => [].to_json
+    end
+  end
+
   def update
     @project = Project.find(params[:id])
     if @project.update_attributes(params[:project])
