@@ -24,57 +24,57 @@ $.ui.draggable.prototype._generatePosition = function(event){
         }
 
         if (o.snapToObjects && this.friendsPosition){
-            this.element.parents('#workspace').children('.guide').css({
-                display: 'none'
-            });
-
-            var top = pageY - this.offset.click.top - this.offset.relative.top - this.offset.parent.top,
-                left = pageX - this.offset.click.left - this.offset.relative.left - this.offset.parent.left,
-                minLeft, minTop,
-                closestLeft, closestTop;
-
-            for (var i = 0; i < this.friendsPosition.v.length; i++){
-                var x = this.friendsPosition.v[i],
-                    diff = Math.abs(x - left);
-                if (!minLeft || minLeft > diff || minLeft > diffEnd){
-                    minLeft = diff;
-                    closestLeft = x;
-                }
-            }
-
-            for (var i = 0; i < this.friendsPosition.h.length; i++){
-                var y = this.friendsPosition.h[i],
-                    diff = Math.abs(y - top);
-                if (!minTop || minTop > diff){
-                    minTop = diff;
-                    closestTop = y;
-                }
-            }
-
-            if (minTop < o.snapToObjectsTolerance){
-                this.element.parents('#workspace').children('.guide-horizontal').css({
-                    top: closestTop + 'px',
-                    display: 'block'
-                });
-                top = closestTop;
-            }
-            if (minLeft < o.snapToObjectsTolerance){
-                this.element.parents('#workspace').children('.guide-vertical').css({
-                    left: closestLeft + 'px',
-                    display: 'block'
-                });
-                left = closestLeft;
-            }
-            if (minTop < o.snapToObjectsTolerance || minLeft < o.snapToObjectsTolerance){
-                return {
-                    top: top,
-                    left: left
-                }
-
-            }
-
-            console.log('---min: ', minLeft, minTop);
-            console.log('position before grid: ', top, left);
+//            this.element.parents('#workspace').children('.guide').css({
+//                display: 'none'
+//            });
+//
+//            var top = pageY - this.offset.click.top - this.offset.relative.top - this.offset.parent.top,
+//                left = pageX - this.offset.click.left - this.offset.relative.left - this.offset.parent.left,
+//                minLeft, minTop,
+//                closestLeft, closestTop;
+//
+//            for (var i = 0; i < this.friendsPosition.v.length; i++){
+//                var x = this.friendsPosition.v[i],
+//                    diff = Math.abs(x - left);
+//                if (!minLeft || minLeft > diff){
+//                    minLeft = diff;
+//                    closestLeft = x;
+//                }
+//            }
+//
+//            for (var i = 0; i < this.friendsPosition.h.length; i++){
+//                var y = this.friendsPosition.h[i],
+//                    diff = Math.abs(y - top);
+//                if (!minTop || minTop > diff){
+//                    minTop = diff;
+//                    closestTop = y;
+//                }
+//            }
+//
+//            if (minTop < o.snapToObjectsTolerance){
+//                this.element.parents('#workspace').children('.guide-horizontal').css({
+//                    top: closestTop + 'px',
+//                    display: 'block'
+//                });
+//                top = closestTop;
+//            }
+//            if (minLeft < o.snapToObjectsTolerance){
+//                this.element.parents('#workspace').children('.guide-vertical').css({
+//                    left: closestLeft + 'px',
+//                    display: 'block'
+//                });
+//                left = closestLeft;
+//            }
+//            if (minTop < o.snapToObjectsTolerance || minLeft < o.snapToObjectsTolerance){
+//                return {
+//                    top: top,
+//                    left: left
+//                }
+//
+//            }
+//
+//            console.log('---min: ', minLeft, minTop);
+//            console.log('position before grid: ', top, left);
         }
 
         if(o.grid) {
@@ -87,47 +87,44 @@ $.ui.draggable.prototype._generatePosition = function(event){
         }
     }
 
-    /* my changes */
-    var top = pageY																// The absolute mouse position
-        - this.offset.click.top													// Click offset (relative to the element)
-        - this.offset.relative.top												// Only for relative positioned nodes: Relative offset from element to offset parent
-        - this.offset.parent.top												// The offsetParent's offset without borders (offset + border)
-        + ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ));
-
-    var left = pageX																// The absolute mouse position
-        - this.offset.click.left												// Click offset (relative to the element)
-        - this.offset.relative.left												// Only for relative positioned nodes: Relative offset from element to offset parent
-        - this.offset.parent.left												// The offsetParent's offset without borders (offset + border)
-        + ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ));
-
-    if (o.snapToGrid && o.grid){
-        var ostX = left % o.grid[0];
-        if (ostX > 0){
-            var diffX = event.pageX - this.originalPageX;
-            if (diffX > 0) {
-                left += o.grid[0] - ostX;
-            }
-            if (diffX < 0){
-                left -= ostX;
-            }
-        }
-        var ostY = top % o.grid[1];
-        if (ostY > 0){
-            var diffY = event.pageY - this.originalPageY;
-            if (diffY > 0) {
-                top += o.grid[1] - ostY;
-            }
-            if (diffY < 0){
-                top -= ostY;
-            }
-        }
-    }
     return {
-        top: top,
-        left: left
+        top: ( pageY																// The absolute mouse position
+            - this.offset.click.top													// Click offset (relative to the element)
+            - this.offset.relative.top												// Only for relative positioned nodes: Relative offset from element to offset parent
+            - this.offset.parent.top												// The offsetParent's offset without borders (offset + border)
+            + ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ))
+        ),
+        left: (pageX																// The absolute mouse position
+            - this.offset.click.left												// Click offset (relative to the element)
+            - this.offset.relative.left												// Only for relative positioned nodes: Relative offset from element to offset parent
+            - this.offset.parent.left												// The offsetParent's offset without borders (offset + border)
+            + ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ))
+        )
     };
 
 }
+
+$.ui.plugin.add("draggable", "snapToGrid", {
+    drag: function(event, ui){
+        var inst = this.data('draggable'),
+            o = inst.options;
+
+        if (o.snapToGrid && o.grid){
+            var pos = ui.position,
+                distanceToCellX = pos.left % o.grid[0],
+                distanceToCellY = pos.top % o.grid[1];
+
+            if (distanceToCellX > 0){
+                var diffX = event.pageX - inst.originalPageX;
+                pos.left += diffX > 0 ? o.grid[0] - distanceToCellX : (diffX < 0 ? -distanceToCellX : 0);
+            }
+            if (distanceToCellY > 0){
+                var diffY = event.pageY - inst.originalPageY;
+                pos.top += diffY > 0 ? o.grid[1] - distanceToCellY : (diffY < 0 ? -distanceToCellY : 0);
+            }
+        }
+    }
+});
 
 $.ui.plugin.add("draggable", "snapToObjects", {
     start: function(event, ui) {
