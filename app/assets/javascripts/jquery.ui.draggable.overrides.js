@@ -1,153 +1,161 @@
-$.ui.draggable.prototype._generatePosition = function(event){
-    var o = this.options, scroll = this.cssPosition == 'absolute' && !(this.scrollParent[0] != document && $.ui.contains(this.scrollParent[0], this.offsetParent[0])) ? this.offsetParent : this.scrollParent, scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName);
-    var pageX = event.pageX;
-    var pageY = event.pageY;
-
-    if(this.originalPosition) { //If we are not dragging yet, we won't check for options
-        var containment;
-        if(this.containment) {
-            if (this.relative_container){
-                var co = this.relative_container.offset();
-                containment = [ this.containment[0] + co.left,
-                    this.containment[1] + co.top,
-                    this.containment[2] + co.left,
-                    this.containment[3] + co.top ];
-            }
-            else {
-                containment = this.containment;
-            }
-
-            if(event.pageX - this.offset.click.left < containment[0]) pageX = containment[0] + this.offset.click.left;
-            if(event.pageY - this.offset.click.top < containment[1]) pageY = containment[1] + this.offset.click.top;
-            if(event.pageX - this.offset.click.left > containment[2]) pageX = containment[2] + this.offset.click.left;
-            if(event.pageY - this.offset.click.top > containment[3]) pageY = containment[3] + this.offset.click.top;
-        }
-
-        if (o.snapToObjects && this.friendsPosition){
-//            this.element.parents('#workspace').children('.guide').css({
-//                display: 'none'
-//            });
-//
-//            var top = pageY - this.offset.click.top - this.offset.relative.top - this.offset.parent.top,
-//                left = pageX - this.offset.click.left - this.offset.relative.left - this.offset.parent.left,
-//                minLeft, minTop,
-//                closestLeft, closestTop;
-//
-//            for (var i = 0; i < this.friendsPosition.v.length; i++){
-//                var x = this.friendsPosition.v[i],
-//                    diff = Math.abs(x - left);
-//                if (!minLeft || minLeft > diff){
-//                    minLeft = diff;
-//                    closestLeft = x;
-//                }
-//            }
-//
-//            for (var i = 0; i < this.friendsPosition.h.length; i++){
-//                var y = this.friendsPosition.h[i],
-//                    diff = Math.abs(y - top);
-//                if (!minTop || minTop > diff){
-//                    minTop = diff;
-//                    closestTop = y;
-//                }
-//            }
-//
-//            if (minTop < o.snapToObjectsTolerance){
-//                this.element.parents('#workspace').children('.guide-horizontal').css({
-//                    top: closestTop + 'px',
-//                    display: 'block'
-//                });
-//                top = closestTop;
-//            }
-//            if (minLeft < o.snapToObjectsTolerance){
-//                this.element.parents('#workspace').children('.guide-vertical').css({
-//                    left: closestLeft + 'px',
-//                    display: 'block'
-//                });
-//                left = closestLeft;
-//            }
-//            if (minTop < o.snapToObjectsTolerance || minLeft < o.snapToObjectsTolerance){
-//                return {
-//                    top: top,
-//                    left: left
-//                }
-//
-//            }
-//
-//            console.log('---min: ', minLeft, minTop);
-//            console.log('position before grid: ', top, left);
-        }
-
-        if(o.grid) {
-            //Check for grid elements set to 0 to prevent divide by 0 error causing invalid argument errors in IE (see ticket #6950)
-            var top = o.grid[1] ? this.originalPageY + Math.round((pageY - this.originalPageY) / o.grid[1]) * o.grid[1] : this.originalPageY;
-            pageY = containment ? (!(top - this.offset.click.top < containment[1] || top - this.offset.click.top > containment[3]) ? top : (!(top - this.offset.click.top < containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
-
-            var left = o.grid[0] ? this.originalPageX + Math.round((pageX - this.originalPageX) / o.grid[0]) * o.grid[0] : this.originalPageX;
-            pageX = containment ? (!(left - this.offset.click.left < containment[0] || left - this.offset.click.left > containment[2]) ? left : (!(left - this.offset.click.left < containment[0]) ? left - o.grid[0] : left + o.grid[0])) : left;
-        }
-    }
-
-    return {
-        top: ( pageY																// The absolute mouse position
-            - this.offset.click.top													// Click offset (relative to the element)
-            - this.offset.relative.top												// Only for relative positioned nodes: Relative offset from element to offset parent
-            - this.offset.parent.top												// The offsetParent's offset without borders (offset + border)
-            + ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) ))
-        ),
-        left: (pageX																// The absolute mouse position
-            - this.offset.click.left												// Click offset (relative to the element)
-            - this.offset.relative.left												// Only for relative positioned nodes: Relative offset from element to offset parent
-            - this.offset.parent.left												// The offsetParent's offset without borders (offset + border)
-            + ($.browser.safari && $.browser.version < 526 && this.cssPosition == 'fixed' ? 0 : ( this.cssPosition == 'fixed' ? -this.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ))
-        )
-    };
-
-}
-
+// snapToGrid plugin
 $.ui.plugin.add("draggable", "snapToGrid", {
     drag: function(event, ui){
         var inst = this.data('draggable'),
             o = inst.options;
 
-        if (o.snapToGrid && o.grid){
+        if (o.grid){
             var pos = ui.position,
                 distanceToCellX = pos.left % o.grid[0],
                 distanceToCellY = pos.top % o.grid[1];
 
             if (distanceToCellX > 0){
-                var diffX = event.pageX - inst.originalPageX;
-                pos.left += diffX > 0 ? o.grid[0] - distanceToCellX : (diffX < 0 ? -distanceToCellX : 0);
+                var distanceToOriginalX = event.pageX - inst.originalPageX;
+                pos.left += distanceToOriginalX > 0 ? o.grid[0] - distanceToCellX : (distanceToOriginalX < 0 ? -distanceToCellX : 0);
             }
             if (distanceToCellY > 0){
-                var diffY = event.pageY - inst.originalPageY;
-                pos.top += diffY > 0 ? o.grid[1] - distanceToCellY : (diffY < 0 ? -distanceToCellY : 0);
+                var distanceToOriginalY = event.pageY - inst.originalPageY;
+                pos.top += distanceToCellY > 0 ? o.grid[1] - distanceToCellY : (distanceToCellY < 0 ? -distanceToCellY : 0);
             }
         }
     }
 });
 
+// snapToObjects plugin
 $.ui.plugin.add("draggable", "snapToObjects", {
     start: function(event, ui) {
         var inst = this.data('draggable'),
-            friends = this.parent().children('.ui-draggable:not(.ui-draggable-disabled)').not(this),
-            friendsPosition = { v: [], h: []};
+            snappingPosition = { v: [], h: []};
 
-        friends.each(function(){
+        this.siblings('.ui-draggable:not(.ui-draggable-disabled)').each(function(){
             var el = $(this),
-                position = el.position();
-            friendsPosition.v.push(position.left);
-            friendsPosition.v.push(position.left + el.width());
-            friendsPosition.h.push(position.top);
-            friendsPosition.h.push(position.top + el.height());
+                pos = el.position();
+            snappingPosition.v.push(pos.left);
+            snappingPosition.v.push(pos.left + el.width());
+            snappingPosition.h.push(pos.top);
+            snappingPosition.h.push(pos.top + el.height());
         });
-
-        inst.friendsPosition = friendsPosition;
-        console.log(friends, friendsPosition);
+        inst.snappingPosition = snappingPosition;
+        inst.guides = inst.guides || {
+            v: inst.element.siblings('.guide-vertical'),
+            h: inst.element.siblings('.guide-horizontal')
+        }
     },
-    stop: function(event, ui){
-        this.parents('#workspace').children('.guide').css({
-            display: 'none'
-        });
-    }
 
+    drag: function(event, ui){
+        var inst = this.data('draggable'),
+            o = inst.options,
+            scroll = inst.cssPosition == 'absolute' && !(inst.scrollParent[0] != document && $.ui.contains(inst.scrollParent[0], inst.offsetParent[0])) ? inst.offsetParent : inst.scrollParent,
+            scrollIsRootNode = (/(html|body)/i).test(scroll[0].tagName),
+            pageX = event.pageX,
+            pageY = event.pageY;
+
+        if (o.snapToObjects && inst.snappingPosition){
+            if(inst.originalPosition) { //If we are not dragging yet, we won't check for options
+                var containment;
+                if(inst.containment) {
+                    if (inst.relative_container){
+                        var co = inst.relative_container.offset();
+                        containment = [ inst.containment[0] + co.left, inst.containment[1] + co.top, inst.containment[2] + co.left, inst.containment[3] + co.top ];
+                    }
+                    else {
+                        containment = inst.containment;
+                    }
+
+                    if(event.pageX - inst.offset.click.left < containment[0]) pageX = containment[0] + inst.offset.click.left;
+                    if(event.pageY - inst.offset.click.top < containment[1]) pageY = containment[1] + inst.offset.click.top;
+                    if(event.pageX - inst.offset.click.left > containment[2]) pageX = containment[2] + inst.offset.click.left;
+                    if(event.pageY - inst.offset.click.top > containment[3]) pageY = containment[3] + inst.offset.click.top;
+                }
+            }
+
+            var top = pageY - inst.offset.click.top - inst.offset.relative.top - inst.offset.parent.top + ($.browser.safari && $.browser.version < 526 && inst.cssPosition == 'fixed' ? 0 : ( inst.cssPosition == 'fixed' ? -inst.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) )),
+                left = pageX - inst.offset.click.left - inst.offset.relative.left - inst.offset.parent.left  + ($.browser.safari && $.browser.version < 526 && inst.cssPosition == 'fixed' ? 0 : ( inst.cssPosition == 'fixed' ? -inst.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ));
+
+            var closestXfront, minXfront, diffXfront;
+            for (var i = 0; i < inst.snappingPosition.v.length; i++){
+                diffXfront = Math.abs(inst.snappingPosition.v[i] - left);
+                if (!minXfront || minXfront > diffXfront){
+                    minXfront = diffXfront;
+                    closestXfront = inst.snappingPosition.v[i];
+                }
+            }
+
+            var closestXback, minXback, diffXback;
+            for (var i = 0; i < inst.snappingPosition.v.length; i++){
+                diffXback = Math.abs(inst.snappingPosition.v[i] - (left + this.width()));
+                if (!minXback || minXback > diffXback){
+                    minXback = diffXback;
+                    closestXback = inst.snappingPosition.v[i];
+                }
+            }
+
+            var closestYfront, minYfront, diffYfront;
+            for (var i = 0; i < inst.snappingPosition.h.length; i++){
+                diffYfront = Math.abs(inst.snappingPosition.h[i] - top);
+                if (!minYfront || minYfront > diffYfront){
+                    minYfront = diffYfront;
+                    closestYfront = inst.snappingPosition.h[i];
+                }
+            }
+
+            var closestYback, minYback, diffYback;
+            for (var i = 0; i < inst.snappingPosition.h.length; i++){
+                diffYback = Math.abs(inst.snappingPosition.h[i] - (top + this.height()));
+                if (!minYback || minYback > diffYback){
+                    minYback = diffYback;
+                    closestYback = inst.snappingPosition.h[i];
+                }
+            }
+
+            if (minXfront <= minXback && minXfront < o.snapToObjectsTolerance){
+                inst.guides.v.css('left', closestXfront + 'px').show();
+                ui.position.left = closestXfront;
+            }
+            if (minXback <= minXfront && minXback < o.snapToObjectsTolerance){
+                inst.guides.v.css('left', closestXback + 'px').show();
+                ui.position.left = closestXback - this.width();
+            }
+
+            if (minYfront <= minYback && minYfront < o.snapToObjectsTolerance){
+                inst.guides.h.css('top', closestYfront + 'px').show();
+                ui.position.top = closestYfront;
+            }
+            if (minYback <= minYfront && minYback < o.snapToObjectsTolerance){
+                inst.guides.h.css('top', closestYback + 'px').show();
+                ui.position.top = closestYback - this.height();
+            }
+
+//                getClosest = function(num1, num2, arr){
+//                    var closest, min, diff1, diff2;
+//                    for (var i = 0; i < arr.length; i++){
+//                        diff1 = Math.abs(arr[i] - num1);
+//                        diff2 = Math.abs(arr[i] - num2);
+//                        if (!min || min > diff1 || min > diff2){
+//                            closest = arr[i];
+//                            min = Math.min(diff1, diff2);
+//                        }
+//                    }
+//                    return closest;
+//                },
+//                closestLeft = getClosest(left, left + this.width(), inst.snappingPosition.v),
+//                closestTop = getClosest(top, top + this.height(), inst.snappingPosition.h);
+//
+//            inst.guides.h.add(inst.guides.v).hide();
+//
+//            if (Math.abs(closestTop - top) < o.snapToObjectsTolerance){
+//                inst.guides.h.css('top', closestTop + 'px').show();
+//                ui.position.top = closestTop;
+//            }
+//            if (Math.abs(closestLeft - left) < o.snapToObjectsTolerance){
+//                inst.guides.v.css('left', closestLeft + 'px').show();
+//                ui.position.left = closestLeft;
+//            }
+        }
+    },
+
+    stop: function(event, ui){
+        var guides = this.data('draggable').guides;
+        guides.h.add(guides.v).hide();
+    }
 });

@@ -9,6 +9,7 @@ Mock.menu.Menu = Mock.extend(null, {
         this.root = $(this.rootDomSelector);
         this.render();
         this.renderDropdownMenu();
+        this.renderContextMenu();
     },
 
     render: function(){
@@ -30,13 +31,16 @@ Mock.menu.Menu = Mock.extend(null, {
     renderDropdownMenu: function(){
         var tpl = Handlebars.compile($('#menu-right-template').html()),
             root = this.root.parent().append(tpl),
-            li = root.find('li.dropdown');
+            li = root.find('li.dropdown'),
+            menu = li.find('.dropdown-menu');
 
         li.click(function(){
             li.toggleClass('open');
+            menu.toggle(li.hasClass('open'));
             if (li.hasClass('open')){
                 $('html').one('click', function(e){
                     li.removeClass('open');
+                    menu.hide();
                 })
             }
             return false;
@@ -46,6 +50,24 @@ Mock.menu.Menu = Mock.extend(null, {
             e.stopPropagation();
         });
         li.settings();
+    },
+
+    renderContextMenu: function(){
+        var ws = $('#workspace'),
+            el = $('.context_menu');
+
+        ws.on('contextmenu', function(event){
+            el.addClass('open').css({
+                left: event.pageX,
+                top: event.pageY
+            });
+            $('body').one('mousedown', function(e){
+                el.removeClass('open');
+            });
+            return false;
+        });
+        el.find('li').click(this.fireEvent.createDelegate(this));
+
     },
 
     fireEvent: function(e, el){

@@ -75,8 +75,19 @@ designer
   <div id="workspace" style="width:<%=raw @project.width %>px; height:<%=raw @project.height %>px;">
     <div class="guide guide-vertical" style="display:none;"></div>
     <div class="guide guide-horizontal" style="display:none;"></div>
-
   </div>
+</div>
+
+<div class="context_menu">
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="#" data-menu="menu_cut"><span>Ctrl+X</span> Cut  </a></li>
+    <li><a href="#" data-menu="menu_copy"><span>Ctrl+C</span> Copy </a></li>
+    <li><a href="#" data-menu="menu_paste"><span>Ctrl+V</span> Paste</a></li>
+    <li><a href="#" data-menu="menu_duplicate"><span>Ctrl+D</span> Duplicate</a></li>
+    <li><a href="#" data-menu="menu_remove"><span>Backspace</span> Delete</a></li>
+    <li class="divider"></li>
+    <li><a tabindex="-1" href="#">Separated link</a></li>
+  </ul>
 </div>
 
 <form id="props_panel" class="well">

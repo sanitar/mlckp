@@ -1,7 +1,8 @@
 body {
-  padding-top: 60px;
-  padding-bottom: 40px;
-  padding-left: 20px;
+    padding-top: 60px;
+    padding-bottom: 40px;
+    padding-left: 20px;
+    font-size: 13px;
 }
 .sidebar-nav {
   padding: 9px 0;
@@ -32,6 +33,13 @@ input.input-condensed{
     cursor: pointer;
     opacity: 0.5;
     &:hover { opacity: 1; }
+}
+.context_menu{
+    position: absolute;
+    li a span{
+        float: right;
+        color: #969696;
+    }
 }
 
 /*---------- navigation ------------*/

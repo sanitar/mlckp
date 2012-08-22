@@ -21,7 +21,6 @@
 //= require jquery.fn.validation.js
 //= require jquery.fn.align.js
 //= require jquery.ui.colorPicker.js
-//= require jquery.ui.settings.js
 //= require jquery.ui.draggable.overrides.js
 
 //= require libs/underscore.js
