@@ -58,7 +58,7 @@ designer
                     <% @elements.each do |element| %>
                         <% if element.element_group_id == group.id %>
                             <div class="element" id="el<%= element.id %>"><span>
-                            <%= image_tag ("elements/#{element.name}.png"), :title => element.description %>
+                              <img src="/assets/elements/<%= element.name %>.png" alt="<%= element.name %>" title="<%= element.description %>"/>
                             </span></div>
                         <% end %>
                     <% end %>
