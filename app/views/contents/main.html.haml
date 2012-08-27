@@ -43,14 +43,16 @@
       %p MolockUp&trade; - это быстрый и удобный инструмент для создания интерактивных прототипов пользовательских интерфейсов, который позволит Вашей команде повысить эффективность разработки программного обеспечения.
       
       %p Релиз бета-версии системы состоится 1 сентября 2012 года, но уже сейчас Вы можете зарегистрироваться и получить бесплатный доступ для одного пользователя на первые два месяца использования.
-    #text_right.span6
-      %p.poll_1_title Проголосуйте за удобный для Вас тарифный план, и мы учтём Ваше мнение:
+    #right_path.span6
       %p
-      - @prices.each do |price|
-        %label{class: 'radio', for: "price_#{price[0]}"}
-          = radio_button_tag :price, price[0]
-          = price[1]
-      #button_vote1
+        #right_path_title.darkblue Какой инструмент проектирования Вы используете?
+      #instruments
+        %p
+        - @instrument.each do |instrument|
+          %label{class: 'radio', for: "instrument_#{instrument}"}
+            = radio_button_tag :instrument, instrument
+            = instrument.humanize
+        %p
         %button.btn.btn-small.btn-primary{:type => "button"} Голосовать
   #monitor
     #users_count
@@ -146,20 +148,7 @@
 
      
      
-    #right_path.span4
-      .row-fluid
-        .span3
-          = image_tag "main/icon_round1.png"
-        .span9
-          Какой инструмент проектирования Вы используете?
-      #instruments
-        %p
-        - @instrument.each do |instrument|
-          %label{class: 'radio', for: "instrument_#{instrument}"}
-            = radio_button_tag :instrument, instrument
-            = instrument.humanize
-        %p
-        %button.btn.btn-small.btn-primary{:type => "button"} Голосовать
+    
   #footer.row-fluid
     .span8
       %b &copy MolockUp, 2012
