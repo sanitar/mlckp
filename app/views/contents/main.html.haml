@@ -70,7 +70,7 @@
         = image_tag "main/thierd_icon.png"
       %p Создавайте собственные уникальные элементы и библиотеки онлайн.
   #six_icon
-    .row-fluid.title 
+    .row-fluid.title
       %h2#go_to 
         Возможности MolockUp&trade;
     .row-fluid
@@ -96,9 +96,11 @@
           %p Контролируйте внесение изменений при работе с проектом и рецензировании.
   #your_mine.row-fluid 
     .span8
-      #horn
-        = image_tag "main/dudka.png"
-        %b Ваше мнение
+      #horn.row-fluid
+        .span2
+          = image_tag "main/dudka.png"
+        #mine_title.span10  
+          %h2 Ваше мнение
       %p Расскажите, что Вам не нравится в системах, которые Вы используете сейчас, или поделитесь Вашими пожеланиями и предложениями:
       #left_path
         #frame
@@ -136,8 +138,11 @@
      
      
     #right_path.span4
-      = image_tag "main/icon_round1.png"
-      Какой инструмент проектирования Вы используете:
+      .row-fluid
+        .span3
+          = image_tag "main/icon_round1.png"
+        .span9
+          Какой инструмент проектирования Вы используете?
       #instruments
         %p
         - @instrument.each do |instrument|
