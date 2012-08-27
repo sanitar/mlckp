@@ -3,6 +3,8 @@
 class ContentsController < ApplicationController
   layout "content"
   def main
+    @days_to_start = rand(45)
+    @users_count = rand(209)
     @prices = [
       [14.99, "$14,99 в месяц (1 пользователь)"],
       [19.99, "$19,99 в месяц (2 пользователя)"],

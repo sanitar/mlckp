@@ -1,6 +1,11 @@
 class ApplicationController < ActionController::Base
   # http_basic_authenticate_with :name => "mlckp", :password => "palmanaogorode"
   protect_from_forgery
+
+  LANGUAGES = %w(en ru)
+  
+  before_filter :set_user_language
+
   def add_class_to_css(element)
     s = element.css
     @css = ''
@@ -38,5 +43,20 @@ class ApplicationController < ActionController::Base
       end
     end
     return res
+  end
+
+  def locale
+    cookies[:language] = {:value => params[:language], :expires => 1.year.from_now} if LANGUAGES.include?(params[:language])
+    redirect_to :back
+  end
+private
+
+  def set_user_language  
+    if cookies[:language] && ["ru", "en"].include?(cookies[:language])
+      I18n.locale = cookies[:language]
+    else
+      I18n.locale = "ru"
+    end
+    @language = I18n.locale.to_s
   end
 end

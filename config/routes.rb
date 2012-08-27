@@ -1,4 +1,6 @@
 Molockup10::Application.routes.draw do
+  match 'locale' => 'application#locale'
+
   resources :developer_tools, :reviewer_tools
 
   post "elements/update" => "elements#update"
