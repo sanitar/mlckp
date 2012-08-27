@@ -4,8 +4,12 @@
       = image_tag "main/logo.png"
     .span4
       Molockup – это быстрый и удобный онлайн-инструмент для создания интерактивных прототипов пользовательских интерфейсов.
-    .span4  
-      =image_tag "main/ru.png"
+    .span4 
+      #lang
+        - if @language == "en"
+          = link_to (image_tag "main/ru.png"), "/locale?language=ru", :class => 'lang_ru'
+        - else
+          = link_to (image_tag "main/en.png"), "/locale?language=en", :class => 'lang_en' 
       %script{:charset => "utf-8", :src => "//yandex.st/share/share.js", :type => "text/javascript"}
       .yashare-auto-init{"data-yashareL10n" => "ru", "data-yashareQuickServices" => "yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,lj,friendfeed,moikrug,gplus", "data-yashareType" => "none"}
   #registration.row-fluid
