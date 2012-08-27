@@ -1,5 +1,5 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
 en:
-  hello: "Hello world"
+  contents:
+    main:
+      header: Molockup is a smart online tool for quick and easy mockup creation and prototyping.
+      to_go: TO GO

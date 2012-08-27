@@ -3,7 +3,7 @@
     .span4 
       = image_tag "main/logo.png"
     .span4
-      Molockup – это быстрый и удобный онлайн-инструмент для создания интерактивных прототипов пользовательских интерфейсов.
+      = t '.header'
     .span4 
       #lang
         - if @language == "en"
@@ -20,7 +20,7 @@
           = 'day'.pluralize(@days_to_start).upcase
         - else 
           = Russian.p(@days_to_start, 'день', 'дня', 'дней').mb_chars.upcase
-      .to_start ДО СТАРТА
+      .to_start= t '.to_go'
     #reg_all.span10
       #reg_title.row-fluid
         Зарегистрируйся до 1 сентября 2012 года и получи 
