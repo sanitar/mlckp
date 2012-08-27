@@ -23,7 +23,7 @@ Molockup10::Application.routes.draw do
 
   match "/mock/blocks" => "mock#blocks"
 
-  root :to => "home#index"
+  root :to => "contents#main"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

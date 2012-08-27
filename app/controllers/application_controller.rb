@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  http_basic_authenticate_with :name => "mlckp", :password => "palmanaogorode"
+  # http_basic_authenticate_with :name => "mlckp", :password => "palmanaogorode"
   protect_from_forgery
   def add_class_to_css(element)
     s = element.css
