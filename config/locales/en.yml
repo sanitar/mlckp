@@ -3,3 +3,42 @@ en:
     main:
       header: Molockup is a smart online tool for quick and easy mockup creation and prototyping.
       to_go: TO GO
+      registration_title: Sign up before September 1, 2012 and get two months FREE!
+      email: 'Email:'
+      password: 'Password:'
+      registration_button: Sign Up
+      description_first: MolockUp – is a smart online tool for quick and easy mockup creation and prototyping that will lead your team to effective software development. 
+      description_second: Our beta-version release is scheduled for September 1, 2012, but you have an opportunity to sign up for a free two months personal access right now.
+      poll: What prototyping tool do you use?
+      poll_button: Vote!
+      are_waiting: are waiting
+      molockup_features: Learn MolockUp features or share your ideas!
+      high-quality: Develop high-quality dynamic mockups and prototypes.
+      auto-fill: Use auto-fill feature for quick and easy prototyping.
+      create_elements: Create your own unique elements and libraries online.
+      main_features_html: Molockup&trade; Features
+      left_path_title_first: Auto-filling
+      left_path_text_first: Give your prototype a finished look by auto-filling it with various available content.
+      left_path_title_second: Unlimited number of pages
+      left_path_text_second: Create and link unlimited number of pages.
+      left_path_title_thierd: Mockups reviewing
+      left_path_text_thierd: Collaborate with customers and development team while mockups reviewing.
+      right_path_title_first: Variety of elements
+      right_path_text_first: Use elements of built-in library or create your own.
+      right_path_title_second: Interactive site map
+      right_path_text_second: View all links between pages in the interactive "tree" of your mockup.
+      right_path_title_thierd: Version control
+      right_path_text_thierd: Control the history of changes made while mockup editing or reviewing.
+      your_opinion: Your opinion
+      tell_us: "Tell us what you don't like about prototyping tool you use, or share your ideas and suggestions:"
+      comment_button: Add comment
+      footer_text: The information and contents of this site are sole intellectual property of InterTechnologues LLC., and this can not be reproduced without written agreement of abovementioned owner.
+      made_by: MADE BY
+      reply: Reply
+
+
+
+
+
+
+

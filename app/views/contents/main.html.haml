@@ -23,98 +23,122 @@
       .to_start= t '.to_go'
     #reg_all.span10
       #reg_title.row-fluid
-        Зарегистрируйся до 1 сентября 2012 года и получи 
-        = link_to "2 месяца бесплатного" 
-        доступа!
+        = t '.registration_title'
+        /= link_to "2 месяца бесплатного" 
+        /доступа!
       #reg_inputs.row-fluid
         .span4
-          = label_tag :email, "Email:"
+          = label_tag :email, t('.email')
           = text_field_tag :email
         .span4    
-          = label_tag :password, "Пароль"
+          = label_tag :password, t('.password')
           = text_field_tag :password
         #button_reg.span4
           = link_to {image_tag "main/vk.png"}
           = link_to {image_tag "main/facebook.png"}
           = link_to {image_tag "main/twitter.png"}
-          %button.btn.btn-small.btn-warning{:type => "button"} Регистрация
+          %button.btn.btn-small.btn-warning{:type => "button"} 
+            = t '.registration_button' 
   #text_and_vote.row-fluid
     #text_left.span6
-      %p MolockUp&trade; - это быстрый и удобный инструмент для создания интерактивных прототипов пользовательских интерфейсов, который позволит Вашей команде повысить эффективность разработки программного обеспечения.
-      
-      %p Релиз бета-версии системы состоится 1 сентября 2012 года, но уже сейчас Вы можете зарегистрироваться и получить бесплатный доступ для одного пользователя на первые два месяца использования.
-    #text_right.span6
-      %p.poll_1_title Проголосуйте за удобный для Вас тарифный план, и мы учтём Ваше мнение:
       %p
-      - @prices.each do |price|
-        %label{class: 'radio', for: "price_#{price[0]}"}
-          = radio_button_tag :price, price[0]
-          = price[1]
-      #button_vote1
-        %button.btn.btn-small.btn-primary{:type => "button"} Голосовать
+        = t '.description_first' 
+      %p 
+        = t '.description_second'
+    #right_path.span6
+      %p
+        #right_path_title.darkblue 
+          = t '.poll'
+      #instruments
+        %p
+        - @instrument.each do |instrument|
+          %label{class: 'radio', for: "instrument_#{instrument}"}
+            = radio_button_tag :instrument, instrument
+            = instrument.humanize
+        %p
+        %button.btn.btn-small.btn-primary{:type => "button"} 
+          = t '.poll_button' 
   #monitor
     #users_count
-      Нас уже  
+      = t '.are_waiting' 
       %br
       %span.number= @users_count
   #aaa.row-fluid
-    Изучите 
-    = link_to "возможности системы", "#go_to"
+    = t '.molockup_features'  
+    / = link_to "возможности системы", "#go_to"
    
 
-    или поделитесь Вашими 
-    = link_to "предложениями", "#your_mine"
-    !
+    / или поделитесь Вашими 
+    / = link_to "предложениями", "#your_mine"
+    / !
   #three_icon.row-fluid
     #first_picture.span4
       .centered_image
         = image_tag "main/first_icon.png"
-      %p Разрабатывайте высококачественные интерактивные макеты пользовательских интерфейсов.
+      %p 
+        = t '.high-quality' 
     #second_picture.span4
       .centered_image
         = image_tag "main/second_icon.png"
-      %p Используйте функцию автоматического наполнения страниц контентом для быстрого и удобного проектирования макетов.
+      %p 
+        = t '.auto-fill' 
     #thierd_picture.span4
       .centered_image
         = image_tag "main/thierd_icon.png"
-      %p Создавайте собственные уникальные элементы и библиотеки онлайн.
+      %p 
+        = t '.create_elements' 
   #six_icon
     .row-fluid.title
       %h2#go_to 
-        Возможности MolockUp&trade;
+        = t '.main_features_html'
     .row-fluid
       .span6
         .features-item
-          %b Автоматическое наполнение контентом
-          %p Придавайте макетам завершенный вид с помощью автоматического заполнения страниц соответствующим контентом.
+          %b 
+            = t '.left_path_title_first'
+          %p 
+            = t '.left_path_text_first'
         .features-item
-          %b Неограниченное количество страниц
-          %p Создавайте и связывайте между собой неограниченное количество страниц.
+          %b 
+            = t '.left_path_title_second' 
+          %p 
+            = t '.left_path_text_second' 
         .features-item
-          %b Рецензирование макетов
-          %p Взаимодействуйте с участниками проекта и заказчиком в процессе рецензирования макетов.
+          %b 
+            = t '.left_path_title_thierd' 
+          %p 
+            = t '.left_path_text_thierd' 
       .span6
         .features-item
-          %b Неограниченный выбор элементов
-          %p Используйте элементы встроенной библиотеки и создавайте свои собственные.
+          %b 
+            = t '.right_path_title_first' 
+          %p 
+            = t '.right_path_text_first'
         .features-item
-          %b Интерактивная карта сайта
-          %p Отслеживайте все связи между страницами на интерактивной схеме проектируемого макета.
+          %b 
+            = t '.right_path_title_second' 
+          %p 
+            = t '.right_path_text_second' 
         .features-item
-          %b Контроль версий проектов
-          %p Контролируйте внесение изменений при работе с проектом и рецензировании.
+          %b 
+            = t '.right_path_title_thierd' 
+          %p 
+            = t '.right_path_text_thierd' 
   #your_mine.row-fluid 
     .span8
       #horn.row-fluid
         .span2
           = image_tag "main/dudka.png"
         #mine_title.span10  
-          %h2 Ваше мнение
-      %p Расскажите, что Вам не нравится в системах, которые Вы используете сейчас, или поделитесь Вашими пожеланиями и предложениями:
+          %h2 
+            = t '.your_opinion'
+      %p 
+        = t '.tell_us' 
       #left_path
         #frame
           = text_area_tag 'post'
-        %button.btn.btn-small.btn-primary{:type => "button"} Добавить комментарий
+        %button.btn.btn-small.btn-primary{:type => "button"} 
+          = t '.comment_button' 
         
         - @comments.each do |comment|
           #comment{class: "#{cycle('odd', 'even')}"}
@@ -142,31 +166,20 @@
                   = link_to {image_tag "main/minus.png"}
                   = link_to {image_tag "main/plus.png"}
                 #apply
-                  = link_to "ответить"
+                  = link_to t('.reply')
 
      
      
-    #right_path.span4
-      .row-fluid
-        .span3
-          = image_tag "main/icon_round1.png"
-        .span9
-          Какой инструмент проектирования Вы используете?
-      #instruments
-        %p
-        - @instrument.each do |instrument|
-          %label{class: 'radio', for: "instrument_#{instrument}"}
-            = radio_button_tag :instrument, instrument
-            = instrument.humanize
-        %p
-        %button.btn.btn-small.btn-primary{:type => "button"} Голосовать
+    
   #footer.row-fluid
     .span8
       %b &copy MolockUp, 2012
-      %p Информация, размещенная на настоящем сайте, является интелектуальной собственностью компании Гамма Тур и размещается на сайте исключительно с целью ознакомления.
+      %p 
+        = t '.footer_text' 
     .span4
       .prime_logo
-        .made_in сделано в
+        .made_in 
+          = t '.made_by' 
         = image_tag "main/lable_footer.png"
         
 
