@@ -135,7 +135,6 @@ Mock.init.designer = function(){
             this.menu = new Mock.menu.Menu({
                 menu: [
                     ['menu_undo', 'menu_redo'],
-                    ['menu_duplicate', 'menu_remove'],
                     ['menu_align_bottom', 'menu_align_middle', 'menu_align_top',
                         'menu_align_right', 'menu_align_center', 'menu_align_left'],
                     ['menu_move_forwards', 'menu_move_backwards', 'menu_move_front', 'menu_move_back'],
@@ -184,7 +183,7 @@ Mock.init.designer = function(){
 
             $(this.menu).on('menu_layers_group menu_layers_ungroup', this.onGroupAction.createDelegate(this));
             $(this.menu).on('menu_move_forwards menu_move_backwards menu_move_front menu_move_back', this.onMoveAction.createDelegate(this));
-            $(this.menu).on('menu_duplicate menu_remove', this.onEditAction.createDelegate(this));
+            $(this.menu).on('menu_copy menu_cut menu_paste menu_duplicate menu_remove', this.onEditAction.createDelegate(this));
             $(this.menu).on('menu_align_right menu_align_center menu_align_left \
                              menu_align_bottom menu_align_middle menu_align_top', this.onAlignAction.createDelegate(this));
             $(this.menu).on('menu_edit menu_review', this.onPreviewAction.createDelegate(this));
@@ -205,12 +204,22 @@ Mock.init.designer = function(){
             });
         },
 
-        onEditAction: function(e, el){
+        onEditAction: function(e, ui){
             if (e.type == 'menu_remove'){
                 this.controller.remove($('.ui-selected'));
             }
             if (e.type == 'menu_duplicate'){
                 this.controller.duplicate($('.ui-selected'));
+            }
+            if (e.type == 'menu_copy'){
+                Mock.buffer.set($('.ui-selected'));
+            }
+            if (e.type == 'menu_paste'){
+                var els = Mock.buffer.get(),
+                    cmAbsPos = $('.context_menu').position(),
+                    wsPos = ws.position(),
+                    cmPos = { left: cmAbsPos.left - wsPos.left, top: cmAbsPos.top - wsPos.top };
+                this.controller.duplicate(els, cmPos);
             }
         },
 

@@ -80,13 +80,23 @@ designer
 
 <div class="context_menu">
   <ul class="dropdown-menu" role="menu">
-    <li><a href="#" data-menu="menu_cut"><span>Ctrl+X</span> Cut  </a></li>
-    <li><a href="#" data-menu="menu_copy"><span>Ctrl+C</span> Copy </a></li>
-    <li><a href="#" data-menu="menu_paste"><span>Ctrl+V</span> Paste</a></li>
-    <li><a href="#" data-menu="menu_duplicate"><span>Ctrl+D</span> Duplicate</a></li>
-    <li><a href="#" data-menu="menu_remove"><span>Backspace</span> Delete</a></li>
+    <li data-menu="menu_copy">      <span class="icon"></span><a> <span>Ctrl+C</span> Copy </a> </li>
+    <li data-menu="menu_paste">     <a> <span>Ctrl+V</span> Paste </a> </li>
+    <li data-menu="menu_duplicate"> <a> <span>Ctrl+D</span> Duplicate </a> </li>
+    <li data-menu="menu_remove">    <a> <span>Backspace</span> Delete something big, i mean really big!</a> </li>
     <li class="divider"></li>
-    <li><a tabindex="-1" href="#">Separated link</a></li>
+    <li class="dropdown-submenu">
+      <a href="#">Align</a>
+      <ul class="dropdown-menu">
+        <li data-menu="menu_align_bottom">  <a>Align bottom</a> </li>
+        <li data-menu="menu_align_middle">  <a>Align middle</a> </li>
+        <li data-menu="menu_align_top">     <a>Align top</a> </li>
+        <li class="divider"></li>
+        <li data-menu="menu_align_right">   <a>Align right</a> </li>
+        <li data-menu="menu_align_center">  <a>Align center</a> </li>
+        <li data-menu="menu_align_left">    <a>Align left</a> </li>
+      </ul>
+    </li>
   </ul>
 </div>
 

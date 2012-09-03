@@ -90,7 +90,8 @@ Mock.BlockGroupComposite = Mock.extend(null, {
 
     /* ------------- common functions -------------- */
 
-    duplicate: function(els){
+    duplicate: function(els, opts){
+        console.log('duplicate,', opts);
         if (els.size() == 0) return;
 
         var self = this,
@@ -116,8 +117,11 @@ Mock.BlockGroupComposite = Mock.extend(null, {
             }
             return groupModel;
         }
-
-
+        // вычисляем насколько надо переместить каждый элемент (delta)
+        if (opts){
+            var pos = els.positionRectangle(),
+                delta = { left: opts.left - pos.left, top: opts.top - pos.top };
+        }
         els.each(function(){
             var el = $(this),
                 view = views.findBy('el', this)[0],
@@ -128,11 +132,12 @@ Mock.BlockGroupComposite = Mock.extend(null, {
                 created_model = self.blocks.copy(view.model);
             }
             var params = $.parseJSON(created_model.attributes.params);
-            params.x += 10;
-            params.y += 10;
+            params.x += delta ? delta.left : 10;
+            params.y += delta ? delta.top : 10;
             created_model.set({
                 params: JSON.stringify(params)
-            })
+            });
+            self.blocks.createBlockView(created_model);
         });
         collection.save({
             success: function(models, responce){

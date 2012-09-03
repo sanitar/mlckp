@@ -68,7 +68,7 @@ $.ui.plugin.add("draggable", "snapToObjects", {
                     if(event.pageY - inst.offset.click.top > containment[3]) pageY = containment[3] + inst.offset.click.top;
                 }
             }
-
+            inst.guides.h.add(inst.guides.v).hide();
             var top = pageY - inst.offset.click.top - inst.offset.relative.top - inst.offset.parent.top + ($.browser.safari && $.browser.version < 526 && inst.cssPosition == 'fixed' ? 0 : ( inst.cssPosition == 'fixed' ? -inst.scrollParent.scrollTop() : ( scrollIsRootNode ? 0 : scroll.scrollTop() ) )),
                 left = pageX - inst.offset.click.left - inst.offset.relative.left - inst.offset.parent.left  + ($.browser.safari && $.browser.version < 526 && inst.cssPosition == 'fixed' ? 0 : ( inst.cssPosition == 'fixed' ? -inst.scrollParent.scrollLeft() : scrollIsRootNode ? 0 : scroll.scrollLeft() ));
 

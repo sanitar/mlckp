@@ -74,6 +74,9 @@ Mock.buffer = (function(){
         },
         get: function(){
             return buffer;
+        },
+        clear: function(){
+            buffer = null;
         }
     }
 }());

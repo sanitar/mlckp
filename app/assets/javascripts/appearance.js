@@ -53,26 +53,35 @@ Mock.menu.Menu = Mock.extend(null, {
     },
 
     renderContextMenu: function(){
-        var ws = $('#workspace'),
-            el = $('.context_menu');
+        var self = this,
+            ws = $('#workspace'),
+            el = $('.context_menu'),
+            lis = el.find('li:not(.divider)'),
+            pasteEl = el.find('li[data-menu="menu_paste"]');
 
         ws.on('contextmenu', function(event){
             el.addClass('open').css({
                 left: event.pageX,
                 top: event.pageY
             });
+
+            lis.toggleClass('disabled', ws.find('.ui-selected').length == 0);
+
+            pasteEl.toggleClass('disabled', Mock.buffer.get() === undefined);''
+
             $('body').one('mousedown', function(e){
                 el.removeClass('open');
             });
             return false;
         });
-        el.find('li').click(this.fireEvent.createDelegate(this));
-
+        el.find('li:not(.divider, .dropdown-submenu)').mousedown(function(e){
+            if (!$(this).hasClass('disabled')) self.fireEvent(e, this);
+        });
     },
 
     fireEvent: function(e, el){
         var attr = $(el).attr('data-menu');
-        if (attr) $(this).trigger(attr, $(el));
+        if (attr) $(this).trigger(attr, { el: $(el), event: e});
     }
 });
 
