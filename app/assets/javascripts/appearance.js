@@ -1,5 +1,11 @@
 Mock.namespace('Mock.menu');
 
+Mock.menu.ContextMenu = Mock.extend(null, {
+    initialize: function(){
+
+    }
+});
+
 Mock.menu.Menu = Mock.extend(null, {
     rootDomSelector: '.navbar .nav',
     menu: [],
@@ -9,7 +15,7 @@ Mock.menu.Menu = Mock.extend(null, {
         this.root = $(this.rootDomSelector);
         this.render();
         this.renderDropdownMenu();
-        this.renderContextMenu();
+//        this.renderContextMenu();
     },
 
     render: function(){
@@ -52,32 +58,32 @@ Mock.menu.Menu = Mock.extend(null, {
         li.settings();
     },
 
-    renderContextMenu: function(){
-        var self = this,
-            ws = $('#workspace'),
-            el = $('.context_menu'),
-            lis = el.find('li:not(.divider)'),
-            pasteEl = el.find('li[data-menu="menu_paste"]');
-
-        ws.on('contextmenu', function(event){
-            el.addClass('open').css({
-                left: event.pageX,
-                top: event.pageY
-            });
-
-            lis.toggleClass('disabled', ws.find('.ui-selected').length == 0);
-
-            pasteEl.toggleClass('disabled', Mock.buffer.get() === undefined);''
-
-            $('body').one('mousedown', function(e){
-                el.removeClass('open');
-            });
-            return false;
-        });
-        el.find('li:not(.divider, .dropdown-submenu)').mousedown(function(e){
-            if (!$(this).hasClass('disabled')) self.fireEvent(e, this);
-        });
-    },
+//    renderContextMenu: function(){
+//        var self = this,
+//            ws = $('#workspace'),
+//            el = $('.context_menu'),
+//            lis = el.find('li:not(.divider)'),
+//            pasteEl = el.find('li[data-menu="menu_paste"]');
+//
+//        ws.on('contextmenu', function(event){
+//            el.addClass('open').css({
+//                left: event.pageX,
+//                top: event.pageY
+//            });
+//
+//            lis.toggleClass('disabled', ws.find('.ui-selected').length == 0);
+//
+//            pasteEl.toggleClass('disabled', Mock.buffer.get() === undefined);''
+//
+//            $('body').one('mousedown', function(e){
+//                el.removeClass('open');
+//            });
+//            return false;
+//        });
+//        el.find('li:not(.divider, .dropdown-submenu)').mousedown(function(e){
+//            if (!$(this).hasClass('disabled')) self.fireEvent(e, this);
+//        });
+//    },
 
     fireEvent: function(e, el){
         var attr = $(el).attr('data-menu');

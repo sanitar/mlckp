@@ -1,5 +1,218 @@
 Mock.BlockGroupComposite = Mock.extend(null, {
-    selected: null,
+    initialize: function(){
+        this.views = new Mock.Collection();
+        this.collection = new Mock.block.BlocksCollection();
+    },
+
+    fetch: function(page){
+        this.clear();
+        if (page){
+            var self = this,
+                url = 'pages/' + page + '/blocks';
+
+            this.collection.fetch({
+                silent: true,
+                url: url,
+                success: function(collection, data){
+                    self.collection.url = url;
+                    $(self).triggerHandler('fetch', [collection, data, page]);
+                    self.render(collection);
+                }
+            });
+        }
+    },
+
+    //private
+    _renderGroup: function(model){
+        var group_view = this.create(model),
+            inners = this.collection.where({ parent_id: model.get('id') }),
+            view;
+        for ( var i = 0; i < inners.length; i++ ){
+            view = inners[i].get('is_group') ? this._renderGroup(inners[i]) : this.create(inners[i]);
+            view.$el.detach().appendTo(group_view.$el).addClass('group-block');
+            view.disable();
+        }
+        return group_view;
+    },
+
+    //private
+    _renderBlock: function(model){
+        if (model.get('parent_id')) return;
+        model.get('is_group') ? this._renderGroup(model) : this.create(model);
+    },
+
+    render: function(data){
+        var self = this;
+        if (data instanceof Mock.block.BlocksCollection){
+            data.each(function(model){
+                self._renderBlock(model);
+            });
+        }
+    },
+
+    create: function(data){
+        if ($.isPlainObject(data)){ // если простой объект, не "класс"
+            data = this.collection.add([data]).last();
+        }
+
+        var view = new Mock.block.BlockView({ model: data });
+        this.views.add(view);
+        return view;
+    },
+
+    clear: function(){
+        var views = this.views;
+        views.each(function(item, i){
+            this.remove();
+            views.remove(this, true);
+        });
+    },
+
+    save: function(els){
+        this.collection.save();
+    },
+
+    // private
+    // data - elements, views, models
+    // return array of views from data
+    _getViews: function(data){
+        if (!data) return [];
+
+        // делаем данные массивом, чтобы не дублировать код
+        if (data.jquery) data = data.toArray();
+        if (!(data instanceof Array)) data = [data];
+
+        var resultViews = [];
+        for (var i = 0, view, len = data.length; i < len; i++){
+            if (data[i] instanceof Mock.block.BlockView){
+                resultViews.push(data[i]);
+            }
+            if (data[i] instanceof Backbone.Model){
+                view = this.views.findBy('model', data[i])[0];
+                if (view) resultViews.push(view);
+            }
+            if (data[i].nodeName){ // if DOM element
+                view = this.views.findBy('el', data[i])[0];
+                if (view) resultViews.push(view);
+            }
+        }
+        return resultViews;
+    },
+
+    // private
+    _removeGroup: function(model){
+        var groupChildren = this.collection.where({ parent_id: model.get('id') });
+        for (var i = 0, len = groupChildren.length; i < len; i++){
+            this._removeModel(groupChildren[i]);
+        }
+        this.collection.remove(model);
+    },
+
+    // private
+    _removeModel: function(model){
+        if (model.get('is_group')) this._removeGroup(model);
+        else this.collection.remove(model);
+    },
+
+    remove: function(data){
+        var views = this._getViews(data);
+        for (var i = 0; i < views.length; i++){
+            this._removeModel(views[i].model);
+        }
+    },
+
+    duplicate: function(els){
+        console.log('duplicate');
+    },
+
+    group: function(elements){
+        var self = this,
+            views = this._getViews(elements),
+            position = elements.positionRectangle();
+
+        this.collection.add([{
+            z_index: 0,
+            params: JSON.stringify({
+                x: position.left,
+                y: position.top,
+                w: position.right - position.left,
+                h: position.bottom - position.top
+            }),
+            is_group: true
+        }]);
+
+        this.collection.save({
+            success: function(models, responce){
+                for (var cid in responce){
+                    var data = responce[cid],
+                        group = self.create(models[0]);
+
+                    for (var i = 0; i < views.length; i++){
+                        var view = views[i],
+                            pos = view.$el.position();
+
+                        view.$el
+                            .css({
+                                left: pos.left - position.left,
+                                top: pos.top - position.top
+                            })
+                            .detach()
+                            .appendTo(group.$el)
+                            .addClass('group-block')
+                            .removeClass('ui-selected');
+
+                        view.model.set({ parent_id: data.id });
+                        view.updatePosition();
+                        view.disable();
+                    }
+                    self.collection.save();
+                    group.$el.addClass('ui-selected');
+
+                }
+            }
+        });
+    },
+
+    ungroup: function(elements){
+        elements = elements.filter('.group');
+
+        var self = this,
+            views = this._getViews(elements);
+
+        for (var i = 0; i < views.length; i++){
+            var groupView = views[i],
+                groupParameters = $.parseJSON(groupView.model.get('params')),
+                children = groupView.$el.children(),
+                childrenViews = self._getViews(children);
+
+            for (var j = 0; j < childrenViews.length; j++){
+                var childView = childrenViews[j],
+                    childParameters = $.parseJSON(childView.model.get('params'));
+
+                childView.$el
+                    .css({
+                        left: groupParameters.x + childParameters.x,
+                        top: groupParameters.y + childParameters.y
+                    })
+                    .detach()
+                    .appendTo('#workspace')
+                    .removeClass('group-block')
+                    .addClass('ui-selected');
+
+                childView.updatePosition();
+                childView.model.set('parent_id', null);
+                childView.enable();
+            }
+            this.collection.remove(groupView.model);
+        }
+        this.collection.save();
+        this.collection.save();
+    }
+
+
+
+
+    /*selected: null,
     current_page: null,
     historyStorage: {},
     initialize: function(o){
@@ -88,7 +301,6 @@ Mock.BlockGroupComposite = Mock.extend(null, {
         this.blocks.collection.save();
     },
 
-    /* ------------- common functions -------------- */
 
     duplicate: function(els, opts){
         console.log('duplicate,', opts);
@@ -325,5 +537,5 @@ Mock.BlockGroupComposite = Mock.extend(null, {
 
     updateZIndex: function(){
         this.blocks.updateOrder();
-    }
+    }*/
 });

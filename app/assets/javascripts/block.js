@@ -165,7 +165,7 @@ Mock.block.BlockView = Backbone.View.extend({
 /* ---------------- new block controller -------------- */
 /* ---------------------------------------------------- */
 
-Mock.block.BlocksController = Mock.extend(null, {
+/*Mock.block.BlocksController = Mock.extend(null, {
     url: 'blocks',
     collection: Mock.block.BlocksCollection,
     last_order: 0,
@@ -365,4 +365,4 @@ Mock.block.BlocksController = Mock.extend(null, {
         this.collection.save();
     }
 
-});
+});    */

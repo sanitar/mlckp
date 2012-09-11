@@ -7,3 +7,5 @@ class Element < ActiveRecord::Base
     self.initial ||= '{"w":200,"h":200,"r":{"x":true,"y":true}}'
   end
 end
+
+

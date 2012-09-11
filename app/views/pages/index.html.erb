@@ -57,7 +57,7 @@ designer
                 <div class="tab-pane" id="group<%= group.id %>">
                     <% @elements.each do |element| %>
                         <% if element.element_group_id == group.id %>
-                            <div class="element" id="el<%= element.id %>"><span>
+                            <div class="element" id="<%= element.id %>el"><span>
                               <img src="/assets/elements/<%= element.name %>.png" alt="<%= element.name %>" title="<%= element.description %>"/>
                             </span></div>
                         <% end %>

@@ -42,6 +42,7 @@
 //= require properties.js
 //= require collection.js
 //= require appearance.js
+//= require module.js
 //= require block.js
 //= require element.js
 //= require element.nav.js
